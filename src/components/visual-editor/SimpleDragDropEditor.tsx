@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,8 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Save, 
+import {
+  Save,
   Trash2,
   Copy,
   Monitor,
@@ -31,7 +27,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Play,
-  Download
+  Download,
 } from "lucide-react";
 
 // CSS simplificado
@@ -98,7 +94,17 @@ const SIMPLE_CSS = `
 // Interfaces completas do funil
 interface SimpleComponent {
   id: string;
-  type: 'title' | 'subtitle' | 'text' | 'image' | 'button' | 'spacer' | 'input' | 'options' | 'progress' | 'logo';
+  type:
+    | "title"
+    | "subtitle"
+    | "text"
+    | "image"
+    | "button"
+    | "spacer"
+    | "input"
+    | "options"
+    | "progress"
+    | "logo";
   data: {
     text?: string;
     src?: string;
@@ -115,7 +121,7 @@ interface SimpleComponent {
   style: {
     fontSize?: string;
     fontWeight?: string;
-    textAlign?: 'left' | 'center' | 'right';
+    textAlign?: "left" | "center" | "right";
     color?: string;
     backgroundColor?: string;
     padding?: string;
@@ -135,7 +141,7 @@ interface QuizOption {
 interface SimplePage {
   id: string;
   title: string;
-  type: 'intro' | 'question' | 'loading' | 'result' | 'offer';
+  type: "intro" | "question" | "loading" | "result" | "offer";
   progress: number;
   showHeader: boolean;
   showProgress: boolean;
@@ -151,7 +157,7 @@ interface QuizFunnel {
 import { LucideIcon } from "lucide-react";
 
 interface ComponentType {
-  type: SimpleComponent['type'];
+  type: SimpleComponent["type"];
   name: string;
   icon: LucideIcon;
   description: string;
@@ -160,65 +166,65 @@ interface ComponentType {
 // Componentes disponíveis - TODOS do funil
 const COMPONENTS: ComponentType[] = [
   {
-    type: 'logo',
-    name: 'Logo',
+    type: "logo",
+    name: "Logo",
     icon: ImageIcon,
-    description: 'Logo da marca'
+    description: "Logo da marca",
   },
   {
-    type: 'progress',
-    name: 'Progresso',
+    type: "progress",
+    name: "Progresso",
     icon: Layout,
-    description: 'Barra de progresso'
+    description: "Barra de progresso",
   },
   {
-    type: 'title',
-    name: 'Título',
+    type: "title",
+    name: "Título",
     icon: Type,
-    description: 'Título principal'
+    description: "Título principal",
   },
   {
-    type: 'subtitle',
-    name: 'Subtítulo',
+    type: "subtitle",
+    name: "Subtítulo",
     icon: Type,
-    description: 'Texto secundário'
+    description: "Texto secundário",
   },
   {
-    type: 'text',
-    name: 'Texto',
+    type: "text",
+    name: "Texto",
     icon: Type,
-    description: 'Parágrafo normal'
+    description: "Parágrafo normal",
   },
   {
-    type: 'image',
-    name: 'Imagem',
+    type: "image",
+    name: "Imagem",
     icon: ImageIcon,
-    description: 'Imagem responsiva'
+    description: "Imagem responsiva",
   },
   {
-    type: 'input',
-    name: 'Campo',
+    type: "input",
+    name: "Campo",
     icon: Type,
-    description: 'Campo de entrada'
+    description: "Campo de entrada",
   },
   {
-    type: 'options',
-    name: 'Opções',
+    type: "options",
+    name: "Opções",
     icon: Layout,
-    description: 'Lista de opções'
+    description: "Lista de opções",
   },
   {
-    type: 'button',
-    name: 'Botão',
+    type: "button",
+    name: "Botão",
     icon: MousePointer,
-    description: 'Botão de ação'
+    description: "Botão de ação",
   },
   {
-    type: 'spacer',
-    name: 'Espaço',
+    type: "spacer",
+    name: "Espaço",
     icon: Layout,
-    description: 'Espaçamento vertical'
-  }
+    description: "Espaçamento vertical",
+  },
 ];
 
 // Templates de páginas do funil completo
@@ -226,79 +232,99 @@ const QUIZ_TEMPLATES = {
   intro: {
     id: "intro-1",
     title: "Página de Introdução",
-    type: 'intro' as const,
+    type: "intro" as const,
     progress: 0,
     showHeader: true,
     showProgress: false,
     components: [
       {
         id: "logo-1",
-        type: 'logo' as const,
-        data: { 
+        type: "logo" as const,
+        data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-          alt: "Logo Gisele Galvão"
+          alt: "Logo Gisele Galvão",
         },
-        style: {}
+        style: {},
       },
       {
         id: "title-1",
-        type: 'title' as const,
+        type: "title" as const,
         data: { text: "Teste de Estilo Pessoal" },
-        style: { fontSize: '2.5rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+        style: {
+          fontSize: "2.5rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
       },
       {
         id: "image-1",
-        type: 'image' as const,
-        data: { 
+        type: "image" as const,
+        data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp",
-          alt: "Imagem de introdução"
+          alt: "Imagem de introdução",
         },
-        style: {}
+        style: {},
       },
       {
         id: "subtitle-1",
-        type: 'subtitle' as const,
-        data: { text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você." },
-        style: { fontSize: '1.25rem', textAlign: 'center' as const, color: '#6B4F43' }
+        type: "subtitle" as const,
+        data: {
+          text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
+        },
+        style: {
+          fontSize: "1.25rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
       },
       {
         id: "input-1",
-        type: 'input' as const,
-        data: { label: "NOME", placeholder: "Digite seu nome aqui...", required: true },
-        style: {}
+        type: "input" as const,
+        data: {
+          label: "NOME",
+          placeholder: "Digite seu nome aqui...",
+          required: true,
+        },
+        style: {},
       },
       {
         id: "button-1",
-        type: 'button' as const,
+        type: "button" as const,
         data: { text: "COMEÇAR AGORA" },
-        style: {}
-      }
-    ]
+        style: {},
+      },
+    ],
   },
 
   question1: {
     id: "question-1",
     title: "Questão Visual - Tipo de Roupa",
-    type: 'question' as const,
+    type: "question" as const,
     progress: 25,
     showHeader: true,
     showProgress: true,
     components: [
       {
         id: "progress-1",
-        type: 'progress' as const,
+        type: "progress" as const,
         data: { progressValue: 25 },
-        style: {}
+        style: {},
       },
       {
         id: "title-2",
-        type: 'title' as const,
+        type: "title" as const,
         data: { text: "QUAL O SEU TIPO DE ROUPA FAVORITA?" },
-        style: { fontSize: '2rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
       },
       {
         id: "options-1",
-        type: 'options' as const,
+        type: "options" as const,
         data: {
           hasImages: true,
           multiSelect: false,
@@ -306,189 +332,260 @@ const QUIZ_TEMPLATES = {
             {
               id: "opt-1",
               text: "Conforto, leveza e praticidade no vestir",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
               value: "Natural",
-              category: "Natural"
+              category: "Natural",
             },
             {
               id: "opt-2",
               text: "Discrição, caimento clássico e sobriedade",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
               value: "Clássico",
-              category: "Clássico"
+              category: "Clássico",
             },
             {
               id: "opt-3",
               text: "Informação de moda, inovação e funcionalidade",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/13_qccdqv.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/13_qccdqv.webp",
               value: "Contemporâneo",
-              category: "Contemporâneo"
+              category: "Contemporâneo",
             },
             {
               id: "opt-4",
               text: "Luxo, refinamento e qualidade",
-              image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_rqy7yh.webp",
+              image:
+                "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_rqy7yh.webp",
               value: "Elegante",
-              category: "Elegante"
-            }
-          ]
+              category: "Elegante",
+            },
+          ],
         },
-        style: {}
-      }
-    ]
+        style: {},
+      },
+    ],
   },
 
   question2: {
     id: "question-2",
     title: "Questão de Personalidade",
-    type: 'question' as const,
+    type: "question" as const,
     progress: 50,
     showHeader: true,
     showProgress: true,
     components: [
       {
         id: "progress-2",
-        type: 'progress' as const,
+        type: "progress" as const,
         data: { progressValue: 50 },
-        style: {}
+        style: {},
       },
       {
         id: "title-3",
-        type: 'title' as const,
+        type: "title" as const,
         data: { text: "RESUMA A SUA PERSONALIDADE:" },
-        style: { fontSize: '2rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
       },
       {
         id: "options-2",
-        type: 'options' as const,
+        type: "options" as const,
         data: {
           hasImages: false,
           multiSelect: false,
           options: [
-            { id: "pers-1", text: "Informal, espontânea, alegre, essencialista", value: "Natural", category: "Natural" },
-            { id: "pers-2", text: "Conservadora, séria, organizada", value: "Clássico", category: "Clássico" },
-            { id: "pers-3", text: "Informada, ativa, prática", value: "Contemporâneo", category: "Contemporâneo" },
-            { id: "pers-4", text: "Exigente, sofisticada, seletiva", value: "Elegante", category: "Elegante" }
-          ]
+            {
+              id: "pers-1",
+              text: "Informal, espontânea, alegre, essencialista",
+              value: "Natural",
+              category: "Natural",
+            },
+            {
+              id: "pers-2",
+              text: "Conservadora, séria, organizada",
+              value: "Clássico",
+              category: "Clássico",
+            },
+            {
+              id: "pers-3",
+              text: "Informada, ativa, prática",
+              value: "Contemporâneo",
+              category: "Contemporâneo",
+            },
+            {
+              id: "pers-4",
+              text: "Exigente, sofisticada, seletiva",
+              value: "Elegante",
+              category: "Elegante",
+            },
+          ],
         },
-        style: {}
-      }
-    ]
+        style: {},
+      },
+    ],
   },
 
   loading: {
     id: "loading-1",
     title: "Processando Resultado",
-    type: 'loading' as const,
+    type: "loading" as const,
     progress: 75,
     showHeader: true,
     showProgress: true,
     components: [
       {
         id: "progress-3",
-        type: 'progress' as const,
+        type: "progress" as const,
         data: { progressValue: 75 },
-        style: {}
+        style: {},
       },
       {
         id: "title-4",
-        type: 'title' as const,
+        type: "title" as const,
         data: { text: "Analisando suas respostas..." },
-        style: { fontSize: '2rem', fontWeight: '600', textAlign: 'center' as const, color: '#432818' }
+        style: {
+          fontSize: "2rem",
+          fontWeight: "600",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
       },
       {
         id: "subtitle-2",
-        type: 'subtitle' as const,
+        type: "subtitle" as const,
         data: { text: "Estamos descobrindo seu estilo predominante" },
-        style: { fontSize: '1.25rem', textAlign: 'center' as const, color: '#6B4F43' }
-      }
-    ]
+        style: {
+          fontSize: "1.25rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
+      },
+    ],
   },
 
   result: {
     id: "result-1",
     title: "Resultado do Quiz",
-    type: 'result' as const,
+    type: "result" as const,
     progress: 100,
     showHeader: true,
     showProgress: true,
     components: [
       {
         id: "progress-4",
-        type: 'progress' as const,
+        type: "progress" as const,
         data: { progressValue: 100 },
-        style: {}
+        style: {},
       },
       {
         id: "title-5",
-        type: 'title' as const,
+        type: "title" as const,
         data: { text: "Seu Estilo Predominante é:" },
-        style: { fontSize: '2rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+        style: {
+          fontSize: "2rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
       },
       {
         id: "title-6",
-        type: 'title' as const,
+        type: "title" as const,
         data: { text: "NATURAL" },
-        style: { fontSize: '3rem', fontWeight: '700', textAlign: 'center' as const, color: '#B89B7A' }
+        style: {
+          fontSize: "3rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#B89B7A",
+        },
       },
       {
         id: "subtitle-3",
-        type: 'subtitle' as const,
-        data: { text: "Seu estilo reflete autenticidade e simplicidade elegante" },
-        style: { fontSize: '1.25rem', textAlign: 'center' as const, color: '#6B4F43' }
+        type: "subtitle" as const,
+        data: {
+          text: "Seu estilo reflete autenticidade e simplicidade elegante",
+        },
+        style: {
+          fontSize: "1.25rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
       },
       {
         id: "button-2",
-        type: 'button' as const,
+        type: "button" as const,
         data: { text: "VER GUIA COMPLETO" },
-        style: {}
-      }
-    ]
+        style: {},
+      },
+    ],
   },
 
   offer: {
     id: "offer-1",
     title: "Oferta Especial",
-    type: 'offer' as const,
+    type: "offer" as const,
     progress: 100,
     showHeader: true,
     showProgress: false,
     components: [
       {
         id: "title-7",
-        type: 'title' as const,
+        type: "title" as const,
         data: { text: "OFERTA ESPECIAL PARA VOCÊ!" },
-        style: { fontSize: '2.5rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' }
+        style: {
+          fontSize: "2.5rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        },
       },
       {
         id: "subtitle-4",
-        type: 'subtitle' as const,
-        data: { text: "Transforme seu guarda-roupa com o Guia Completo de Estilo" },
-        style: { fontSize: '1.25rem', textAlign: 'center' as const, color: '#6B4F43' }
+        type: "subtitle" as const,
+        data: {
+          text: "Transforme seu guarda-roupa com o Guia Completo de Estilo",
+        },
+        style: {
+          fontSize: "1.25rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        },
       },
       {
         id: "image-2",
-        type: 'image' as const,
-        data: { 
+        type: "image" as const,
+        data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp",
-          alt: "Guia de estilo"
+          alt: "Guia de estilo",
         },
-        style: {}
+        style: {},
       },
       {
         id: "text-1",
-        type: 'text' as const,
-        data: { text: "✨ Análise completa do seu estilo pessoal\n✨ Dicas personalizadas de combinações\n✨ Guia de cores que favorecem você\n✨ Lista de compras inteligente" },
-        style: { fontSize: '1.1rem', textAlign: 'left' as const, color: '#374151' }
+        type: "text" as const,
+        data: {
+          text: "✨ Análise completa do seu estilo pessoal\n✨ Dicas personalizadas de combinações\n✨ Guia de cores que favorecem você\n✨ Lista de compras inteligente",
+        },
+        style: {
+          fontSize: "1.1rem",
+          textAlign: "left" as const,
+          color: "#374151",
+        },
       },
       {
         id: "button-3",
-        type: 'button' as const,
+        type: "button" as const,
         data: { text: "QUERO MEU GUIA AGORA" },
-        style: {}
-      }
-    ]
-  }
+        style: {},
+      },
+    ],
+  },
 };
 
 const SimpleDragDropEditor: React.FC = () => {
@@ -502,24 +599,28 @@ const SimpleDragDropEditor: React.FC = () => {
       QUIZ_TEMPLATES.question2,
       QUIZ_TEMPLATES.loading,
       QUIZ_TEMPLATES.result,
-      QUIZ_TEMPLATES.offer
-    ]
+      QUIZ_TEMPLATES.offer,
+    ],
   });
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentPage = currentFunnel.pages[currentPageIndex];
 
-  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
-  const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(
+    null
+  );
+  const [deviceView, setDeviceView] = useState<"mobile" | "tablet" | "desktop">(
+    "desktop"
+  );
   const [draggedType, setDraggedType] = useState<ComponentType | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   // Aplicar CSS
   useEffect(() => {
-    const styleElement = document.createElement('style');
+    const styleElement = document.createElement("style");
     styleElement.textContent = SIMPLE_CSS;
     document.head.appendChild(styleElement);
-    
+
     return () => {
       if (document.head.contains(styleElement)) {
         document.head.removeChild(styleElement);
@@ -546,16 +647,16 @@ const SimpleDragDropEditor: React.FC = () => {
     const newPage: SimplePage = {
       id: `page-${Date.now()}`,
       title: "Nova Página",
-      type: 'question',
+      type: "question",
       progress: 50,
       showHeader: true,
       showProgress: true,
-      components: []
+      components: [],
     };
 
-    setCurrentFunnel(prev => ({
+    setCurrentFunnel((prev) => ({
       ...prev,
-      pages: [...prev.pages, newPage]
+      pages: [...prev.pages, newPage],
     }));
     setCurrentPageIndex(currentFunnel.pages.length);
   };
@@ -565,30 +666,32 @@ const SimpleDragDropEditor: React.FC = () => {
       ...currentPage,
       id: `page-${Date.now()}`,
       title: `${currentPage.title} (Cópia)`,
-      components: currentPage.components.map(comp => ({
+      components: currentPage.components.map((comp) => ({
         ...comp,
-        id: `${comp.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-      }))
+        id: `${comp.type}-${Date.now()}-${Math.random()
+          .toString(36)
+          .substr(2, 9)}`,
+      })),
     };
 
-    setCurrentFunnel(prev => ({
+    setCurrentFunnel((prev) => ({
       ...prev,
       pages: [
         ...prev.pages.slice(0, currentPageIndex + 1),
         newPage,
-        ...prev.pages.slice(currentPageIndex + 1)
-      ]
+        ...prev.pages.slice(currentPageIndex + 1),
+      ],
     }));
     setCurrentPageIndex(currentPageIndex + 1);
   };
 
   const deletePage = () => {
     if (currentFunnel.pages.length > 1) {
-      setCurrentFunnel(prev => ({
+      setCurrentFunnel((prev) => ({
         ...prev,
-        pages: prev.pages.filter((_, index) => index !== currentPageIndex)
+        pages: prev.pages.filter((_, index) => index !== currentPageIndex),
       }));
-      
+
       if (currentPageIndex >= currentFunnel.pages.length - 1) {
         setCurrentPageIndex(Math.max(0, currentPageIndex - 1));
       }
@@ -598,32 +701,38 @@ const SimpleDragDropEditor: React.FC = () => {
 
   const exportFunnel = () => {
     const dataStr = JSON.stringify(currentFunnel, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = `quiz-funnel-${currentFunnel.name.toLowerCase().replace(/\s+/g, '-')}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = `quiz-funnel-${currentFunnel.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")}.json`;
+
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
   };
 
   // Funções de drag & drop
-  const handleDragStart = (e: React.DragEvent, componentType: ComponentType) => {
+  const handleDragStart = (
+    e: React.DragEvent,
+    componentType: ComponentType
+  ) => {
     setDraggedType(componentType);
-    e.dataTransfer.effectAllowed = 'copy';
+    e.dataTransfer.effectAllowed = "copy";
   };
 
   const handleDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
+    e.dataTransfer.dropEffect = "copy";
     setDragOverIndex(index);
   };
 
   const handleDrop = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     setDragOverIndex(null);
-    
+
     if (draggedType) {
       addComponentToPage(draggedType, index);
       setDraggedType(null);
@@ -632,42 +741,42 @@ const SimpleDragDropEditor: React.FC = () => {
 
   const getDefaultData = (type: string) => {
     switch (type) {
-      case 'logo':
-        return { 
-          src: 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp', 
-          alt: 'Logo' 
+      case "logo":
+        return {
+          src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+          alt: "Logo",
         };
-      case 'progress':
+      case "progress":
         return { progressValue: 50 };
-      case 'title':
-        return { text: 'Novo Título' };
-      case 'subtitle':
-        return { text: 'Novo Subtítulo' };
-      case 'text':
-        return { text: 'Digite seu texto aqui...' };
-      case 'image':
-        return { 
-          src: 'https://via.placeholder.com/400x300/B89B7A/FFFFFF?text=Nova+Imagem', 
-          alt: 'Nova imagem' 
+      case "title":
+        return { text: "Novo Título" };
+      case "subtitle":
+        return { text: "Novo Subtítulo" };
+      case "text":
+        return { text: "Digite seu texto aqui..." };
+      case "image":
+        return {
+          src: "https://via.placeholder.com/400x300/B89B7A/FFFFFF?text=Nova+Imagem",
+          alt: "Nova imagem",
         };
-      case 'input':
-        return { 
-          label: 'CAMPO', 
-          placeholder: 'Digite aqui...', 
-          required: false 
+      case "input":
+        return {
+          label: "CAMPO",
+          placeholder: "Digite aqui...",
+          required: false,
         };
-      case 'options':
+      case "options":
         return {
           hasImages: false,
           multiSelect: false,
           options: [
-            { id: 'opt-1', text: 'Opção 1', value: 'option1' },
-            { id: 'opt-2', text: 'Opção 2', value: 'option2' }
-          ]
+            { id: "opt-1", text: "Opção 1", value: "option1" },
+            { id: "opt-2", text: "Opção 2", value: "option2" },
+          ],
         };
-      case 'button':
-        return { text: 'CLIQUE AQUI' };
-      case 'spacer':
+      case "button":
+        return { text: "CLIQUE AQUI" };
+      case "spacer":
         return { height: 32 };
       default:
         return {};
@@ -676,86 +785,104 @@ const SimpleDragDropEditor: React.FC = () => {
 
   const getDefaultStyle = (type: string) => {
     switch (type) {
-      case 'title':
-        return { fontSize: '2.5rem', fontWeight: '700', textAlign: 'center' as const, color: '#432818' };
-      case 'subtitle':
-        return { fontSize: '1.25rem', textAlign: 'center' as const, color: '#6B4F43' };
-      case 'text':
-        return { fontSize: '1rem', textAlign: 'left' as const, color: '#374151' };
+      case "title":
+        return {
+          fontSize: "2.5rem",
+          fontWeight: "700",
+          textAlign: "center" as const,
+          color: "#432818",
+        };
+      case "subtitle":
+        return {
+          fontSize: "1.25rem",
+          textAlign: "center" as const,
+          color: "#6B4F43",
+        };
+      case "text":
+        return {
+          fontSize: "1rem",
+          textAlign: "left" as const,
+          color: "#374151",
+        };
       default:
         return {};
     }
   };
 
   // Funções de edição
-  const updateComponent = (componentId: string, newData: Partial<SimpleComponent['data']>) => {
-    setCurrentFunnel(prev => ({
+  const updateComponent = (
+    componentId: string,
+    newData: Partial<SimpleComponent["data"]>
+  ) => {
+    setCurrentFunnel((prev) => ({
       ...prev,
-      pages: prev.pages.map((page, index) => 
-        index === currentPageIndex 
+      pages: prev.pages.map((page, index) =>
+        index === currentPageIndex
           ? {
               ...page,
-              components: page.components.map(comp =>
+              components: page.components.map((comp) =>
                 comp.id === componentId
                   ? { ...comp, data: { ...comp.data, ...newData } }
                   : comp
-              )
+              ),
             }
           : page
-      )
+      ),
     }));
   };
 
   const updateCurrentPage = (updates: Partial<SimplePage>) => {
-    setCurrentFunnel(prev => ({
+    setCurrentFunnel((prev) => ({
       ...prev,
-      pages: prev.pages.map((page, index) => 
-        index === currentPageIndex 
-          ? { ...page, ...updates }
-          : page
-      )
+      pages: prev.pages.map((page, index) =>
+        index === currentPageIndex ? { ...page, ...updates } : page
+      ),
     }));
   };
 
   const deleteComponent = (componentId: string) => {
-    setCurrentFunnel(prev => ({
+    setCurrentFunnel((prev) => ({
       ...prev,
-      pages: prev.pages.map((page, index) => 
-        index === currentPageIndex 
+      pages: prev.pages.map((page, index) =>
+        index === currentPageIndex
           ? {
               ...page,
-              components: page.components.filter(comp => comp.id !== componentId)
+              components: page.components.filter(
+                (comp) => comp.id !== componentId
+              ),
             }
           : page
-      )
+      ),
     }));
     setSelectedComponent(null);
   };
 
   const duplicateComponent = (componentId: string) => {
-    const component = currentPage.components.find(c => c.id === componentId);
+    const component = currentPage.components.find((c) => c.id === componentId);
     if (component) {
       const newComponent: SimpleComponent = {
         ...component,
         id: `${component.type}-${Date.now()}`,
-        data: { ...component.data }
+        data: { ...component.data },
       };
-      
-      const index = currentPage.components.findIndex(c => c.id === componentId);
-      setCurrentFunnel(prev => ({
+
+      const index = currentPage.components.findIndex(
+        (c) => c.id === componentId
+      );
+      setCurrentFunnel((prev) => ({
         ...prev,
-        pages: prev.pages.map((page, pageIndex) => 
-          pageIndex === currentPageIndex 
+        pages: prev.pages.map((page, pageIndex) =>
+          pageIndex === currentPageIndex
             ? {
                 ...page,
                 components: [
                   ...page.components.slice(0, index + 1),
                   newComponent,
-                  ...page.components.slice(index + 1)
-                ]
+                  ...page.components.slice(index + 1),
+                ],
               }
             : page
-        )
+        ),
       }));
     }
   };
@@ -765,23 +892,23 @@ const SimpleDragDropEditor: React.FC = () => {
       id: `${componentType.type}-${Date.now()}`,
       type: componentType.type,
       data: getDefaultData(componentType.type),
-      style: getDefaultStyle(componentType.type)
+      style: getDefaultStyle(componentType.type),
     };
 
-    setCurrentFunnel(prev => ({
+    setCurrentFunnel((prev) => ({
       ...prev,
-      pages: prev.pages.map((page, pageIndex) => 
-        pageIndex === currentPageIndex 
+      pages: prev.pages.map((page, pageIndex) =>
+        pageIndex === currentPageIndex
           ? {
               ...page,
               components: [
                 ...page.components.slice(0, index),
                 newComponent,
-                ...page.components.slice(index)
-              ]
+                ...page.components.slice(index),
+              ],
             }
           : page
-      )
+      ),
     }));
 
     setSelectedComponent(newComponent.id);
@@ -795,16 +922,16 @@ const SimpleDragDropEditor: React.FC = () => {
       <div key={component.id} className="relative">
         {/* Drop Zone */}
         <div
-          className={`drop-zone ${dragOverIndex === index ? 'drag-over' : ''}`}
+          className={`drop-zone ${dragOverIndex === index ? "drag-over" : ""}`}
           onDragOver={(e) => handleDragOver(e, index)}
           onDrop={(e) => handleDrop(e, index)}
         >
-          {dragOverIndex === index ? 'Solte aqui' : 'Arraste componentes aqui'}
+          {dragOverIndex === index ? "Solte aqui" : "Arraste componentes aqui"}
         </div>
 
         {/* Component Wrapper */}
         <div
-          className={`component-wrapper ${isSelected ? 'selected' : ''}`}
+          className={`component-wrapper ${isSelected ? "selected" : ""}`}
           onClick={() => setSelectedComponent(component.id)}
         >
           {/* Toolbar */}
@@ -844,85 +971,92 @@ const SimpleDragDropEditor: React.FC = () => {
     const { type, data, style } = component;
 
     switch (type) {
-      case 'logo':
+      case "logo":
         return (
-          <div className="text-center" style={{ padding: '16px 0' }}>
+          <div className="text-center" style={{ padding: "16px 0" }}>
             <img
-              src={data.src || 'https://via.placeholder.com/200x100'}
-              alt={data.alt || 'Logo'}
+              src={data.src || "https://via.placeholder.com/200x100"}
+              alt={data.alt || "Logo"}
               style={{
-                maxWidth: '200px',
-                height: 'auto',
-                objectFit: 'contain'
+                maxWidth: "200px",
+                height: "auto",
+                objectFit: "contain",
               }}
             />
           </div>
         );
 
-      case 'progress':
+      case "progress":
         return (
-          <div style={{ padding: '16px 0' }}>
-            <div style={{
-              width: '100%',
-              height: '8px',
-              backgroundColor: '#E5E7EB',
-              borderRadius: '4px',
-              overflow: 'hidden'
-            }}>
-              <div style={{
-                height: '100%',
-                width: `${data.progressValue || 0}%`,
-                background: 'linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)',
-                transition: 'width 0.3s ease'
-              }} />
+          <div style={{ padding: "16px 0" }}>
+            <div
+              style={{
+                width: "100%",
+                height: "8px",
+                backgroundColor: "#E5E7EB",
+                borderRadius: "4px",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  height: "100%",
+                  width: `${data.progressValue || 0}%`,
+                  background:
+                    "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
+                  transition: "width 0.3s ease",
+                }}
+              />
             </div>
           </div>
         );
 
-      case 'input':
+      case "input":
         return (
-          <div style={{ margin: '16px 0' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '8px', 
-              fontWeight: '600',
-              color: '#432818',
-              fontSize: '0.875rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px'
-            }}>
-              {data.label || 'CAMPO'}
-              {data.required && <span style={{ color: 'red' }}> *</span>}
+          <div style={{ margin: "16px 0" }}>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "8px",
+                fontWeight: "600",
+                color: "#432818",
+                fontSize: "0.875rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+              }}
+            >
+              {data.label || "CAMPO"}
+              {data.required && <span style={{ color: "red" }}> *</span>}
             </label>
             <input
               type="text"
-              placeholder={data.placeholder || 'Digite aqui...'}
+              placeholder={data.placeholder || "Digite aqui..."}
               style={{
-                width: '100%',
-                padding: '12px',
-                border: '2px solid #e5e7eb',
-                borderRadius: '8px',
-                fontSize: '1rem'
+                width: "100%",
+                padding: "12px",
+                border: "2px solid #e5e7eb",
+                borderRadius: "8px",
+                fontSize: "1rem",
               }}
             />
           </div>
         );
 
-      case 'options':
+      case "options":
         return (
-          <div style={{ margin: '16px 0' }}>
+          <div style={{ margin: "16px 0" }}>
             {data.options?.map((option: QuizOption) => (
               <div
                 key={option.id}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '16px',
-                  margin: '8px 0',
-                  background: 'white',
-                  border: '2px solid #e5e7eb',
-                  borderRadius: '12px',
-                  cursor: 'pointer'
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "16px",
+                  margin: "8px 0",
+                  background: "white",
+                  border: "2px solid #e5e7eb",
+                  borderRadius: "12px",
+                  cursor: "pointer",
                 }}
               >
                 {data.hasImages && option.image && (
@@ -930,11 +1064,11 @@ const SimpleDragDropEditor: React.FC = () => {
                     src={option.image}
                     alt={option.text}
                     style={{
-                      width: '60px',
-                      height: '60px',
-                      objectFit: 'cover',
-                      borderRadius: '8px',
-                      marginRight: '12px'
+                      width: "60px",
+                      height: "60px",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                      marginRight: "12px",
                     }}
                   />
                 )}
@@ -944,72 +1078,72 @@ const SimpleDragDropEditor: React.FC = () => {
           </div>
         );
 
-      case 'title':
-      case 'subtitle':
-      case 'text':
+      case "title":
+      case "subtitle":
+      case "text":
         return (
           <div
             style={{
-              fontSize: style?.fontSize || '1rem',
-              fontWeight: style?.fontWeight || 'normal',
-              textAlign: style?.textAlign || 'left',
-              color: style?.color || '#000000',
-              padding: '8px 0',
-              whiteSpace: 'pre-line'
+              fontSize: style?.fontSize || "1rem",
+              fontWeight: style?.fontWeight || "normal",
+              textAlign: style?.textAlign || "left",
+              color: style?.color || "#000000",
+              padding: "8px 0",
+              whiteSpace: "pre-line",
             }}
           >
-            {data.text || 'Clique para editar...'}
+            {data.text || "Clique para editar..."}
           </div>
         );
 
-      case 'image':
+      case "image":
         return (
-          <div className="text-center" style={{ padding: '16px 0' }}>
+          <div className="text-center" style={{ padding: "16px 0" }}>
             <img
-              src={data.src || 'https://via.placeholder.com/400x300'}
-              alt={data.alt || 'Imagem'}
+              src={data.src || "https://via.placeholder.com/400x300"}
+              alt={data.alt || "Imagem"}
               style={{
-                maxWidth: '100%',
-                height: 'auto',
-                borderRadius: '8px'
+                maxWidth: "100%",
+                height: "auto",
+                borderRadius: "8px",
               }}
             />
           </div>
         );
 
-      case 'button':
+      case "button":
         return (
-          <div style={{ textAlign: 'center', margin: '16px 0' }}>
+          <div style={{ textAlign: "center", margin: "16px 0" }}>
             <button
               style={{
-                padding: '12px 24px',
-                background: 'linear-gradient(135deg, #B89B7A 0%, #aa6b5d 100%)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                fontWeight: '600',
-                cursor: 'pointer'
+                padding: "12px 24px",
+                background: "linear-gradient(135deg, #B89B7A 0%, #aa6b5d 100%)",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "1rem",
+                fontWeight: "600",
+                cursor: "pointer",
               }}
             >
-              {data.text || 'BOTÃO'}
+              {data.text || "BOTÃO"}
             </button>
           </div>
         );
 
-      case 'spacer':
+      case "spacer":
         return (
           <div
             style={{
               height: `${data.height || 32}px`,
-              border: '1px dashed #cbd5e1',
-              borderRadius: '4px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#64748b',
-              fontSize: '0.75rem',
-              opacity: 0.5
+              border: "1px dashed #cbd5e1",
+              borderRadius: "4px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#64748b",
+              fontSize: "0.75rem",
+              opacity: 0.5,
             }}
           >
             Espaçamento ({data.height || 32}px)
@@ -1022,68 +1156,86 @@ const SimpleDragDropEditor: React.FC = () => {
   };
 
   const renderPropertiesPanel = () => {
-    const component = currentPage.components.find(c => c.id === selectedComponent);
+    const component = currentPage.components.find(
+      (c) => c.id === selectedComponent
+    );
     if (!component) return null;
 
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm">Propriedades - {component.type}</CardTitle>
+          <CardTitle className="text-sm">
+            Propriedades - {component.type}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Texto para title, subtitle, text, button */}
-          {['title', 'subtitle', 'text', 'button'].includes(component.type) && (
+          {["title", "subtitle", "text", "button"].includes(component.type) && (
             <div>
               <Label>Texto</Label>
               <Textarea
-                value={component.data.text || ''}
-                onChange={(e) => updateComponent(component.id, { text: e.target.value })}
+                value={component.data.text || ""}
+                onChange={(e) =>
+                  updateComponent(component.id, { text: e.target.value })
+                }
                 rows={3}
               />
             </div>
           )}
 
           {/* Propriedades de imagem e logo */}
-          {['image', 'logo'].includes(component.type) && (
+          {["image", "logo"].includes(component.type) && (
             <>
               <div>
                 <Label>URL da Imagem</Label>
                 <Input
-                  value={component.data.src || ''}
-                  onChange={(e) => updateComponent(component.id, { src: e.target.value })}
+                  value={component.data.src || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { src: e.target.value })
+                  }
                 />
               </div>
               <div>
                 <Label>Texto Alternativo</Label>
                 <Input
-                  value={component.data.alt || ''}
-                  onChange={(e) => updateComponent(component.id, { alt: e.target.value })}
+                  value={component.data.alt || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { alt: e.target.value })
+                  }
                 />
               </div>
             </>
           )}
 
           {/* Propriedades de input */}
-          {component.type === 'input' && (
+          {component.type === "input" && (
             <>
               <div>
                 <Label>Rótulo</Label>
                 <Input
-                  value={component.data.label || ''}
-                  onChange={(e) => updateComponent(component.id, { label: e.target.value })}
+                  value={component.data.label || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, { label: e.target.value })
+                  }
                 />
               </div>
               <div>
                 <Label>Placeholder</Label>
                 <Input
-                  value={component.data.placeholder || ''}
-                  onChange={(e) => updateComponent(component.id, { placeholder: e.target.value })}
+                  value={component.data.placeholder || ""}
+                  onChange={(e) =>
+                    updateComponent(component.id, {
+                      placeholder: e.target.value,
+                    })
+                  }
                 />
               </div>
               <div className="flex items-center space-x-2">
                 <Switch
                   checked={component.data.required || false}
-                  onCheckedChange={(checked) => updateComponent(component.id, { required: checked })}
+                  onCheckedChange={(checked) =>
+                    updateComponent(component.id, { required: checked })
+                  }
                 />
                 <Label>Obrigatório</Label>
               </div>
@@ -1091,13 +1243,17 @@ const SimpleDragDropEditor: React.FC = () => {
           )}
 
           {/* Propriedades de progress */}
-          {component.type === 'progress' && (
+          {component.type === "progress" && (
             <div>
               <Label>Valor do Progresso (%)</Label>
               <Input
                 type="number"
                 value={component.data.progressValue || 0}
-                onChange={(e) => updateComponent(component.id, { progressValue: parseInt(e.target.value) || 0 })}
+                onChange={(e) =>
+                  updateComponent(component.id, {
+                    progressValue: parseInt(e.target.value) || 0,
+                  })
+                }
                 min="0"
                 max="100"
               />
@@ -1105,31 +1261,39 @@ const SimpleDragDropEditor: React.FC = () => {
           )}
 
           {/* Propriedades de spacer */}
-          {component.type === 'spacer' && (
+          {component.type === "spacer" && (
             <div>
               <Label>Altura (px)</Label>
               <Input
                 type="number"
                 value={component.data.height || 32}
-                onChange={(e) => updateComponent(component.id, { height: parseInt(e.target.value) || 32 })}
+                onChange={(e) =>
+                  updateComponent(component.id, {
+                    height: parseInt(e.target.value) || 32,
+                  })
+                }
               />
             </div>
           )}
 
           {/* Propriedades de opções */}
-          {component.type === 'options' && (
+          {component.type === "options" && (
             <>
               <div className="flex items-center space-x-2">
                 <Switch
                   checked={component.data.hasImages || false}
-                  onCheckedChange={(checked) => updateComponent(component.id, { hasImages: checked })}
+                  onCheckedChange={(checked) =>
+                    updateComponent(component.id, { hasImages: checked })
+                  }
                 />
                 <Label>Com Imagens</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <Switch
                   checked={component.data.multiSelect || false}
-                  onCheckedChange={(checked) => updateComponent(component.id, { multiSelect: checked })}
+                  onCheckedChange={(checked) =>
+                    updateComponent(component.id, { multiSelect: checked })
+                  }
                 />
                 <Label>Múltipla Seleção</Label>
               </div>
@@ -1152,14 +1316,14 @@ const SimpleDragDropEditor: React.FC = () => {
 
   const getDeviceClass = () => {
     switch (deviceView) {
-      case 'mobile':
-        return 'max-w-sm mx-auto';
-      case 'tablet':
-        return 'max-w-md mx-auto';
-      case 'desktop':
-        return 'max-w-2xl mx-auto';
+      case "mobile":
+        return "max-w-sm mx-auto";
+      case "tablet":
+        return "max-w-md mx-auto";
+      case "desktop":
+        return "max-w-2xl mx-auto";
       default:
-        return 'max-w-2xl mx-auto';
+        return "max-w-2xl mx-auto";
     }
   };
 
@@ -1169,37 +1333,39 @@ const SimpleDragDropEditor: React.FC = () => {
       <div className="w-80 border-r bg-muted/30 overflow-hidden">
         <div className="p-4 border-b">
           <h2 className="text-lg font-semibold mb-4">Editor de Funil</h2>
-          
+
           {/* Nome do Funil */}
           <div className="mb-4">
             <Label className="text-xs">Nome do Funil</Label>
             <Input
               value={currentFunnel.name}
-              onChange={(e) => setCurrentFunnel(prev => ({ ...prev, name: e.target.value }))}
+              onChange={(e) =>
+                setCurrentFunnel((prev) => ({ ...prev, name: e.target.value }))
+              }
               className="mt-1"
               placeholder="Nome do seu quiz"
             />
           </div>
-          
+
           <div className="flex gap-1 mb-4">
             <Button
-              variant={deviceView === 'mobile' ? 'default' : 'outline'}
+              variant={deviceView === "mobile" ? "default" : "outline"}
               size="sm"
-              onClick={() => setDeviceView('mobile')}
+              onClick={() => setDeviceView("mobile")}
             >
               <Smartphone className="h-4 w-4" />
             </Button>
             <Button
-              variant={deviceView === 'tablet' ? 'default' : 'outline'}
+              variant={deviceView === "tablet" ? "default" : "outline"}
               size="sm"
-              onClick={() => setDeviceView('tablet')}
+              onClick={() => setDeviceView("tablet")}
             >
               <Tablet className="h-4 w-4" />
             </Button>
             <Button
-              variant={deviceView === 'desktop' ? 'default' : 'outline'}
+              variant={deviceView === "desktop" ? "default" : "outline"}
               size="sm"
-              onClick={() => setDeviceView('desktop')}
+              onClick={() => setDeviceView("desktop")}
             >
               <Monitor className="h-4 w-4" />
             </Button>
@@ -1221,7 +1387,9 @@ const SimpleDragDropEditor: React.FC = () => {
                   {currentFunnel.pages.map((page, index) => (
                     <div key={page.id} className="relative">
                       <Button
-                        variant={index === currentPageIndex ? 'default' : 'outline'}
+                        variant={
+                          index === currentPageIndex ? "default" : "outline"
+                        }
                         size="sm"
                         className="w-full justify-start"
                         onClick={() => setCurrentPageIndex(index)}
@@ -1231,7 +1399,9 @@ const SimpleDragDropEditor: React.FC = () => {
                             {index + 1}
                           </Badge>
                           <div className="flex-1 text-left">
-                            <div className="font-medium text-sm truncate">{page.title}</div>
+                            <div className="font-medium text-sm truncate">
+                              {page.title}
+                            </div>
                             <div className="text-xs text-muted-foreground">
                               {page.type} • {page.components.length} componentes
                             </div>
@@ -1241,7 +1411,7 @@ const SimpleDragDropEditor: React.FC = () => {
                           </div>
                         </div>
                       </Button>
-                      
+
                       {/* Conectores visuais */}
                       {index < currentFunnel.pages.length - 1 && (
                         <div className="flex justify-center mt-1 mb-1">
@@ -1257,23 +1427,31 @@ const SimpleDragDropEditor: React.FC = () => {
             {/* Configurações da Página Atual */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm">Configurações da Página</CardTitle>
+                <CardTitle className="text-sm">
+                  Configurações da Página
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div>
                   <Label>Título da Página</Label>
                   <Input
                     value={currentPage.title}
-                    onChange={(e) => updateCurrentPage({ title: e.target.value })}
+                    onChange={(e) =>
+                      updateCurrentPage({ title: e.target.value })
+                    }
                   />
                 </div>
-                
+
                 <div>
                   <Label>Progresso (%)</Label>
                   <Input
                     type="number"
                     value={currentPage.progress}
-                    onChange={(e) => updateCurrentPage({ progress: parseInt(e.target.value) || 0 })}
+                    onChange={(e) =>
+                      updateCurrentPage({
+                        progress: parseInt(e.target.value) || 0,
+                      })
+                    }
                     min="0"
                     max="100"
                   />
@@ -1282,7 +1460,9 @@ const SimpleDragDropEditor: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <Switch
                     checked={currentPage.showHeader}
-                    onCheckedChange={(checked) => updateCurrentPage({ showHeader: checked })}
+                    onCheckedChange={(checked) =>
+                      updateCurrentPage({ showHeader: checked })
+                    }
                   />
                   <Label>Mostrar Header</Label>
                 </div>
@@ -1290,7 +1470,9 @@ const SimpleDragDropEditor: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <Switch
                     checked={currentPage.showProgress}
-                    onCheckedChange={(checked) => updateCurrentPage({ showProgress: checked })}
+                    onCheckedChange={(checked) =>
+                      updateCurrentPage({ showProgress: checked })
+                    }
                   />
                   <Label>Mostrar Progresso</Label>
                 </div>
@@ -1313,7 +1495,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.intro;
-                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
                   📝 Página de Introdução
@@ -1325,7 +1507,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.question1;
-                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
                   🖼️ Questão Visual
@@ -1337,7 +1519,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.question2;
-                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
                   📄 Questão de Texto
@@ -1349,7 +1531,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.loading;
-                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
                   ⏳ Tela de Loading
@@ -1361,7 +1543,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.result;
-                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
                   🎯 Página de Resultado
@@ -1373,14 +1555,14 @@ const SimpleDragDropEditor: React.FC = () => {
                   onClick={() => {
                     const newPages = [...currentFunnel.pages];
                     newPages[currentPageIndex] = QUIZ_TEMPLATES.offer;
-                    setCurrentFunnel(prev => ({ ...prev, pages: newPages }));
+                    setCurrentFunnel((prev) => ({ ...prev, pages: newPages }));
                   }}
                 >
                   💰 Página de Oferta
                 </Button>
-                
+
                 <Separator />
-                
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -1390,7 +1572,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <Copy className="h-3 w-3 mr-2" />
                   Duplicar Página Atual
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -1400,7 +1582,7 @@ const SimpleDragDropEditor: React.FC = () => {
                   <Plus className="h-3 w-3 mr-2" />
                   Adicionar Nova Página
                 </Button>
-                
+
                 {currentFunnel.pages.length > 1 && (
                   <Button
                     variant="destructive"
@@ -1437,7 +1619,9 @@ const SimpleDragDropEditor: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <Icon className="h-4 w-4" />
                           <div>
-                            <div className="font-medium text-sm">{componentType.name}</div>
+                            <div className="font-medium text-sm">
+                              {componentType.name}
+                            </div>
                             <div className="text-xs text-muted-foreground">
                               {componentType.description}
                             </div>
@@ -1467,20 +1651,20 @@ const SimpleDragDropEditor: React.FC = () => {
                 Página {currentPageIndex + 1} de {currentFunnel.pages.length}
               </Badge>
             </div>
-            
+
             <div className="flex items-center gap-2">
               {/* Navegação entre páginas */}
               <div className="flex items-center gap-1 mr-2">
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="outline"
                   onClick={goToPreviousPage}
                   disabled={currentPageIndex === 0}
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="outline"
                   onClick={goToNextPage}
                   disabled={currentPageIndex === currentFunnel.pages.length - 1}
@@ -1488,37 +1672,38 @@ const SimpleDragDropEditor: React.FC = () => {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
-              
-              <Button 
-                size="sm" 
+
+              <Button
+                size="sm"
                 variant="outline"
                 onClick={() => {
                   // Preview do funil completo
-                  window.open(`/quiz-preview?funnel=${encodeURIComponent(JSON.stringify(currentFunnel))}`, '_blank');
+                  window.open(
+                    `/quiz-preview?funnel=${encodeURIComponent(
+                      JSON.stringify(currentFunnel)
+                    )}`,
+                    "_blank"
+                  );
                 }}
               >
                 <Play className="h-4 w-4 mr-2" />
                 Testar Funil
               </Button>
-              
-              <Button 
-                size="sm" 
+
+              <Button
+                size="sm"
                 variant="outline"
-                onClick={() => console.log('Preview:', currentPage)}
+                onClick={() => console.log("Preview:", currentPage)}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 Preview
               </Button>
-              
-              <Button 
-                size="sm" 
-                variant="outline"
-                onClick={exportFunnel}
-              >
+
+              <Button size="sm" variant="outline" onClick={exportFunnel}>
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
-              
+
               <Button size="sm">
                 <Save className="h-4 w-4 mr-2" />
                 Salvar Funil
@@ -1531,20 +1716,22 @@ const SimpleDragDropEditor: React.FC = () => {
             <div className={`quiz-preview ${getDeviceClass()}`}>
               {/* Header */}
               {currentPage.showHeader && (
-                <div style={{
-                  padding: '1rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderBottom: '1px solid #e5e7eb'
-                }}>
-                  <img 
+                <div
+                  style={{
+                    padding: "1rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderBottom: "1px solid #e5e7eb",
+                  }}
+                >
+                  <img
                     src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-                    alt="Logo" 
+                    alt="Logo"
                     style={{
-                      maxWidth: '120px',
-                      height: 'auto',
-                      objectFit: 'contain'
+                      maxWidth: "120px",
+                      height: "auto",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
@@ -1552,31 +1739,39 @@ const SimpleDragDropEditor: React.FC = () => {
 
               {/* Progress Bar */}
               {currentPage.showProgress && (
-                <div style={{ padding: '0 1rem 2rem' }}>
-                  <div style={{
-                    width: '100%',
-                    height: '8px',
-                    backgroundColor: '#E5E7EB',
-                    borderRadius: '4px',
-                    overflow: 'hidden'
-                  }}>
-                    <div style={{
-                      height: '100%',
-                      width: `${currentPage.progress}%`,
-                      background: 'linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)',
-                      transition: 'width 0.3s ease'
-                    }} />
+                <div style={{ padding: "0 1rem 2rem" }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "8px",
+                      backgroundColor: "#E5E7EB",
+                      borderRadius: "4px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        height: "100%",
+                        width: `${currentPage.progress}%`,
+                        background:
+                          "linear-gradient(90deg, #B89B7A 0%, #aa6b5d 100%)",
+                        transition: "width 0.3s ease",
+                      }}
+                    />
                   </div>
                 </div>
               )}
 
               {/* Content Area */}
-              <div className="max-w-600px mx-auto" style={{ padding: '0 1rem 2rem' }}>
+              <div
+                className="max-w-600px mx-auto"
+                style={{ padding: "0 1rem 2rem" }}
+              >
                 {/* Drop Zone inicial */}
                 {currentPage.components.length === 0 && (
                   <div
                     className="drop-zone"
-                    style={{ minHeight: '200px' }}
+                    style={{ minHeight: "200px" }}
                     onDragOver={(e) => handleDragOver(e, 0)}
                     onDrop={(e) => handleDrop(e, 0)}
                   >
@@ -1585,15 +1780,21 @@ const SimpleDragDropEditor: React.FC = () => {
                 )}
 
                 {/* Componentes */}
-                {currentPage.components.map((component, index) => 
+                {currentPage.components.map((component, index) =>
                   renderComponent(component, index)
                 )}
 
                 {/* Drop zone final */}
                 {currentPage.components.length > 0 && (
                   <div
-                    className={`drop-zone ${dragOverIndex === currentPage.components.length ? 'drag-over' : ''}`}
-                    onDragOver={(e) => handleDragOver(e, currentPage.components.length)}
+                    className={`drop-zone ${
+                      dragOverIndex === currentPage.components.length
+                        ? "drag-over"
+                        : ""
+                    }`}
+                    onDragOver={(e) =>
+                      handleDragOver(e, currentPage.components.length)
+                    }
                     onDrop={(e) => handleDrop(e, currentPage.components.length)}
                   >
                     Adicionar mais componentes

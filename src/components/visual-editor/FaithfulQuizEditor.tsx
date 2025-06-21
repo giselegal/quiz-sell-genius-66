@@ -5,16 +5,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Save, 
-  Eye, 
-  Edit3, 
-  Settings, 
+import {
+  Save,
+  Eye,
+  Edit3,
+  Settings,
   Plus,
   Trash2,
   Copy,
@@ -27,13 +33,13 @@ import {
   Type,
   Image as ImageIcon,
   MousePointer,
-  Layout
+  Layout,
 } from "lucide-react";
 
 // Interfaces para o sistema de quiz
 interface QuizPage {
   id: string;
-  type: 'intro' | 'question' | 'result' | 'loading';
+  type: "intro" | "question" | "result" | "loading";
   title: string;
   subtitle?: string;
   config: PageConfig;
@@ -51,7 +57,14 @@ interface PageConfig {
 
 interface QuizComponent {
   id: string;
-  type: 'title' | 'subtitle' | 'image' | 'input' | 'button' | 'options' | 'spacer';
+  type:
+    | "title"
+    | "subtitle"
+    | "image"
+    | "input"
+    | "button"
+    | "options"
+    | "spacer";
   data: ComponentData;
   style: ComponentStyle;
 }
@@ -72,7 +85,7 @@ interface ComponentData {
 interface ComponentStyle {
   fontSize?: string;
   fontWeight?: string;
-  textAlign?: 'left' | 'center' | 'right';
+  textAlign?: "left" | "center" | "right";
   color?: string;
   backgroundColor?: string;
   padding?: string;
@@ -296,72 +309,85 @@ const QUIZ_ORIGINAL_CSS = `
 const QUIZ_TEMPLATES = {
   intro: {
     title: "Teste de Estilo Pessoal",
-    subtitle: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp",
+    subtitle:
+      "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
+    image:
+      "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp",
     inputLabel: "NOME",
     inputPlaceholder: "Digite seu nome aqui...",
-    buttonText: "COMEÇAR AGORA"
+    buttonText: "COMEÇAR AGORA",
   },
-  
+
   visualQuestion: {
     title: "QUAL O SEU TIPO DE ROUPA FAVORITA?",
     options: [
       {
         text: "Conforto, leveza e praticidade no vestir",
-        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
-        category: "Natural"
+        image:
+          "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735329/11_hqmr8l.webp",
+        category: "Natural",
       },
       {
         text: "Discrição, caimento clássico e sobriedade",
-        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
-        category: "Clássico"
+        image:
+          "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/12_edlmwf.webp",
+        category: "Clássico",
       },
       {
         text: "Informação de moda, inovação e funcionalidade",
-        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/13_qccdqv.webp",
-        category: "Contemporâneo"
+        image:
+          "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/13_qccdqv.webp",
+        category: "Contemporâneo",
       },
       {
         text: "Luxo, refinamento e qualidade",
-        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_rqy7yh.webp",
-        category: "Elegante"
+        image:
+          "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/14_rqy7yh.webp",
+        category: "Elegante",
       },
       {
         text: "Feminilidade, delicadeza e charme",
-        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/15_kpqhgl.webp",
-        category: "Romântico"
+        image:
+          "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735330/15_kpqhgl.webp",
+        category: "Romântico",
       },
       {
         text: "Sensualidade, glamour e sedução",
-        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735331/16_oqc9gd.webp",
-        category: "Sexy"
+        image:
+          "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735331/16_oqc9gd.webp",
+        category: "Sexy",
       },
       {
         text: "Imponência, sofisticação e poder",
-        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735331/17_iqr8th.webp",
-        category: "Dramático"
+        image:
+          "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735331/17_iqr8th.webp",
+        category: "Dramático",
       },
       {
         text: "Originalidade, criatividade e personalidade",
-        image: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735331/18_o5gzhu.webp",
-        category: "Criativo"
-      }
-    ]
+        image:
+          "https://res.cloudinary.com/dqljyf76t/image/upload/v1744735331/18_o5gzhu.webp",
+        category: "Criativo",
+      },
+    ],
   },
 
   textQuestion: {
     title: "RESUMA A SUA PERSONALIDADE:",
     options: [
-      { text: "Informal, espontânea, alegre, essencialista", category: "Natural" },
+      {
+        text: "Informal, espontânea, alegre, essencialista",
+        category: "Natural",
+      },
       { text: "Conservadora, séria, organizada", category: "Clássico" },
       { text: "Informada, ativa, prática", category: "Contemporâneo" },
       { text: "Exigente, sofisticada, seletiva", category: "Elegante" },
       { text: "Feminina, meiga, delicada, sensível", category: "Romântico" },
       { text: "Glamorosa, vaidosa, sensual", category: "Sexy" },
       { text: "Cosmopolita, moderna e audaciosa", category: "Dramático" },
-      { text: "Exótica, aventureira, livre", category: "Criativo" }
-    ]
-  }
+      { text: "Exótica, aventureira, livre", category: "Criativo" },
+    ],
+  },
 };
 
 const FaithfulQuizEditor: React.FC = () => {
@@ -373,121 +399,150 @@ const FaithfulQuizEditor: React.FC = () => {
       showHeader: true,
       showProgress: true,
       showBackButton: false,
-      logoUrl: "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
+      logoUrl:
+        "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
       backgroundColor: "#FFFBF7",
-      progressValue: 14
+      progressValue: 14,
     },
     components: [
       {
         id: "title-1",
         type: "title",
         data: { text: "Teste de Estilo Pessoal" },
-        style: { textAlign: "center", fontSize: "2.5rem", fontWeight: "700", color: "#432818" }
+        style: {
+          textAlign: "center",
+          fontSize: "2.5rem",
+          fontWeight: "700",
+          color: "#432818",
+        },
       },
       {
         id: "image-1",
         type: "image",
-        data: { 
+        data: {
           src: "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.webp",
-          alt: "Imagem de introdução"
+          alt: "Imagem de introdução",
         },
-        style: {}
+        style: {},
       },
       {
         id: "subtitle-1",
         type: "subtitle",
-        data: { text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você." },
-        style: { textAlign: "center", fontSize: "1.25rem", color: "#6B4F43" }
+        data: {
+          text: "Chega de um guarda-roupa lotado e da sensação de que nada combina com Você.",
+        },
+        style: { textAlign: "center", fontSize: "1.25rem", color: "#6B4F43" },
       },
       {
         id: "input-1",
         type: "input",
-        data: { label: "NOME", placeholder: "Digite seu nome aqui...", required: true },
-        style: {}
+        data: {
+          label: "NOME",
+          placeholder: "Digite seu nome aqui...",
+          required: true,
+        },
+        style: {},
       },
       {
         id: "button-1",
         type: "button",
         data: { text: "COMEÇAR AGORA" },
-        style: {}
-      }
-    ]
+        style: {},
+      },
+    ],
   });
 
-  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
-  const [deviceView, setDeviceView] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [selectedComponent, setSelectedComponent] = useState<string | null>(
+    null
+  );
+  const [viewMode, setViewMode] = useState<"edit" | "preview">("edit");
+  const [deviceView, setDeviceView] = useState<"mobile" | "tablet" | "desktop">(
+    "desktop"
+  );
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   // Aplicar CSS personalizado
   useEffect(() => {
-    const styleElement = document.createElement('style');
+    const styleElement = document.createElement("style");
     styleElement.textContent = QUIZ_ORIGINAL_CSS;
     document.head.appendChild(styleElement);
-    
+
     return () => {
       document.head.removeChild(styleElement);
     };
   }, []);
 
   // Funções de manipulação
-  const updateComponent = (componentId: string, newData: Partial<ComponentData>) => {
-    setCurrentPage(prev => ({
+  const updateComponent = (
+    componentId: string,
+    newData: Partial<ComponentData>
+  ) => {
+    setCurrentPage((prev) => ({
       ...prev,
-      components: prev.components.map(comp =>
+      components: prev.components.map((comp) =>
         comp.id === componentId
           ? { ...comp, data: { ...comp.data, ...newData } }
           : comp
-      )
+      ),
     }));
   };
 
-  const updateComponentStyle = (componentId: string, newStyle: Partial<ComponentStyle>) => {
-    setCurrentPage(prev => ({
+  const updateComponentStyle = (
+    componentId: string,
+    newStyle: Partial<ComponentStyle>
+  ) => {
+    setCurrentPage((prev) => ({
       ...prev,
-      components: prev.components.map(comp =>
+      components: prev.components.map((comp) =>
         comp.id === componentId
           ? { ...comp, style: { ...comp.style, ...newStyle } }
           : comp
-      )
+      ),
     }));
   };
 
-  const addComponent = (type: QuizComponent['type']) => {
+  const addComponent = (type: QuizComponent["type"]) => {
     const newComponent: QuizComponent = {
       id: `${type}-${Date.now()}`,
       type: type,
       data: getDefaultComponentData(type),
-      style: getDefaultComponentStyle(type)
+      style: getDefaultComponentStyle(type),
     };
 
-    setCurrentPage(prev => ({
+    setCurrentPage((prev) => ({
       ...prev,
-      components: [...prev.components, newComponent]
+      components: [...prev.components, newComponent],
     }));
   };
 
   const getDefaultComponentData = (type: string) => {
     switch (type) {
-      case 'title':
+      case "title":
         return { text: "Novo Título" };
-      case 'subtitle':
+      case "subtitle":
         return { text: "Novo subtítulo" };
-      case 'image':
-        return { src: "https://via.placeholder.com/400x300", alt: "Nova imagem" };
-      case 'input':
-        return { label: "CAMPO", placeholder: "Digite aqui...", required: false };
-      case 'button':
+      case "image":
+        return {
+          src: "https://via.placeholder.com/400x300",
+          alt: "Nova imagem",
+        };
+      case "input":
+        return {
+          label: "CAMPO",
+          placeholder: "Digite aqui...",
+          required: false,
+        };
+      case "button":
         return { text: "BOTÃO" };
-      case 'options':
+      case "options":
         return {
           multiSelect: false,
           options: [
             { id: "opt-1", text: "Opção 1", value: "option1" },
-            { id: "opt-2", text: "Opção 2", value: "option2" }
-          ]
+            { id: "opt-2", text: "Opção 2", value: "option2" },
+          ],
         };
-      case 'spacer':
+      case "spacer":
         return { height: 32 };
       default:
         return {};
@@ -496,9 +551,14 @@ const FaithfulQuizEditor: React.FC = () => {
 
   const getDefaultComponentStyle = (type: string): ComponentStyle => {
     switch (type) {
-      case 'title':
-        return { textAlign: "center", fontSize: "2.5rem", fontWeight: "700", color: "#432818" };
-      case 'subtitle':
+      case "title":
+        return {
+          textAlign: "center",
+          fontSize: "2.5rem",
+          fontWeight: "700",
+          color: "#432818",
+        };
+      case "subtitle":
         return { textAlign: "center", fontSize: "1.25rem", color: "#6B4F43" };
       default:
         return {};
@@ -506,9 +566,9 @@ const FaithfulQuizEditor: React.FC = () => {
   };
 
   const deleteComponent = (componentId: string) => {
-    setCurrentPage(prev => ({
+    setCurrentPage((prev) => ({
       ...prev,
-      components: prev.components.filter(comp => comp.id !== componentId)
+      components: prev.components.filter((comp) => comp.id !== componentId),
     }));
     setSelectedComponent(null);
   };
@@ -517,64 +577,81 @@ const FaithfulQuizEditor: React.FC = () => {
     const template = QUIZ_TEMPLATES[templateType];
     let components: QuizComponent[] = [];
 
-    if (templateType === 'intro') {
+    if (templateType === "intro") {
       components = [
         {
           id: "title-template",
           type: "title",
           data: { text: template.title },
-          style: { textAlign: "center", fontSize: "2.5rem", fontWeight: "700", color: "#432818" }
+          style: {
+            textAlign: "center",
+            fontSize: "2.5rem",
+            fontWeight: "700",
+            color: "#432818",
+          },
         },
         {
           id: "image-template",
           type: "image",
           data: { src: template.image, alt: "Imagem de introdução" },
-          style: {}
+          style: {},
         },
         {
           id: "subtitle-template",
           type: "subtitle",
           data: { text: template.subtitle },
-          style: { textAlign: "center", fontSize: "1.25rem", color: "#6B4F43" }
+          style: { textAlign: "center", fontSize: "1.25rem", color: "#6B4F43" },
         },
         {
           id: "input-template",
           type: "input",
-          data: { label: template.inputLabel, placeholder: template.inputPlaceholder, required: true },
-          style: {}
+          data: {
+            label: template.inputLabel,
+            placeholder: template.inputPlaceholder,
+            required: true,
+          },
+          style: {},
         },
         {
           id: "button-template",
           type: "button",
           data: { text: template.buttonText },
-          style: {}
-        }
+          style: {},
+        },
       ];
-    } else if (templateType === 'visualQuestion' || templateType === 'textQuestion') {
+    } else if (
+      templateType === "visualQuestion" ||
+      templateType === "textQuestion"
+    ) {
       components = [
         {
           id: "title-template",
           type: "title",
           data: { text: template.title },
-          style: { textAlign: "center", fontSize: "2rem", fontWeight: "700", color: "#432818" }
+          style: {
+            textAlign: "center",
+            fontSize: "2rem",
+            fontWeight: "700",
+            color: "#432818",
+          },
         },
         {
           id: "options-template",
           type: "options",
           data: {
             multiSelect: false,
-            hasImages: templateType === 'visualQuestion',
-            options: template.options
+            hasImages: templateType === "visualQuestion",
+            options: template.options,
           },
-          style: {}
-        }
+          style: {},
+        },
       ];
     }
 
-    setCurrentPage(prev => ({
+    setCurrentPage((prev) => ({
       ...prev,
-      type: templateType === 'intro' ? 'intro' : 'question',
-      components
+      type: templateType === "intro" ? "intro" : "question",
+      components,
     }));
   };
 
@@ -582,14 +659,14 @@ const FaithfulQuizEditor: React.FC = () => {
   const renderFaithfulPreview = () => {
     const getDeviceClass = () => {
       switch (deviceView) {
-        case 'mobile':
-          return 'max-w-sm mx-auto';
-        case 'tablet':
-          return 'max-w-md mx-auto';
-        case 'desktop':
-          return 'max-w-2xl mx-auto';
+        case "mobile":
+          return "max-w-sm mx-auto";
+        case "tablet":
+          return "max-w-md mx-auto";
+        case "desktop":
+          return "max-w-2xl mx-auto";
         default:
-          return 'max-w-2xl mx-auto';
+          return "max-w-2xl mx-auto";
       }
     };
 
@@ -603,9 +680,9 @@ const FaithfulQuizEditor: React.FC = () => {
                 <ArrowLeft className="h-5 w-5" />
               </button>
             )}
-            <img 
-              src={currentPage.config.logoUrl} 
-              alt="Logo" 
+            <img
+              src={currentPage.config.logoUrl}
+              alt="Logo"
               className="quiz-logo"
             />
           </div>
@@ -615,7 +692,7 @@ const FaithfulQuizEditor: React.FC = () => {
         {currentPage.config.showProgress && (
           <div className="quiz-progress-container">
             <div className="quiz-progress-bar">
-              <div 
+              <div
                 className="quiz-progress-fill"
                 style={{ width: `${currentPage.config.progressValue}%` }}
               />
@@ -625,12 +702,18 @@ const FaithfulQuizEditor: React.FC = () => {
 
         {/* Content */}
         <div className="quiz-content">
-          {currentPage.components.map(component => (
+          {currentPage.components.map((component) => (
             <div
               key={component.id}
-              className={`component-wrapper ${selectedComponent === component.id ? 'ring-2 ring-blue-500 ring-offset-2 rounded-lg' : ''}`}
-              onClick={() => viewMode === 'edit' && setSelectedComponent(component.id)}
-              style={{ cursor: viewMode === 'edit' ? 'pointer' : 'default' }}
+              className={`component-wrapper ${
+                selectedComponent === component.id
+                  ? "ring-2 ring-blue-500 ring-offset-2 rounded-lg"
+                  : ""
+              }`}
+              onClick={() =>
+                viewMode === "edit" && setSelectedComponent(component.id)
+              }
+              style={{ cursor: viewMode === "edit" ? "pointer" : "default" }}
             >
               {renderFaithfulComponent(component)}
             </div>
@@ -644,43 +727,31 @@ const FaithfulQuizEditor: React.FC = () => {
     const { type, data, style } = component;
 
     switch (type) {
-      case 'title':
+      case "title":
         return (
-          <h1 
-            className="quiz-title"
-            style={style}
-          >
+          <h1 className="quiz-title" style={style}>
             {data.text}
           </h1>
         );
 
-      case 'subtitle':
+      case "subtitle":
         return (
-          <p 
-            className="quiz-subtitle"
-            style={style}
-          >
+          <p className="quiz-subtitle" style={style}>
             {data.text}
           </p>
         );
 
-      case 'image':
-        return (
-          <img 
-            src={data.src}
-            alt={data.alt}
-            className="quiz-image"
-          />
-        );
+      case "image":
+        return <img src={data.src} alt={data.alt} className="quiz-image" />;
 
-      case 'input':
+      case "input":
         return (
           <div className="quiz-input-group">
             <label className="quiz-input-label">
               {data.label}
-              {data.required && <span style={{ color: 'red' }}> *</span>}
+              {data.required && <span style={{ color: "red" }}> *</span>}
             </label>
-            <input 
+            <input
               type="text"
               className="quiz-input"
               placeholder={data.placeholder}
@@ -689,25 +760,23 @@ const FaithfulQuizEditor: React.FC = () => {
           </div>
         );
 
-      case 'button':
-        return (
-          <button className="quiz-button">
-            {data.text}
-          </button>
-        );
+      case "button":
+        return <button className="quiz-button">{data.text}</button>;
 
-      case 'options':
+      case "options":
         return (
           <div className="quiz-options">
             {data.options.map((option: QuizOption) => (
               <div
                 key={option.id}
-                className={`quiz-option ${selectedOptions.includes(option.id) ? 'selected' : ''}`}
+                className={`quiz-option ${
+                  selectedOptions.includes(option.id) ? "selected" : ""
+                }`}
                 onClick={() => {
                   if (data.multiSelect) {
-                    setSelectedOptions(prev => 
-                      prev.includes(option.id) 
-                        ? prev.filter(id => id !== option.id)
+                    setSelectedOptions((prev) =>
+                      prev.includes(option.id)
+                        ? prev.filter((id) => id !== option.id)
                         : [...prev, option.id]
                     );
                   } else {
@@ -716,23 +785,21 @@ const FaithfulQuizEditor: React.FC = () => {
                 }}
               >
                 {data.hasImages && option.image && (
-                  <img 
+                  <img
                     src={option.image}
                     alt={option.text}
                     className="quiz-option-image"
                   />
                 )}
-                <div className="quiz-option-text">
-                  {option.text}
-                </div>
+                <div className="quiz-option-text">{option.text}</div>
               </div>
             ))}
           </div>
         );
 
-      case 'spacer':
+      case "spacer":
         return (
-          <div 
+          <div
             style={{ height: `${data.height}px` }}
             className="opacity-30 border border-dashed border-gray-400 rounded"
           />
@@ -745,78 +812,98 @@ const FaithfulQuizEditor: React.FC = () => {
 
   // Painel de propriedades
   const renderPropertiesPanel = () => {
-    const component = currentPage.components.find(c => c.id === selectedComponent);
+    const component = currentPage.components.find(
+      (c) => c.id === selectedComponent
+    );
     if (!component) return null;
 
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm">Propriedades - {component.type}</CardTitle>
+          <CardTitle className="text-sm">
+            Propriedades - {component.type}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Propriedades do conteúdo */}
-          {component.type === 'title' || component.type === 'subtitle' ? (
+          {component.type === "title" || component.type === "subtitle" ? (
             <div>
               <Label>Texto</Label>
               <Textarea
                 value={component.data.text}
-                onChange={(e) => updateComponent(component.id, { text: e.target.value })}
+                onChange={(e) =>
+                  updateComponent(component.id, { text: e.target.value })
+                }
                 rows={3}
               />
             </div>
           ) : null}
 
-          {component.type === 'image' && (
+          {component.type === "image" && (
             <>
               <div>
                 <Label>URL da Imagem</Label>
                 <Input
                   value={component.data.src}
-                  onChange={(e) => updateComponent(component.id, { src: e.target.value })}
+                  onChange={(e) =>
+                    updateComponent(component.id, { src: e.target.value })
+                  }
                 />
               </div>
               <div>
                 <Label>Texto Alternativo</Label>
                 <Input
                   value={component.data.alt}
-                  onChange={(e) => updateComponent(component.id, { alt: e.target.value })}
+                  onChange={(e) =>
+                    updateComponent(component.id, { alt: e.target.value })
+                  }
                 />
               </div>
             </>
           )}
 
-          {component.type === 'input' && (
+          {component.type === "input" && (
             <>
               <div>
                 <Label>Rótulo</Label>
                 <Input
                   value={component.data.label}
-                  onChange={(e) => updateComponent(component.id, { label: e.target.value })}
+                  onChange={(e) =>
+                    updateComponent(component.id, { label: e.target.value })
+                  }
                 />
               </div>
               <div>
                 <Label>Placeholder</Label>
                 <Input
                   value={component.data.placeholder}
-                  onChange={(e) => updateComponent(component.id, { placeholder: e.target.value })}
+                  onChange={(e) =>
+                    updateComponent(component.id, {
+                      placeholder: e.target.value,
+                    })
+                  }
                 />
               </div>
               <div className="flex items-center space-x-2">
                 <Switch
                   checked={component.data.required}
-                  onCheckedChange={(checked) => updateComponent(component.id, { required: checked })}
+                  onCheckedChange={(checked) =>
+                    updateComponent(component.id, { required: checked })
+                  }
                 />
                 <Label>Obrigatório</Label>
               </div>
             </>
           )}
 
-          {component.type === 'button' && (
+          {component.type === "button" && (
             <div>
               <Label>Texto do Botão</Label>
               <Input
                 value={component.data.text}
-                onChange={(e) => updateComponent(component.id, { text: e.target.value })}
+                onChange={(e) =>
+                  updateComponent(component.id, { text: e.target.value })
+                }
               />
             </div>
           )}
@@ -825,14 +912,16 @@ const FaithfulQuizEditor: React.FC = () => {
           <Separator />
           <div className="space-y-3">
             <Label className="text-sm font-semibold">Estilo</Label>
-            
-            {(component.type === 'title' || component.type === 'subtitle') && (
+
+            {(component.type === "title" || component.type === "subtitle") && (
               <>
                 <div>
                   <Label>Alinhamento</Label>
                   <Select
-                    value={component.style.textAlign || 'center'}
-                    onValueChange={(value: 'left' | 'center' | 'right') => updateComponentStyle(component.id, { textAlign: value })}
+                    value={component.style.textAlign || "center"}
+                    onValueChange={(value: "left" | "center" | "right") =>
+                      updateComponentStyle(component.id, { textAlign: value })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -844,21 +933,29 @@ const FaithfulQuizEditor: React.FC = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label>Cor do Texto</Label>
                   <Input
                     type="color"
-                    value={component.style.color || '#432818'}
-                    onChange={(e) => updateComponentStyle(component.id, { color: e.target.value })}
+                    value={component.style.color || "#432818"}
+                    onChange={(e) =>
+                      updateComponentStyle(component.id, {
+                        color: e.target.value,
+                      })
+                    }
                   />
                 </div>
-                
+
                 <div>
                   <Label>Tamanho da Fonte</Label>
                   <Input
-                    value={component.style.fontSize || ''}
-                    onChange={(e) => updateComponentStyle(component.id, { fontSize: e.target.value })}
+                    value={component.style.fontSize || ""}
+                    onChange={(e) =>
+                      updateComponentStyle(component.id, {
+                        fontSize: e.target.value,
+                      })
+                    }
                     placeholder="ex: 1.5rem, 24px"
                   />
                 </div>
@@ -889,16 +986,16 @@ const FaithfulQuizEditor: React.FC = () => {
             <h2 className="text-lg font-semibold">Quiz Editor Fiel</h2>
             <div className="flex gap-1">
               <Button
-                variant={viewMode === 'edit' ? 'default' : 'outline'}
+                variant={viewMode === "edit" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode('edit')}
+                onClick={() => setViewMode("edit")}
               >
                 <Edit3 className="h-4 w-4" />
               </Button>
               <Button
-                variant={viewMode === 'preview' ? 'default' : 'outline'}
+                variant={viewMode === "preview" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode('preview')}
+                onClick={() => setViewMode("preview")}
               >
                 <Eye className="h-4 w-4" />
               </Button>
@@ -908,23 +1005,23 @@ const FaithfulQuizEditor: React.FC = () => {
           {/* Dispositivos */}
           <div className="flex gap-1">
             <Button
-              variant={deviceView === 'mobile' ? 'default' : 'outline'}
+              variant={deviceView === "mobile" ? "default" : "outline"}
               size="sm"
-              onClick={() => setDeviceView('mobile')}
+              onClick={() => setDeviceView("mobile")}
             >
               <Smartphone className="h-4 w-4" />
             </Button>
             <Button
-              variant={deviceView === 'tablet' ? 'default' : 'outline'}
+              variant={deviceView === "tablet" ? "default" : "outline"}
               size="sm"
-              onClick={() => setDeviceView('tablet')}
+              onClick={() => setDeviceView("tablet")}
             >
               <Tablet className="h-4 w-4" />
             </Button>
             <Button
-              variant={deviceView === 'desktop' ? 'default' : 'outline'}
+              variant={deviceView === "desktop" ? "default" : "outline"}
               size="sm"
-              onClick={() => setDeviceView('desktop')}
+              onClick={() => setDeviceView("desktop")}
             >
               <Monitor className="h-4 w-4" />
             </Button>
@@ -936,14 +1033,18 @@ const FaithfulQuizEditor: React.FC = () => {
             {/* Configurações da Página */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm">Configurações da Página</CardTitle>
+                <CardTitle className="text-sm">
+                  Configurações da Página
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div>
                   <Label>Tipo da Página</Label>
                   <Select
                     value={currentPage.type}
-                    onValueChange={(value: QuizPage['type']) => setCurrentPage(prev => ({ ...prev, type: value }))}
+                    onValueChange={(value: QuizPage["type"]) =>
+                      setCurrentPage((prev) => ({ ...prev, type: value }))
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -960,10 +1061,12 @@ const FaithfulQuizEditor: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <Switch
                     checked={currentPage.config.showHeader}
-                    onCheckedChange={(checked) => setCurrentPage(prev => ({
-                      ...prev,
-                      config: { ...prev.config, showHeader: checked }
-                    }))}
+                    onCheckedChange={(checked) =>
+                      setCurrentPage((prev) => ({
+                        ...prev,
+                        config: { ...prev.config, showHeader: checked },
+                      }))
+                    }
                   />
                   <Label>Mostrar Header</Label>
                 </div>
@@ -971,10 +1074,12 @@ const FaithfulQuizEditor: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <Switch
                     checked={currentPage.config.showProgress}
-                    onCheckedChange={(checked) => setCurrentPage(prev => ({
-                      ...prev,
-                      config: { ...prev.config, showProgress: checked }
-                    }))}
+                    onCheckedChange={(checked) =>
+                      setCurrentPage((prev) => ({
+                        ...prev,
+                        config: { ...prev.config, showProgress: checked },
+                      }))
+                    }
                   />
                   <Label>Mostrar Progresso</Label>
                 </div>
@@ -985,10 +1090,15 @@ const FaithfulQuizEditor: React.FC = () => {
                     <Input
                       type="number"
                       value={currentPage.config.progressValue}
-                      onChange={(e) => setCurrentPage(prev => ({
-                        ...prev,
-                        config: { ...prev.config, progressValue: parseInt(e.target.value) || 0 }
-                      }))}
+                      onChange={(e) =>
+                        setCurrentPage((prev) => ({
+                          ...prev,
+                          config: {
+                            ...prev.config,
+                            progressValue: parseInt(e.target.value) || 0,
+                          },
+                        }))
+                      }
                       min="0"
                       max="100"
                     />
@@ -1000,14 +1110,16 @@ const FaithfulQuizEditor: React.FC = () => {
             {/* Templates */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm">Templates do Quiz Original</CardTitle>
+                <CardTitle className="text-sm">
+                  Templates do Quiz Original
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <Button
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => loadTemplate('intro')}
+                  onClick={() => loadTemplate("intro")}
                 >
                   📝 Página de Introdução
                 </Button>
@@ -1015,7 +1127,7 @@ const FaithfulQuizEditor: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => loadTemplate('visualQuestion')}
+                  onClick={() => loadTemplate("visualQuestion")}
                 >
                   🖼️ Questão Visual
                 </Button>
@@ -1023,7 +1135,7 @@ const FaithfulQuizEditor: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => loadTemplate('textQuestion')}
+                  onClick={() => loadTemplate("textQuestion")}
                 >
                   📄 Questão de Texto
                 </Button>
@@ -1040,7 +1152,7 @@ const FaithfulQuizEditor: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => addComponent('title')}
+                  onClick={() => addComponent("title")}
                 >
                   <Type className="h-4 w-4 mr-2" />
                   Título
@@ -1049,7 +1161,7 @@ const FaithfulQuizEditor: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => addComponent('subtitle')}
+                  onClick={() => addComponent("subtitle")}
                 >
                   <Type className="h-4 w-4 mr-2" />
                   Subtítulo
@@ -1058,7 +1170,7 @@ const FaithfulQuizEditor: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => addComponent('image')}
+                  onClick={() => addComponent("image")}
                 >
                   <ImageIcon className="h-4 w-4 mr-2" />
                   Imagem
@@ -1067,7 +1179,7 @@ const FaithfulQuizEditor: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => addComponent('input')}
+                  onClick={() => addComponent("input")}
                 >
                   <Edit3 className="h-4 w-4 mr-2" />
                   Campo de Entrada
@@ -1076,7 +1188,7 @@ const FaithfulQuizEditor: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => addComponent('button')}
+                  onClick={() => addComponent("button")}
                 >
                   <MousePointer className="h-4 w-4 mr-2" />
                   Botão
@@ -1085,7 +1197,7 @@ const FaithfulQuizEditor: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => addComponent('options')}
+                  onClick={() => addComponent("options")}
                 >
                   <Layout className="h-4 w-4 mr-2" />
                   Opções de Resposta
@@ -1094,7 +1206,7 @@ const FaithfulQuizEditor: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start"
-                  onClick={() => addComponent('spacer')}
+                  onClick={() => addComponent("spacer")}
                 >
                   <Layout className="h-4 w-4 mr-2" />
                   Espaçamento
