@@ -199,6 +199,16 @@ function App() {
             }
           />
 
+          {/* Editor funcionando - versão estática */}
+          <Route
+            path="/working-editor"
+            element={
+              <div className="min-h-screen bg-background">
+                <FinalRefactoredEditor />
+              </div>
+            }
+          />
+
           {/* Teste de Configuração - Apenas para desenvolvimento */}
           <Route path="/test-config" element={<QuizConfigTest />} />
 

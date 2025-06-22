@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-22T15:48:06.551Z",
-  "components": 501,
+  "timestamp": "2025-06-22T15:49:29.011Z",
+  "components": 502,
   "files": [
     {
       "name": "App",
@@ -2050,6 +2050,11 @@
     {
       "name": "ModernVisualEditor_original",
       "path": "src/components/visual-editor/ModernVisualEditor_original.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ModularRefactoredEditor",
+      "path": "src/components/visual-editor/ModularRefactoredEditor.tsx",
       "type": "typescript"
     },
     {
