@@ -23,10 +23,10 @@
   },
   "sync": {
     "forced": true,
-    "timestamp": 1750613549,
+    "timestamp": 1750613641,
     "method": "webhook-alternative",
     "tokenRequired": false,
-    "lastForceSync": "2025-06-22T17:32:29.713Z",
+    "lastForceSync": "2025-06-22T17:34:01.664Z",
     "reactivation": true
   },
   "scripts": {
@@ -34,6 +34,6 @@
     "sync": "node scripts/manual-sync.js",
     "test": "node scripts/test-sync.js"
   },
-  "lastSync": "2025-06-22T17:32:29.713Z",
+  "lastSync": "2025-06-22T17:34:01.663Z",
   "componentCount": 503
 }
