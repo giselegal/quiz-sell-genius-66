@@ -1,14 +1,1 @@
-{
-  "lastSync": "2025-06-20T13:38:20.695Z",
-  "method": "complete-manual-sync",
-  "status": "sync-forced",
-  "timestamp": 1750426700,
-  "buildFixed": true,
-  "modernVisualEditorFixed": true,
-  "tokenConfigured": true,
-  "filesUpdated": [
-    "src/components/visual-editor/ModernVisualEditor.tsx",
-    ".lovable",
-    ".lovable-trigger"
-  ]
-}
+LOVABLE_STATUS=ACTIVE
