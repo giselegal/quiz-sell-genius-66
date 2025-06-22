@@ -1,14 +1,40 @@
 import React from "react";
-import { useQuizEditor } from "../../hooks/useQuizEditorState";
-import ComponentPalette from "./components/ComponentPalette";
-import StepTree from "./components/StepTree";
-import Canvas from "./components/Canvas";
-import PropertiesPanel from "./components/PropertiesPanel";
-import EditorToolbar from "./components/EditorToolbar";
-import "@/styles/refactored-editor.css";
+import "@/styles/advanced-editor.css";
+
+// Importações condicionais com fallbacks
+let useQuizEditor: any;
+let ComponentPalette: any;
+let StepTree: any;
+let Canvas: any;
+let PropertiesPanel: any;
+let EditorToolbar: any;
+
+try {
+  useQuizEditor = require("../../hooks/useQuizEditorState").useQuizEditor;
+  ComponentPalette = require("./components/ComponentPalette").default;
+  StepTree = require("./components/StepTree").default;
+  Canvas = require("./components/Canvas").default;
+  PropertiesPanel = require("./components/PropertiesPanel").default;
+  EditorToolbar = require("./components/EditorToolbar").default;
+} catch (error) {
+  console.error("Erro ao importar componentes:", error);
+}
 
 const FinalRefactoredEditor: React.FC = () => {
-  const { state, currentStep, selectedComponent, actions } = useQuizEditor();
+  // Fallback se não conseguir carregar o hook
+  let state, currentStep, selectedComponent, actions;
+  
+  try {
+    if (useQuizEditor) {
+      const editorState = useQuizEditor();
+      state = editorState.state;
+      currentStep = editorState.currentStep;
+      selectedComponent = editorState.selectedComponent;
+      actions = editorState.actions;
+    }
+  } catch (error) {
+    console.error("Erro ao usar hook:", error);
+  }
 
   // Handlers para drag & drop
   const handleDragStart = React.useCallback(
@@ -22,6 +48,79 @@ const FinalRefactoredEditor: React.FC = () => {
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       const componentType = event.dataTransfer.getData("component-type");
+      if (componentType && actions?.addComponent) {
+        actions.addComponent(componentType);
+      }
+    },
+    [actions]
+  );
+
+  const handleDragOver = React.useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  }, []);
+
+  // Se não conseguiu carregar os componentes, renderiza versão simples
+  if (!ComponentPalette || !StepTree || !Canvas || !PropertiesPanel || !EditorToolbar) {
+    return (
+      <div className="advanced-quiz-editor">
+        <div className="editor-layout">
+          <div className="editor-column palette-column">
+            <div className="component-palette">
+              <h2 className="palette-title">Componentes</h2>
+              <div className="components-grid">
+                <div className="draggable-component">
+                  <span className="component-icon">📝</span>
+                  <span className="component-label">Título</span>
+                </div>
+                <div className="draggable-component">
+                  <span className="component-icon">📄</span>
+                  <span className="component-label">Texto</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="editor-column tree-column">
+            <div className="step-tree">
+              <div className="tree-header">
+                <h2 className="tree-title">Etapas</h2>
+              </div>
+              <div className="steps-list">
+                <div className="step-item active">
+                  <div className="step-header">
+                    <div className="step-number">1</div>
+                    <span className="step-name">Primeira Etapa</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="editor-column canvas-column">
+            <div className="canvas-container">
+              <div className="canvas-header">
+                <h2 className="canvas-title">Canvas</h2>
+              </div>
+              <div className="canvas-area">
+                <div className="canvas-empty">
+                  <p>Editor Carregado com Fallback - Componentes modulares com erro</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="editor-column properties-column">
+            <div className="properties-panel">
+              <h2 className="panel-title">Propriedades</h2>
+              <div className="no-selection">
+                <p>Modo de fallback ativo</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
       if (componentType) {
         actions.addComponent(componentType);

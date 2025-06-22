@@ -170,6 +170,35 @@ function App() {
             }
           />
 
+          {/* Teste simples do editor refatorado */}
+          <Route
+            path="/test-editor"
+            element={
+              <div className="min-h-screen bg-background">
+                <div style={{ padding: "20px", textAlign: "center" }}>
+                  <h1>Editor Refatorado - Teste</h1>
+                  <p>Se você está vendo isso, o roteamento está funcionando!</p>
+                  <div className="advanced-quiz-editor">
+                    <div className="editor-layout">
+                      <div className="editor-column">
+                        <div style={{ padding: "20px" }}>Coluna 1</div>
+                      </div>
+                      <div className="editor-column">
+                        <div style={{ padding: "20px" }}>Coluna 2</div>
+                      </div>
+                      <div className="editor-column">
+                        <div style={{ padding: "20px" }}>Coluna 3</div>
+                      </div>
+                      <div className="editor-column">
+                        <div style={{ padding: "20px" }}>Coluna 4</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          />
+
           {/* Teste de Configuração - Apenas para desenvolvimento */}
           <Route path="/test-config" element={<QuizConfigTest />} />
 
