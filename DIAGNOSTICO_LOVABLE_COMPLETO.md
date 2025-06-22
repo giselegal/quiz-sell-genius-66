@@ -11,6 +11,7 @@
 ### 2. **🌐 ENDPOINTS DE WEBHOOK ALTERNATIVOS** ⚠️
 
 O Lovable não requer webhooks tradicionais, mas sim:
+
 - Integração direta via GitHub Apps
 - Sincronização automática quando há commits
 - Monitoramento do repositório pelo Lovable Studio
@@ -69,13 +70,13 @@ O Lovable não requer webhooks tradicionais, mas sim:
 
 ## 📈 STATUS CORRIGIDO:
 
-| Componente | Status | Detalhes |
-|------------|---------|----------|
-| Scripts Locais | ✅ Funcionando | manual-sync.js, force-lovable-sync.js |
-| Arquivo .lovable | ✅ Atualizado | Timestamp: 1750610695 |
-| Lovable Studio | ❓ Verificar | https://lovable.dev/@graciele |
-| GitHub Integration | ❓ Verificar | Via GitHub App ou webhook |
-| Conectividade | ✅ OK | lovable.dev acessível |
+| Componente         | Status         | Detalhes                              |
+| ------------------ | -------------- | ------------------------------------- |
+| Scripts Locais     | ✅ Funcionando | manual-sync.js, force-lovable-sync.js |
+| Arquivo .lovable   | ✅ Atualizado  | Timestamp: 1750610695                 |
+| Lovable Studio     | ❓ Verificar   | https://lovable.dev/@graciele         |
+| GitHub Integration | ❓ Verificar   | Via GitHub App ou webhook             |
+| Conectividade      | ✅ OK          | lovable.dev acessível                 |
 
 ## 🎯 PRÓXIMOS PASSOS CORRIGIDOS:
 
