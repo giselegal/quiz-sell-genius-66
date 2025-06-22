@@ -1,13 +1,66 @@
 #!/bin/bash
 
-echo "🚀 COMANDOS PARA REATIVAR O LOVABLE"
-echo "==================================="
+echo "🚀 COMANDOS FORÇADOS PARA REATIVAR O LOVABLE"
+echo "============================================="
+echo "Repositório: https://github.com/vdp2025/quiz-sell-genius-66.git"
 echo "Data: $(date)"
 echo ""
 
-echo "📋 PASSO 1: PREPARAR COMPONENTES LOCAIS"
-echo "======================================="
-echo "# 1. Execute o tagger do Lovable para marcar os componentes"
+echo "� PASSO 1: FORÇA TOTAL DE REATIVAÇÃO"
+echo "======================================"
+echo "1. Forçando atualização de timestamps..."
+TIMESTAMP=$(date +%s)
+echo "LOVABLE_FORCE_SYNC=$TIMESTAMP" > .lovable-trigger
+echo "LOVABLE_REACTIVATION=FORCED_$(date +%Y%m%d_%H%M%S)" > .lovable-status
+
+echo "2. Atualizando .lovable com nova configuração..."
+cat > .lovable << EOF
+{
+  "github": {
+    "autoSyncFromGithub": true,
+    "autoPushToGithub": true,
+    "branch": "main",
+    "repository": "https://github.com/vdp2025/quiz-sell-genius-66.git"
+  },
+  "projectName": "Quiz Sell Genius",
+  "projectId": "quiz-sell-genius-66",
+  "version": "2.3.$TIMESTAMP",
+  "lastUpdate": "$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)",
+  "features": {
+    "componentTagger": true,
+    "liveEditing": true,
+    "enhancedSync": true,
+    "visualEditor": true,
+    "forceSync": true,
+    "webhookAlternative": true,
+    "reactivation": true
+  },
+  "editor": {
+    "enableLiveMode": true,
+    "autoSave": true,
+    "componentHighlighting": true
+  },
+  "sync": {
+    "forced": true,
+    "timestamp": $TIMESTAMP,
+    "method": "github-direct",
+    "tokenRequired": false,
+    "lastForceSync": "$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)",
+    "reactivation": true,
+    "status": "FORCE_ACTIVATED"
+  },
+  "scripts": {
+    "prepare": "node scripts/prepare-lovable.js",
+    "sync": "node scripts/manual-sync.js",
+    "test": "node scripts/test-sync.js"
+  },
+  "lastSync": "$(date -u +%Y-%m-%dT%H:%M:%S.%3NZ)",
+  "componentCount": 503,
+  "reactivationAttempt": "$TIMESTAMP"
+}
+EOF
+
+echo "3. Preparando componentes..."
 npm run lovable:prepare
 
 echo ""
@@ -20,7 +73,7 @@ echo ""
 echo "📋 PASSO 3: FAZER COMMIT DAS ALTERAÇÕES"
 echo "======================================="
 # 3. Faça o commit das alterações
-git commit -m "🔄 REATIVAÇÃO: Preparação completa Lovable - $(date)"
+git commit -m "🔄 REATIVAÇÃO FORÇADA: Lovable com repositório específico - $(date)"
 
 echo ""
 echo "📋 PASSO 4: ENVIAR PARA O GITHUB"
@@ -29,7 +82,24 @@ echo "================================"
 git push origin main
 
 echo ""
-echo "📋 PASSO 5: FAZER BUILD DO PROJETO"
+echo "📋 PASSO 5: WEBHOOK MANUAL PARA LOVABLE"
+echo "======================================="
+echo "5. Tentando notificar Lovable sobre as alterações..."
+curl -X POST "https://api.lovable.dev/webhook/github" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "repository": "https://github.com/vdp2025/quiz-sell-genius-66.git",
+    "ref": "refs/heads/main",
+    "after": "'$(git rev-parse HEAD)'",
+    "commits": [{
+      "id": "'$(git rev-parse HEAD)'",
+      "message": "Reativação forçada Lovable",
+      "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+    }]
+  }' || echo "Webhook falhou - normal se não há endpoint ativo"
+
+echo ""
+echo "📋 PASSO 6: FAZER BUILD DO PROJETO"
 echo "=================================="
 # 5. Rodar o build ou o projeto
 npm run build
