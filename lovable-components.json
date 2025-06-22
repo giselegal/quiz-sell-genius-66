@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-22T15:46:52.198Z",
-  "components": 502,
+  "timestamp": "2025-06-22T15:48:06.551Z",
+  "components": 501,
   "files": [
     {
       "name": "App",
@@ -2030,11 +2030,6 @@
     {
       "name": "FaithfulQuizEditor",
       "path": "src/components/visual-editor/FaithfulQuizEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FinalRefactoredEditor",
-      "path": "src/components/visual-editor/FinalRefactoredEditor.tsx",
       "type": "typescript"
     },
     {
