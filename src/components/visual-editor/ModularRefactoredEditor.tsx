@@ -29,9 +29,12 @@ const ModularRefactoredEditor: React.FC = () => {
     [actions]
   );
 
-  const handleDragOver = React.useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  }, []);
+  const handleDragOver = React.useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+    },
+    []
+  );
 
   return (
     <div className="advanced-quiz-editor">
@@ -41,14 +44,14 @@ const ModularRefactoredEditor: React.FC = () => {
             onDragStart={handleDragStart}
             availableComponents={[
               "heading",
-              "text", 
+              "text",
               "image",
               "button",
               "input",
               "options",
               "alert",
               "video",
-              "spacer"
+              "spacer",
             ]}
           />
         </div>
