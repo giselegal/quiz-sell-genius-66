@@ -7,8 +7,8 @@
   },
   "projectName": "Quiz Sell Genius",
   "projectId": "quiz-sell-genius-66",
-  "version": "2.3.1750613750",
-  "lastUpdate": "2025-06-22T17:35:50.019Z",
+  "version": "2.3.1750613771",
+  "lastUpdate": "2025-06-22T17:36:11.454Z",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
@@ -25,10 +25,10 @@
   },
   "sync": {
     "forced": true,
-    "timestamp": 1750613750,
+    "timestamp": 1750613771,
     "method": "github-direct",
     "tokenRequired": false,
-    "lastForceSync": "2025-06-22T17:35:50.020Z",
+    "lastForceSync": "2025-06-22T17:36:11.455Z",
     "reactivation": true,
     "status": "FORCE_ACTIVATED"
   },
@@ -37,7 +37,7 @@
     "sync": "node scripts/manual-sync.js",
     "test": "node scripts/test-sync.js"
   },
-  "lastSync": "2025-06-22T17:35:50.199Z",
+  "lastSync": "2025-06-22T17:36:11.631Z",
   "componentCount": 503,
-  "reactivationAttempt": "1750613750"
+  "reactivationAttempt": "1750613771"
 }
