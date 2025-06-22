@@ -1,13 +1,30 @@
-/* Advanced Quiz Editor Styles */
+/* Advanced Quiz Editor Styles - Clean Version */
 
-/* Barras de rolagem customizadas para o editor */
-.advanced-editor-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #52525b #27272a;
+/* === LAYOUT PRINCIPAL === */
+.advanced-quiz-editor {
+  width: 100%;
+  height: 100vh;
+  background: #f8fafc;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.advanced-editor-scrollbar::-webkit-scrollbar {
-  width: 8px;
+.editor-layout {
+  display: grid;
+  grid-template-columns: 250px 300px 1fr 350px;
+  height: 100vh;
+  gap: 1px;
+  background: #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.editor-column {
+  background: white;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 0;
+}
   background: #27272a;
 }
 
@@ -1163,19 +1180,19 @@ button:focus {
 .editor-column {
   background: white;
   overflow: hidden;
-  display: flex;ite;
+  display: flex;
   flex-direction: column;
   position: relative;
-  min-height: 0; /* Importante para flexbox com scroll */
-} min-width: 0; /* Importante para overflow */
+  min-height: 0;
 }
+
 /* Scroll independente para cada coluna */
-.editor-column > * {ado para cada coluna */
-  flex: 1;lumn > div {
+.editor-column > * {
+  flex: 1;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 #f1f5f9;
-} scrollbar-color: #cbd5e0 #f7fafc;
+}
 }
 .editor-column > *::-webkit-scrollbar {
   width: 6px;n > div::-webkit-scrollbar {
