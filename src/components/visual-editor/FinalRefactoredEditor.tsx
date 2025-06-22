@@ -98,7 +98,9 @@ const FinalRefactoredEditor: React.FC = () => {
         <div className="editor-column canvas-column">
           <div className="canvas-container">
             <div className="canvas-header">
-              <h2 className="canvas-title">Área de Trabalho - Pergunta Inicial</h2>
+              <h2 className="canvas-title">
+                Área de Trabalho - Pergunta Inicial
+              </h2>
               <div className="canvas-actions">
                 <button className="toolbar-btn secondary">🔍 Preview</button>
                 <button className="toolbar-btn secondary">📱 Mobile</button>
@@ -121,7 +123,8 @@ const FinalRefactoredEditor: React.FC = () => {
                   <button className="delete-component-btn">×</button>
                 </div>
                 <div className="text-preview">
-                  Escolha a opção que mais representa o seu gosto pessoal para decoração de ambientes.
+                  Escolha a opção que mais representa o seu gosto pessoal para
+                  decoração de ambientes.
                 </div>
               </div>
 
@@ -133,26 +136,77 @@ const FinalRefactoredEditor: React.FC = () => {
                   <h4>Opções de Resposta:</h4>
                   <div className="options-grid">
                     <div className="option-card">
-                      <div className="option-image" style={{background: '#f0f0f0', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>🏛️</div>
+                      <div
+                        className="option-image"
+                        style={{
+                          background: "#f0f0f0",
+                          height: "60px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        🏛️
+                      </div>
                       Clássico
                     </div>
                     <div className="option-card">
-                      <div className="option-image" style={{background: '#f0f0f0', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>🏢</div>
+                      <div
+                        className="option-image"
+                        style={{
+                          background: "#f0f0f0",
+                          height: "60px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        🏢
+                      </div>
                       Moderno
                     </div>
                     <div className="option-card">
-                      <div className="option-image" style={{background: '#f0f0f0', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>🌿</div>
+                      <div
+                        className="option-image"
+                        style={{
+                          background: "#f0f0f0",
+                          height: "60px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        🌿
+                      </div>
                       Rústico
                     </div>
                     <div className="option-card">
-                      <div className="option-image" style={{background: '#f0f0f0', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>✨</div>
+                      <div
+                        className="option-image"
+                        style={{
+                          background: "#f0f0f0",
+                          height: "60px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        ✨
+                      </div>
                       Minimalista
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="canvas-empty" style={{marginTop: '20px', padding: '20px', border: '2px dashed #dee2e6'}}>
+              <div
+                className="canvas-empty"
+                style={{
+                  marginTop: "20px",
+                  padding: "20px",
+                  border: "2px dashed #dee2e6",
+                }}
+              >
                 <p>Arraste mais componentes aqui para continuar construindo</p>
               </div>
             </div>
@@ -175,23 +229,23 @@ const FinalRefactoredEditor: React.FC = () => {
                 <div className="section-content">
                   <div className="form-field">
                     <label>Texto do Título</label>
-                    <input 
-                      type="text" 
-                      defaultValue="Qual é o seu estilo de decoração preferido?" 
+                    <input
+                      type="text"
+                      defaultValue="Qual é o seu estilo de decoração preferido?"
                       className="form-input"
                     />
                   </div>
                   <div className="form-field">
                     <label>Subtítulo (opcional)</label>
-                    <input 
-                      type="text" 
-                      placeholder="Digite um subtítulo..." 
+                    <input
+                      type="text"
+                      placeholder="Digite um subtítulo..."
                       className="form-input"
                     />
                   </div>
                 </div>
               </div>
-              
+
               <div className="property-section">
                 <div className="section-header">
                   <span className="section-title">🎨 Estilo</span>
@@ -217,11 +271,11 @@ const FinalRefactoredEditor: React.FC = () => {
                   </div>
                   <div className="form-field">
                     <label>Cor do Texto</label>
-                    <input 
-                      type="color" 
-                      defaultValue="#333333" 
+                    <input
+                      type="color"
+                      defaultValue="#333333"
                       className="form-input"
-                      style={{height: '40px'}}
+                      style={{ height: "40px" }}
                     />
                   </div>
                 </div>
@@ -235,9 +289,9 @@ const FinalRefactoredEditor: React.FC = () => {
                 <div className="section-content">
                   <div className="form-field">
                     <label>Margem Superior</label>
-                    <input 
-                      type="number" 
-                      defaultValue="20" 
+                    <input
+                      type="number"
+                      defaultValue="20"
                       className="form-input"
                       min="0"
                       max="100"
@@ -245,9 +299,9 @@ const FinalRefactoredEditor: React.FC = () => {
                   </div>
                   <div className="form-field">
                     <label>Margem Inferior</label>
-                    <input 
-                      type="number" 
-                      defaultValue="20" 
+                    <input
+                      type="number"
+                      defaultValue="20"
                       className="form-input"
                       min="0"
                       max="100"
