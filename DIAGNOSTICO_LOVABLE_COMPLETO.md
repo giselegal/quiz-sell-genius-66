@@ -67,22 +67,22 @@ O Lovable não requer webhooks tradicionais, mas sim:
 # Valor: [URL correta do webhook do projeto]
 ```
 
-## 📈 STATUS ATUAL:
+## 📈 STATUS CORRIGIDO:
 
-| Componente       | Status         | Detalhes                              |
-| ---------------- | -------------- | ------------------------------------- |
-| Scripts Locais   | ✅ Funcionando | manual-sync.js, force-lovable-sync.js |
-| Arquivo .lovable | ✅ Atualizado  | Timestamp: 1750610695                 |
-| GitHub Workflows | ⚠️ Falhando    | Sem token configurado                 |
-| API Endpoints    | ❌ Falhando    | 0/5 webhooks funcionando              |
-| Conectividade    | ✅ OK          | lovable.dev e api.lovable.dev         |
+| Componente | Status | Detalhes |
+|------------|---------|----------|
+| Scripts Locais | ✅ Funcionando | manual-sync.js, force-lovable-sync.js |
+| Arquivo .lovable | ✅ Atualizado | Timestamp: 1750610695 |
+| Lovable Studio | ❓ Verificar | https://lovable.dev/@graciele |
+| GitHub Integration | ❓ Verificar | Via GitHub App ou webhook |
+| Conectividade | ✅ OK | lovable.dev acessível |
 
-## 🎯 PRÓXIMOS PASSOS:
+## 🎯 PRÓXIMOS PASSOS CORRIGIDOS:
 
-1. **Configure o LOVABLE_TOKEN** (obrigatório)
-2. **Teste uma alteração no Lovable Studio**
-3. **Verifique se aparece commit automático**
-4. **Execute: `npm run lovable:force`** para revalidar
+1. **Acesse https://lovable.dev/@graciele** (obrigatório)
+2. **Verifique conexão GitHub do projeto**
+3. **Teste alteração no Lovable Studio**
+4. **Confirme se gera commit automático**
 
 ## 📝 COMANDOS DE TESTE:
 
