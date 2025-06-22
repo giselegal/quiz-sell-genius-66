@@ -23,16 +23,17 @@
   },
   "sync": {
     "forced": true,
-    "timestamp": 1750611273,
+    "timestamp": 1750613549,
     "method": "webhook-alternative",
     "tokenRequired": false,
-    "lastForceSync": "2025-06-22T16:44:55.205Z"
+    "lastForceSync": "2025-06-22T17:32:29.713Z",
+    "reactivation": true
   },
   "scripts": {
     "prepare": "node scripts/prepare-lovable.js",
     "sync": "node scripts/manual-sync.js",
     "test": "node scripts/test-sync.js"
   },
-  "lastSync": "2025-06-22T17:30:41.863Z",
+  "lastSync": "2025-06-22T17:32:29.713Z",
   "componentCount": 503
 }
