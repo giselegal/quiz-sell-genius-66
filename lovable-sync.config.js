@@ -1,11 +1,12 @@
 
 /**
  * Configuração de sincronização do Lovable
- * Funciona sem necessidade de token API
+ * Atualizada para o novo repositório
  */
 
 module.exports = {
   projectId: 'quiz-sell-genius-66',
+  repository: 'ggsl87/quiz-sell-genius-66',
   syncMethod: 'webhook-alternative',
   
   // Configurações de componentes

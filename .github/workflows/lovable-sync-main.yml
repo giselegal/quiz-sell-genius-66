@@ -1,3 +1,4 @@
+
 name: 🔄 Lovable Sync Definitivo
 
 on:
@@ -38,36 +39,13 @@ jobs:
           npm ci
           echo "✅ Dependências instaladas"
 
-      - name: 🔍 Validate Lovable Token
-        run: |
-          if [ -z "${{ secrets.LOVABLE_TOKEN }}" ]; then
-            echo "❌ LOVABLE_TOKEN não configurado!"
-            echo "📋 Configure em: https://github.com/${{ github.repository }}/settings/secrets/actions"
-            echo "💡 Execute: npm run lovable:configure-token"
-            exit 1
-          else
-            echo "✅ LOVABLE_TOKEN configurado"
-            echo "Token preview: ${LOVABLE_TOKEN:0:8}...${LOVABLE_TOKEN: -4}"
-          fi
-        env:
-          LOVABLE_TOKEN: ${{ secrets.LOVABLE_TOKEN }}
-
       - name: 🚀 Execute Lovable Sync
         run: |
           echo "🔄 Iniciando sincronização completa..."
           node scripts/prepare-lovable.js
           echo "✅ Preparação concluída"
         env:
-          LOVABLE_TOKEN: ${{ secrets.LOVABLE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🔄 Force Sync with Webhook
-        run: |
-          echo "🌐 Executando sincronização forçada..."
-          node scripts/force-lovable-sync.js
-          echo "✅ Sincronização forçada concluída"
-        env:
-          LOVABLE_TOKEN: ${{ secrets.LOVABLE_TOKEN }}
 
       - name: 📝 Update Sync Status
         run: |
@@ -91,26 +69,14 @@ jobs:
                 config.sync.lastWorkflowSync = new Date().toISOString();
                 config.lastUpdate = new Date().toISOString();
                 config.version = '2.2.$CURRENT_TIMESTAMP';
-                config.tokenConfigured = true;
+                config.github.repository = 'https://github.com/ggsl87/quiz-sell-genius-66.git';
                 fs.writeFileSync('.lovable', JSON.stringify(config, null, 2));
-                console.log('✅ Configuração .lovable atualizada com workflow info');
+                console.log('✅ Configuração .lovable atualizada com novo repositório');
               } catch (error) {
                 console.log('⚠️ Erro ao atualizar .lovable:', error.message);
               }
             "
           fi
-
-          # Atualizar status
-          cat > .lovable-status << EOF
-          {
-            "lastSync": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "method": "github-workflow",
-            "status": "sync-completed",
-            "timestamp": $CURRENT_TIMESTAMP,
-            "workflowRunId": "${{ github.run_id }}",
-            "tokenConfigured": true
-          }
-          EOF
 
       - name: 🔔 Notify Lovable API
         run: |
@@ -130,11 +96,10 @@ jobs:
             echo "🔗 Tentando: $url"
             
             response=$(curl -s -w "%{http_code}" -X POST "$url" \
-              -H "Authorization: Bearer ${{ secrets.LOVABLE_TOKEN }}" \
               -H "Content-Type: application/json" \
               -H "User-Agent: GitHub-Actions-Lovable-Sync/2.0" \
               -d '{
-                "repository": "${{ github.repository }}",
+                "repository": "ggsl87/quiz-sell-genius-66",
                 "branch": "${{ github.ref_name }}",
                 "commit": "${{ github.sha }}",
                 "timestamp": '"$(date +%s)"',
@@ -160,14 +125,6 @@ jobs:
 
           echo "📊 Webhooks bem-sucedidos: $SUCCESS_COUNT/${#WEBHOOK_URLS[@]}"
 
-          if [ $SUCCESS_COUNT -gt 0 ]; then
-            echo "✅ Pelo menos um webhook funcionou"
-          else
-            echo "⚠️ Nenhum webhook funcionou, mas sincronização pode ainda estar ativa"
-          fi
-        env:
-          LOVABLE_TOKEN: ${{ secrets.LOVABLE_TOKEN }}
-
       - name: 💾 Commit Changes
         run: |
           git config --local user.email "action@github.com"
@@ -183,38 +140,13 @@ jobs:
             echo "ℹ️ Nenhuma alteração para commitar"
           fi
 
-      - name: 🧪 Validate Sync
-        run: |
-          echo "🔍 Validando sincronização..."
-
-          if [ -f ".lovable" ]; then
-            echo "✅ Arquivo .lovable existe"
-            node -e "
-              const config = JSON.parse(require('fs').readFileSync('.lovable', 'utf8'));
-              console.log('📊 Projeto:', config.name || 'N/A');
-              console.log('📊 ID:', config.id || 'N/A');
-              console.log('📊 Última atualização:', config.lastUpdate || 'N/A');
-              console.log('📊 Token configurado:', config.tokenConfigured ? '✅' : '❌');
-            "
-          else
-            echo "⚠️ Arquivo .lovable não encontrado"
-          fi
-
-          if [ -f ".lovable-status" ]; then
-            echo "✅ Status de sincronização:"
-            cat .lovable-status
-          fi
-
-          echo "🎉 Validação de sincronização concluída!"
-
       - name: 📊 Sync Summary
         run: |
           echo "📋 RESUMO DA SINCRONIZAÇÃO"
           echo "========================="
-          echo "🔗 Repositório: ${{ github.repository }}"
+          echo "🔗 Repositório: ggsl87/quiz-sell-genius-66"
           echo "🌿 Branch: ${{ github.ref_name }}"
           echo "📝 Commit: ${{ github.sha }}"
           echo "🏃 Workflow Run: ${{ github.run_id }}"
           echo "⏰ Timestamp: $(date -u +%Y-%m-%d\ %H:%M:%S)"
-          echo "🔑 Token: $([ -n "${{ secrets.LOVABLE_TOKEN }}" ] && echo "✅ Configurado" || echo "❌ Ausente")"
           echo "========================="

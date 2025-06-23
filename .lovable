@@ -1,9 +1,10 @@
+
 {
   "github": {
     "autoSyncFromGithub": true,
     "autoPushToGithub": true,
     "branch": "main",
-    "repository": "https://github.com/vdp2025/quiz-sell-genius-66.git"
+    "repository": "https://github.com/ggsl87/quiz-sell-genius-66.git"
   },
   "projectName": "Quiz Sell Genius",
   "projectId": "quiz-sell-genius-66",
