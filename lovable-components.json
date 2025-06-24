@@ -1,2520 +1,2520 @@
 {
-  "timestamp": "2025-06-22T17:37:30.870Z",
+  "timestamp": "2025-06-24T21:18:51.707Z",
   "components": 503,
   "files": [
     {
       "name": "App",
-      "path": "src/App.tsx",
+      "path": "src\\App.tsx",
       "type": "typescript"
     },
     {
       "name": "ResultPage.backup",
-      "path": "src/backup/ResultPage.backup.tsx",
+      "path": "src\\backup\\ResultPage.backup.tsx",
       "type": "typescript"
     },
     {
       "name": "ResultPage.current.backup",
-      "path": "src/backup/ResultPage.current.backup.tsx",
+      "path": "src\\backup\\ResultPage.current.backup.tsx",
       "type": "typescript"
     },
     {
       "name": "ABTestRedirect",
-      "path": "src/components/ABTestRedirect.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BuildInfo",
-      "path": "src/components/BuildInfo.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ClientLayout",
-      "path": "src/components/ClientLayout.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ClientToaster",
-      "path": "src/components/ClientToaster.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "CriticalCSSLoader",
-      "path": "src/components/CriticalCSSLoader.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "GeminiStyleAdvisor",
-      "path": "src/components/GeminiStyleAdvisor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PixelInitializer",
-      "path": "src/components/PixelInitializer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ProtectedRoute",
-      "path": "src/components/ProtectedRoute.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizContent",
-      "path": "src/components/QuizContent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizFinalTransition",
-      "path": "src/components/QuizFinalTransition.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizFlow",
-      "path": "src/components/QuizFlow.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizIntro",
-      "path": "src/components/QuizIntro.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizOfferPage",
-      "path": "src/components/QuizOfferPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizPage",
-      "path": "src/components/QuizPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizPreview",
-      "path": "src/components/QuizPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizResult",
-      "path": "src/components/QuizResult.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizTransition",
-      "path": "src/components/QuizTransition.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizWelcome",
-      "path": "src/components/QuizWelcome.tsx",
+      "path": "src\\components\\ABTestRedirect.tsx",
       "type": "typescript"
     },
     {
       "name": "AdminLayout",
-      "path": "src/components/admin/AdminLayout.tsx",
+      "path": "src\\components\\admin\\AdminLayout.tsx",
       "type": "typescript"
     },
     {
       "name": "AdminLogin",
-      "path": "src/components/admin/AdminLogin.tsx",
+      "path": "src\\components\\admin\\AdminLogin.tsx",
       "type": "typescript"
     },
     {
       "name": "AdminRoute",
-      "path": "src/components/admin/AdminRoute.tsx",
+      "path": "src\\components\\admin\\AdminRoute.tsx",
       "type": "typescript"
     },
     {
       "name": "ComponentPalette",
-      "path": "src/components/admin/editor/ComponentPalette.tsx",
+      "path": "src\\components\\admin\\editor\\ComponentPalette.tsx",
       "type": "typescript"
     },
     {
       "name": "EditorCanvas",
-      "path": "src/components/admin/editor/EditorCanvas.tsx",
+      "path": "src\\components\\admin\\editor\\EditorCanvas.tsx",
       "type": "typescript"
     },
     {
       "name": "EnhancedResultPageEditorPage",
-      "path": "src/components/admin/editor/EnhancedResultPageEditorPage.tsx",
+      "path": "src\\components\\admin\\editor\\EnhancedResultPageEditorPage.tsx",
       "type": "typescript"
     },
     {
       "name": "PropertyPanel",
-      "path": "src/components/admin/editor/PropertyPanel.tsx",
+      "path": "src\\components\\admin\\editor\\PropertyPanel.tsx",
       "type": "typescript"
     },
     {
       "name": "ABTestAlerts",
-      "path": "src/components/analytics/ABTestAlerts.tsx",
+      "path": "src\\components\\analytics\\ABTestAlerts.tsx",
       "type": "typescript"
     },
     {
       "name": "ABTestAlerts_backup",
-      "path": "src/components/analytics/ABTestAlerts_backup.tsx",
+      "path": "src\\components\\analytics\\ABTestAlerts_backup.tsx",
       "type": "typescript"
     },
     {
       "name": "ABTestAlerts_new",
-      "path": "src/components/analytics/ABTestAlerts_new.tsx",
+      "path": "src\\components\\analytics\\ABTestAlerts_new.tsx",
       "type": "typescript"
     },
     {
       "name": "ABTestComparison",
-      "path": "src/components/analytics/ABTestComparison.tsx",
+      "path": "src\\components\\analytics\\ABTestComparison.tsx",
       "type": "typescript"
     },
     {
       "name": "AdvancedFunnel",
-      "path": "src/components/analytics/AdvancedFunnel.tsx",
+      "path": "src\\components\\analytics\\AdvancedFunnel.tsx",
       "type": "typescript"
     },
     {
       "name": "CreativeAnalyticsDashboardNew",
-      "path": "src/components/analytics/CreativeAnalyticsDashboardNew.tsx",
+      "path": "src\\components\\analytics\\CreativeAnalyticsDashboardNew.tsx",
       "type": "typescript"
     },
     {
       "name": "CreativePerformanceDashboard",
-      "path": "src/components/analytics/CreativePerformanceDashboard.tsx",
+      "path": "src\\components\\analytics\\CreativePerformanceDashboard.tsx",
       "type": "typescript"
     },
     {
       "name": "DashboardHeader",
-      "path": "src/components/analytics/DashboardHeader.tsx",
+      "path": "src\\components\\analytics\\DashboardHeader.tsx",
       "type": "typescript"
     },
     {
       "name": "EventLogger",
-      "path": "src/components/analytics/EventLogger.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "LoadingState",
-      "path": "src/components/analytics/LoadingState.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MetricCard",
-      "path": "src/components/analytics/MetricCard.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MetricsGrid",
-      "path": "src/components/analytics/MetricsGrid.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "RealTimeMetrics",
-      "path": "src/components/analytics/RealTimeMetrics.tsx",
+      "path": "src\\components\\analytics\\EventLogger.tsx",
       "type": "typescript"
     },
     {
       "name": "ApiTokensCard",
-      "path": "src/components/analytics/integrations/ApiTokensCard.tsx",
+      "path": "src\\components\\analytics\\integrations\\ApiTokensCard.tsx",
       "type": "typescript"
     },
     {
       "name": "EventTrackingCard",
-      "path": "src/components/analytics/integrations/EventTrackingCard.tsx",
+      "path": "src\\components\\analytics\\integrations\\EventTrackingCard.tsx",
       "type": "typescript"
     },
     {
       "name": "FacebookPixelCard",
-      "path": "src/components/analytics/integrations/FacebookPixelCard.tsx",
+      "path": "src\\components\\analytics\\integrations\\FacebookPixelCard.tsx",
       "type": "typescript"
     },
     {
       "name": "GoogleAnalyticsCard",
-      "path": "src/components/analytics/integrations/GoogleAnalyticsCard.tsx",
+      "path": "src\\components\\analytics\\integrations\\GoogleAnalyticsCard.tsx",
       "type": "typescript"
     },
     {
       "name": "MarketingPlatformsCard",
-      "path": "src/components/analytics/integrations/MarketingPlatformsCard.tsx",
+      "path": "src\\components\\analytics\\integrations\\MarketingPlatformsCard.tsx",
       "type": "typescript"
     },
     {
       "name": "WebhookCard",
-      "path": "src/components/analytics/integrations/WebhookCard.tsx",
+      "path": "src\\components\\analytics\\integrations\\WebhookCard.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "LoadingState",
+      "path": "src\\components\\analytics\\LoadingState.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "MetricCard",
+      "path": "src\\components\\analytics\\MetricCard.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "MetricsGrid",
+      "path": "src\\components\\analytics\\MetricsGrid.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "RealTimeMetrics",
+      "path": "src\\components\\analytics\\RealTimeMetrics.tsx",
       "type": "typescript"
     },
     {
       "name": "DataTab",
-      "path": "src/components/analytics/tabs/DataTab.tsx",
+      "path": "src\\components\\analytics\\tabs\\DataTab.tsx",
       "type": "typescript"
     },
     {
       "name": "FunnelTab",
-      "path": "src/components/analytics/tabs/FunnelTab.tsx",
+      "path": "src\\components\\analytics\\tabs\\FunnelTab.tsx",
       "type": "typescript"
     },
     {
       "name": "IntegrationTab",
-      "path": "src/components/analytics/tabs/IntegrationTab.tsx",
+      "path": "src\\components\\analytics\\tabs\\IntegrationTab.tsx",
       "type": "typescript"
     },
     {
       "name": "OverviewTab",
-      "path": "src/components/analytics/tabs/OverviewTab.tsx",
+      "path": "src\\components\\analytics\\tabs\\OverviewTab.tsx",
       "type": "typescript"
     },
     {
       "name": "ProgressTab",
-      "path": "src/components/analytics/tabs/ProgressTab.tsx",
+      "path": "src\\components\\analytics\\tabs\\ProgressTab.tsx",
       "type": "typescript"
     },
     {
       "name": "UsersTab",
-      "path": "src/components/analytics/tabs/UsersTab.tsx",
+      "path": "src\\components\\analytics\\tabs\\UsersTab.tsx",
       "type": "typescript"
     },
     {
       "name": "UtmTab",
-      "path": "src/components/analytics/tabs/UtmTab.tsx",
+      "path": "src\\components\\analytics\\tabs\\UtmTab.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "BuildInfo",
+      "path": "src\\components\\BuildInfo.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ClientLayout",
+      "path": "src\\components\\ClientLayout.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ClientToaster",
+      "path": "src\\components\\ClientToaster.tsx",
       "type": "typescript"
     },
     {
       "name": "SectionTitle",
-      "path": "src/components/common/SectionTitle.tsx",
+      "path": "src\\components\\common\\SectionTitle.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CriticalCSSLoader",
+      "path": "src\\components\\CriticalCSSLoader.tsx",
       "type": "typescript"
     },
     {
       "name": "ImageDiagnosticDebugger",
-      "path": "src/components/debug/ImageDiagnosticDebugger.tsx",
+      "path": "src\\components\\debug\\ImageDiagnosticDebugger.tsx",
       "type": "typescript"
     },
     {
       "name": "ImageDiagnosticFixer",
-      "path": "src/components/debug/ImageDiagnosticFixer.tsx",
+      "path": "src\\components\\debug\\ImageDiagnosticFixer.tsx",
       "type": "typescript"
     },
     {
       "name": "QuickFixButton",
-      "path": "src/components/debug/QuickFixButton.tsx",
+      "path": "src\\components\\debug\\QuickFixButton.tsx",
       "type": "typescript"
     },
     {
       "name": "EditingFlowDemo",
-      "path": "src/components/demo/EditingFlowDemo.tsx",
+      "path": "src\\components\\demo\\EditingFlowDemo.tsx",
       "type": "typescript"
     },
     {
       "name": "ImageOptimizationDemo",
-      "path": "src/components/demo/ImageOptimizationDemo.tsx",
+      "path": "src\\components\\demo\\ImageOptimizationDemo.tsx",
       "type": "typescript"
     },
     {
       "name": "AddBlockButton",
-      "path": "src/components/editor/AddBlockButton.tsx",
+      "path": "src\\components\\editor\\AddBlockButton.tsx",
       "type": "typescript"
     },
     {
       "name": "BlockRenderer",
-      "path": "src/components/editor/BlockRenderer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "CanvasLayout",
-      "path": "src/components/editor/CanvasLayout.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ConfigurationPanel",
-      "path": "src/components/editor/ConfigurationPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditBlockContent",
-      "path": "src/components/editor/EditBlockContent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditableElement",
-      "path": "src/components/editor/EditableElement.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditableImageOptions",
-      "path": "src/components/editor/EditableImageOptions.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorBlockItem",
-      "path": "src/components/editor/EditorBlockItem.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorCanvas",
-      "path": "src/components/editor/EditorCanvas.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorLayout",
-      "path": "src/components/editor/EditorLayout.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorNavbar",
-      "path": "src/components/editor/EditorNavbar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorPanel",
-      "path": "src/components/editor/EditorPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EmptyEditor",
-      "path": "src/components/editor/EmptyEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PageEditor",
-      "path": "src/components/editor/PageEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PropertiesSidebar",
-      "path": "src/components/editor/PropertiesSidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SalesPageEditor",
-      "path": "src/components/editor/SalesPageEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StepsSidebar",
-      "path": "src/components/editor/StepsSidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ToolbarSidebar",
-      "path": "src/components/editor/ToolbarSidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "UnifiedEditorLayout",
-      "path": "src/components/editor/UnifiedEditorLayout.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "VisualEditor",
-      "path": "src/components/editor/VisualEditor.tsx",
+      "path": "src\\components\\editor\\BlockRenderer.tsx",
       "type": "typescript"
     },
     {
       "name": "BenefitsBlockEditor",
-      "path": "src/components/editor/blocks/BenefitsBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\BenefitsBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "BonusCarouselBlockEditor",
-      "path": "src/components/editor/blocks/BonusCarouselBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\BonusCarouselBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "CTABlockEditor",
-      "path": "src/components/editor/blocks/CTABlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\CTABlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "GuaranteeBlockEditor",
-      "path": "src/components/editor/blocks/GuaranteeBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\GuaranteeBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "HeaderBlockEditor",
-      "path": "src/components/editor/blocks/HeaderBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\HeaderBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "HeadlineBlockEditor",
-      "path": "src/components/editor/blocks/HeadlineBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\HeadlineBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "HeroSectionBlockEditor",
-      "path": "src/components/editor/blocks/HeroSectionBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\HeroSectionBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "ImageBlockEditor",
-      "path": "src/components/editor/blocks/ImageBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\ImageBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "PricingBlockEditor",
-      "path": "src/components/editor/blocks/PricingBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\PricingBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "SecondaryStylesBlockEditor",
-      "path": "src/components/editor/blocks/SecondaryStylesBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\SecondaryStylesBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "StyleResultBlockEditor",
-      "path": "src/components/editor/blocks/StyleResultBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\StyleResultBlockEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "StyleResultPreview",
-      "path": "src/components/editor/blocks/StyleResultPreview.tsx",
+      "path": "src\\components\\editor\\blocks\\StyleResultPreview.tsx",
       "type": "typescript"
     },
     {
       "name": "TextBlockEditor",
-      "path": "src/components/editor/blocks/TextBlockEditor.tsx",
+      "path": "src\\components\\editor\\blocks\\TextBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CanvasLayout",
+      "path": "src\\components\\editor\\CanvasLayout.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ConfigurationPanel",
+      "path": "src\\components\\editor\\ConfigurationPanel.tsx",
       "type": "typescript"
     },
     {
       "name": "EditorContent",
-      "path": "src/components/editor/content/EditorContent.tsx",
+      "path": "src\\components\\editor\\content\\EditorContent.tsx",
       "type": "typescript"
     },
     {
       "name": "StyleControls",
-      "path": "src/components/editor/controls/StyleControls.tsx",
+      "path": "src\\components\\editor\\controls\\StyleControls.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditableElement",
+      "path": "src\\components\\editor\\EditableElement.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditableImageOptions",
+      "path": "src\\components\\editor\\EditableImageOptions.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditBlockContent",
+      "path": "src\\components\\editor\\EditBlockContent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorBlockItem",
+      "path": "src\\components\\editor\\EditorBlockItem.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorCanvas",
+      "path": "src\\components\\editor\\EditorCanvas.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorLayout",
+      "path": "src\\components\\editor\\EditorLayout.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorNavbar",
+      "path": "src\\components\\editor\\EditorNavbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorPanel",
+      "path": "src\\components\\editor\\EditorPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EmptyEditor",
+      "path": "src\\components\\editor\\EmptyEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "UnifiedEditorLayout",
-      "path": "src/components/editor/layouts/UnifiedEditorLayout.tsx",
+      "path": "src\\components\\editor\\layouts\\UnifiedEditorLayout.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PageEditor",
+      "path": "src\\components\\editor\\PageEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "BlockRenderer",
-      "path": "src/components/editor/preview/BlockRenderer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PagePreview",
-      "path": "src/components/editor/preview/PagePreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PreviewContainer",
-      "path": "src/components/editor/preview/PreviewContainer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PreviewToolbar",
-      "path": "src/components/editor/preview/PreviewToolbar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPagePreview",
-      "path": "src/components/editor/preview/ResultPagePreview.tsx",
+      "path": "src\\components\\editor\\preview\\BlockRenderer.tsx",
       "type": "typescript"
     },
     {
       "name": "BenefitsBlock",
-      "path": "src/components/editor/preview/blocks/BenefitsBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\BenefitsBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "BonusCarouselBlock",
-      "path": "src/components/editor/preview/blocks/BonusCarouselBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\BonusCarouselBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "CTABlock",
-      "path": "src/components/editor/preview/blocks/CTABlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\CTABlock.tsx",
       "type": "typescript"
     },
     {
       "name": "FinalCtaBlock",
-      "path": "src/components/editor/preview/blocks/FinalCtaBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\FinalCtaBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "GuaranteeBlock",
-      "path": "src/components/editor/preview/blocks/GuaranteeBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\GuaranteeBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "HeaderBlock",
-      "path": "src/components/editor/preview/blocks/HeaderBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\HeaderBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "HeadlineBlock",
-      "path": "src/components/editor/preview/blocks/HeadlineBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\HeadlineBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "HeroBlock",
-      "path": "src/components/editor/preview/blocks/HeroBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\HeroBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "PricingBlock",
-      "path": "src/components/editor/preview/blocks/PricingBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\PricingBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "ResultHeaderBlock",
-      "path": "src/components/editor/preview/blocks/ResultHeaderBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\ResultHeaderBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "TestimonialsBlock",
-      "path": "src/components/editor/preview/blocks/TestimonialsBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\TestimonialsBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "TextBlock",
-      "path": "src/components/editor/preview/blocks/TextBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\TextBlock.tsx",
       "type": "typescript"
     },
     {
       "name": "TransitionBlock",
-      "path": "src/components/editor/preview/blocks/TransitionBlock.tsx",
+      "path": "src\\components\\editor\\preview\\blocks\\TransitionBlock.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PagePreview",
+      "path": "src\\components\\editor\\preview\\PagePreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PreviewContainer",
+      "path": "src\\components\\editor\\preview\\PreviewContainer.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PreviewToolbar",
+      "path": "src\\components\\editor\\preview\\PreviewToolbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPagePreview",
+      "path": "src\\components\\editor\\preview\\ResultPagePreview.tsx",
       "type": "typescript"
     },
     {
       "name": "PropertiesPanel",
-      "path": "src/components/editor/properties/PropertiesPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PreviewPanel",
-      "path": "src/components/editor/result/PreviewPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PropertiesPanel",
-      "path": "src/components/editor/result/PropertiesPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPageBuilder",
-      "path": "src/components/editor/result/ResultPageBuilder.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentsSidebar",
-      "path": "src/components/editor/sidebar/ComponentsSidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TemplateList",
-      "path": "src/components/editor/templates/TemplateList.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorToolbar",
-      "path": "src/components/editor/toolbar/EditorToolbar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorNavigation",
-      "path": "src/components/editors/EditorNavigation.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizOfferPageVisualEditor",
-      "path": "src/components/editors/QuizOfferPageVisualEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnchantedEffects",
-      "path": "src/components/effects/EnchantedEffects.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "InteractionEffects",
-      "path": "src/components/effects/InteractionEffects.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ParticleSystem",
-      "path": "src/components/effects/ParticleSystem.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedQuizBuilder",
-      "path": "src/components/enhanced-editor/EnhancedQuizBuilder.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AutoSaveIndicator",
-      "path": "src/components/enhanced-editor/components/AutoSaveIndicator.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "InlineTextEditor",
-      "path": "src/components/enhanced-editor/preview/editors/InlineTextEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PropertiesPanel",
-      "path": "src/components/enhanced-editor/properties/PropertiesPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentItem",
-      "path": "src/components/enhanced-editor/sidebar/ComponentItem.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentsSidebar",
-      "path": "src/components/enhanced-editor/sidebar/ComponentsSidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorToolbar",
-      "path": "src/components/enhanced-editor/toolbar/EditorToolbar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "InLeadCanvas",
-      "path": "src/components/inlead-editor/InLeadCanvas.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "InLeadEditor",
-      "path": "src/components/inlead-editor/InLeadEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "InLeadPreview",
-      "path": "src/components/inlead-editor/InLeadPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "InLeadSidebar",
-      "path": "src/components/inlead-editor/InLeadSidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "InlineEditor",
-      "path": "src/components/inline-editor/InlineEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPageWrapper",
-      "path": "src/components/layout/ResultPageWrapper.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "LiveQuizEditor",
-      "path": "src/components/live-editor/LiveQuizEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "InlineEditor",
-      "path": "src/components/live-editor/inline-editor/InlineEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "LivePreview",
-      "path": "src/components/live-editor/preview/LivePreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "OfferPreview",
-      "path": "src/components/live-editor/preview/components/OfferPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuestionPreview",
-      "path": "src/components/live-editor/preview/components/QuestionPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizIntroPreview",
-      "path": "src/components/live-editor/preview/components/QuizIntroPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPreview",
-      "path": "src/components/live-editor/preview/components/ResultPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentsSidebar",
-      "path": "src/components/live-editor/sidebar/ComponentsSidebar.tsx",
+      "path": "src\\components\\editor\\properties\\PropertiesPanel.tsx",
       "type": "typescript"
     },
     {
       "name": "PropertiesSidebar",
-      "path": "src/components/live-editor/sidebar/PropertiesSidebar.tsx",
+      "path": "src\\components\\editor\\PropertiesSidebar.tsx",
       "type": "typescript"
     },
     {
-      "name": "StagesSidebar",
-      "path": "src/components/live-editor/sidebar/StagesSidebar.tsx",
+      "name": "PreviewPanel",
+      "path": "src\\components\\editor\\result\\PreviewPanel.tsx",
       "type": "typescript"
     },
     {
-      "name": "SmartComponentPalette",
-      "path": "src/components/live-editor/smart-components/SmartComponentPalette.tsx",
+      "name": "PropertiesPanel",
+      "path": "src\\components\\editor\\result\\PropertiesPanel.tsx",
       "type": "typescript"
     },
     {
-      "name": "TemplateLibrary",
-      "path": "src/components/live-editor/templates/TemplateLibrary.tsx",
+      "name": "ResultPageBuilder",
+      "path": "src\\components\\editor\\result\\ResultPageBuilder.tsx",
       "type": "typescript"
     },
     {
-      "name": "FileLoadingScreen",
-      "path": "src/components/loaders/FileLoadingScreen.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FileLoadingSimulator",
-      "path": "src/components/loading/FileLoadingSimulator.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizCover.lovable",
-      "path": "src/components/lovable/QuizCover.lovable.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizLogic.lovable",
-      "path": "src/components/lovable/QuizLogic.lovable.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizQuestion.lovable",
-      "path": "src/components/lovable/QuizQuestion.lovable.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPageEditor.lovable",
-      "path": "src/components/lovable/ResultPageEditor.lovable.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "lovable-mocks",
-      "path": "src/components/lovable-mocks.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PreviewQuizOfferPage",
-      "path": "src/components/pages/PreviewQuizOfferPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "copy-estrutura",
-      "path": "src/components/pages/copy-estrutura.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AccessibilityTip",
-      "path": "src/components/quiz/AccessibilityTip.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AnimatedNameForm",
-      "path": "src/components/quiz/AnimatedNameForm.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AnimatedProgressIndicator",
-      "path": "src/components/quiz/AnimatedProgressIndicator.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ElementRenderer",
-      "path": "src/components/quiz/ElementRenderer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "LoadingManager",
-      "path": "src/components/quiz/LoadingManager.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MainTransition",
-      "path": "src/components/quiz/MainTransition.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuestionComponent",
-      "path": "src/components/quiz/QuestionComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizContent",
-      "path": "src/components/quiz/QuizContent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizElementRenderer",
-      "path": "src/components/quiz/QuizElementRenderer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizHeader",
-      "path": "src/components/quiz/QuizHeader.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizNavigation",
-      "path": "src/components/quiz/QuizNavigation.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizOptionImage",
-      "path": "src/components/quiz/QuizOptionImage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StrategicQuestions",
-      "path": "src/components/quiz/StrategicQuestions.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentRenderer",
-      "path": "src/components/quiz-builder/ComponentRenderer.tsx",
+      "name": "SalesPageEditor",
+      "path": "src\\components\\editor\\SalesPageEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "ComponentsSidebar",
-      "path": "src/components/quiz-builder/ComponentsSidebar.tsx",
+      "path": "src\\components\\editor\\sidebar\\ComponentsSidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StepsSidebar",
+      "path": "src\\components\\editor\\StepsSidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TemplateList",
+      "path": "src\\components\\editor\\templates\\TemplateList.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorToolbar",
+      "path": "src\\components\\editor\\toolbar\\EditorToolbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ToolbarSidebar",
+      "path": "src\\components\\editor\\ToolbarSidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "UnifiedEditorLayout",
+      "path": "src\\components\\editor\\UnifiedEditorLayout.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "VisualEditor",
+      "path": "src\\components\\editor\\VisualEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorNavigation",
+      "path": "src\\components\\editors\\EditorNavigation.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizOfferPageVisualEditor",
+      "path": "src\\components\\editors\\QuizOfferPageVisualEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnchantedEffects",
+      "path": "src\\components\\effects\\EnchantedEffects.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "InteractionEffects",
+      "path": "src\\components\\effects\\InteractionEffects.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ParticleSystem",
+      "path": "src\\components\\effects\\ParticleSystem.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AutoSaveIndicator",
+      "path": "src\\components\\enhanced-editor\\components\\AutoSaveIndicator.tsx",
       "type": "typescript"
     },
     {
       "name": "EnhancedQuizBuilder",
-      "path": "src/components/quiz-builder/EnhancedQuizBuilder.tsx",
+      "path": "src\\components\\enhanced-editor\\EnhancedQuizBuilder.tsx",
       "type": "typescript"
     },
     {
-      "name": "PreviewPanel",
-      "path": "src/components/quiz-builder/PreviewPanel.tsx",
+      "name": "InlineTextEditor",
+      "path": "src\\components\\enhanced-editor\\preview\\editors\\InlineTextEditor.tsx",
       "type": "typescript"
     },
     {
       "name": "PropertiesPanel",
-      "path": "src/components/quiz-builder/PropertiesPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizBuilder",
-      "path": "src/components/quiz-builder/QuizBuilder.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StagesPanel",
-      "path": "src/components/quiz-builder/StagesPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TemplateSelector",
-      "path": "src/components/quiz-builder/TemplateSelector.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BuilderLayout",
-      "path": "src/components/quiz-builder/components/BuilderLayout.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BuilderToolbar",
-      "path": "src/components/quiz-builder/components/BuilderToolbar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentToolbar",
-      "path": "src/components/quiz-builder/components/ComponentToolbar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentsSidebar",
-      "path": "src/components/quiz-builder/components/ComponentsSidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedImageProperties",
-      "path": "src/components/quiz-builder/components/EnhancedImageProperties.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeaderComponent",
-      "path": "src/components/quiz-builder/components/HeaderComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ImageComponent",
-      "path": "src/components/quiz-builder/components/ImageComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MultipleChoiceComponent",
-      "path": "src/components/quiz-builder/components/MultipleChoiceComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PropertyPanel",
-      "path": "src/components/quiz-builder/components/PropertyPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizOptionEditor",
-      "path": "src/components/quiz-builder/components/QuizOptionEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizResultComponent",
-      "path": "src/components/quiz-builder/components/QuizResultComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizTemplateImporter",
-      "path": "src/components/quiz-builder/components/QuizTemplateImporter.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StageCoverComponent",
-      "path": "src/components/quiz-builder/components/StageCoverComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StageList",
-      "path": "src/components/quiz-builder/components/StageList.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StageQuestionComponent",
-      "path": "src/components/quiz-builder/components/StageQuestionComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StageResultComponent",
-      "path": "src/components/quiz-builder/components/StageResultComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TextComponent",
-      "path": "src/components/quiz-builder/components/TextComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentPreviewPanel",
-      "path": "src/components/quiz-builder/preview/ComponentPreviewPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentRenderer",
-      "path": "src/components/quiz-builder/preview/ComponentRenderer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "DraggableComponent",
-      "path": "src/components/quiz-builder/preview/DraggableComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "NewComponentPreviewPanel",
-      "path": "src/components/quiz-builder/preview/NewComponentPreviewPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizPreview",
-      "path": "src/components/quiz-builder/preview/QuizPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPreview",
-      "path": "src/components/quiz-builder/preview/ResultPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StagePreview",
-      "path": "src/components/quiz-builder/preview/StagePreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeaderProperties",
-      "path": "src/components/quiz-builder/properties/HeaderProperties.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ImageProperties",
-      "path": "src/components/quiz-builder/properties/ImageProperties.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MultipleChoiceProperties",
-      "path": "src/components/quiz-builder/properties/MultipleChoiceProperties.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizResultProperties",
-      "path": "src/components/quiz-builder/properties/QuizResultProperties.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StyleProperties",
-      "path": "src/components/quiz-builder/properties/StyleProperties.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TextProperties",
-      "path": "src/components/quiz-builder/properties/TextProperties.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StageSection",
-      "path": "src/components/quiz-builder/stages/StageSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuestionEditor",
-      "path": "src/components/quiz-editor/QuestionEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuestionOptionEditor",
-      "path": "src/components/quiz-editor/QuestionOptionEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizCategoryTab",
-      "path": "src/components/quiz-editor/QuizCategoryTab.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizEditor",
-      "path": "src/components/quiz-editor/QuizEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TemplateSelector",
-      "path": "src/components/quiz-editor/TemplateSelector.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EmbeddedQuizPreview",
-      "path": "src/components/quiz-offer/EmbeddedQuizPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizOfferCTA",
-      "path": "src/components/quiz-offer/QuizOfferCTA.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizOfferHero",
-      "path": "src/components/quiz-offer/QuizOfferHero.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "OfferCard",
-      "path": "src/components/quiz-result/OfferCard.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PrimaryStyleCard",
-      "path": "src/components/quiz-result/PrimaryStyleCard.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultHeader",
-      "path": "src/components/quiz-result/ResultHeader.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SecondaryStylesSection",
-      "path": "src/components/quiz-result/SecondaryStylesSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BenefitList",
-      "path": "src/components/quiz-result/sales/BenefitList.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "Guarantee",
-      "path": "src/components/quiz-result/sales/Guarantee.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeroSection",
-      "path": "src/components/quiz-result/sales/HeroSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "OfferCard",
-      "path": "src/components/quiz-result/sales/OfferCard.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PricingSection",
-      "path": "src/components/quiz-result/sales/PricingSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ProductShowcase",
-      "path": "src/components/quiz-result/sales/ProductShowcase.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "Testimonials",
-      "path": "src/components/quiz-result/sales/Testimonials.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FinalCtaSection",
-      "path": "src/components/quiz-sections/FinalCtaSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultHeaderSection",
-      "path": "src/components/quiz-sections/ResultHeaderSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TransitionSection",
-      "path": "src/components/quiz-sections/TransitionSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BeforeAfterTransformation",
-      "path": "src/components/result/BeforeAfterTransformation.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BenefitsSection",
-      "path": "src/components/result/BenefitsSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BonusCarousel",
-      "path": "src/components/result/BonusCarousel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BonusSection",
-      "path": "src/components/result/BonusSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditResultPageButton",
-      "path": "src/components/result/EditResultPageButton.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedPricingSection",
-      "path": "src/components/result/EnhancedPricingSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ErrorState",
-      "path": "src/components/result/ErrorState.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FloatingCTA",
-      "path": "src/components/result/FloatingCTA.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "GuaranteeSeal",
-      "path": "src/components/result/GuaranteeSeal.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "GuaranteeSection",
-      "path": "src/components/result/GuaranteeSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "Header",
-      "path": "src/components/result/Header.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeroSection",
-      "path": "src/components/result/HeroSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MentorSection",
-      "path": "src/components/result/MentorSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MotivationSection",
-      "path": "src/components/result/MotivationSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PerformanceMonitor",
-      "path": "src/components/result/PerformanceMonitor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PricingSection",
-      "path": "src/components/result/PricingSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResourcePreloader",
-      "path": "src/components/result/ResourcePreloader.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultSkeleton",
-      "path": "src/components/result/ResultSkeleton.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SecondaryStylesSection",
-      "path": "src/components/result/SecondaryStylesSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SecurePurchaseElement",
-      "path": "src/components/result/SecurePurchaseElement.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StyleResult",
-      "path": "src/components/result/StyleResult.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TestimonialsSection",
-      "path": "src/components/result/TestimonialsSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BlockRenderer",
-      "path": "src/components/result-editor/BlockRenderer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ColorPicker",
-      "path": "src/components/result-editor/ColorPicker.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentRegistry",
-      "path": "src/components/result-editor/ComponentRegistry.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentRenderers",
-      "path": "src/components/result-editor/ComponentRenderers.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentToolbar",
-      "path": "src/components/result-editor/ComponentToolbar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentsSidebar",
-      "path": "src/components/result-editor/ComponentsSidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "DragDropEditor",
-      "path": "src/components/result-editor/DragDropEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "DraggableBlockList",
-      "path": "src/components/result-editor/DraggableBlockList.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "DropZoneCanvas",
-      "path": "src/components/result-editor/DropZoneCanvas.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditSectionOverlay",
-      "path": "src/components/result-editor/EditSectionOverlay.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditableBlock",
-      "path": "src/components/result-editor/EditableBlock.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditableComponent",
-      "path": "src/components/result-editor/EditableComponent.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditableSection",
-      "path": "src/components/result-editor/EditableSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditableSections",
-      "path": "src/components/result-editor/EditableSections.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorCompleto",
-      "path": "src/components/result-editor/EditorCompleto.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorPreview",
-      "path": "src/components/result-editor/EditorPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorSimples",
-      "path": "src/components/result-editor/EditorSimples.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorToolbar",
-      "path": "src/components/result-editor/EditorToolbar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedResultPageEditor",
-      "path": "src/components/result-editor/EnhancedResultPageEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedResultPageEditorWrapper",
-      "path": "src/components/result-editor/EnhancedResultPageEditorWrapper.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "GlobalStyleEditor",
-      "path": "src/components/result-editor/GlobalStyleEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "GlobalStylesEditor",
-      "path": "src/components/result-editor/GlobalStylesEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "JsonConfigEditor",
-      "path": "src/components/result-editor/JsonConfigEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "LiveEditor",
-      "path": "src/components/result-editor/LiveEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PreviewPanel",
-      "path": "src/components/result-editor/PreviewPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PropertiesPanel",
-      "path": "src/components/result-editor/PropertiesPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPageBlockEditor",
-      "path": "src/components/result-editor/ResultPageBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPageDuplicator",
-      "path": "src/components/result-editor/ResultPageDuplicator.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPageEditor",
-      "path": "src/components/result-editor/ResultPageEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPageEditorWithControls",
-      "path": "src/components/result-editor/ResultPageEditorWithControls.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultPageVisualEditor",
-      "path": "src/components/result-editor/ResultPageVisualEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SectionEditor",
-      "path": "src/components/result-editor/SectionEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SortableBlock",
-      "path": "src/components/result-editor/SortableBlock.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SortableCanvasItem",
-      "path": "src/components/result-editor/SortableCanvasItem.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StepsPanel",
-      "path": "src/components/result-editor/StepsPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StyleEditor",
-      "path": "src/components/result-editor/StyleEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StyleSelector",
-      "path": "src/components/result-editor/StyleSelector.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AnimationBlockEditor",
-      "path": "src/components/result-editor/block-editors/AnimationBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BenefitsBlockEditor",
-      "path": "src/components/result-editor/block-editors/BenefitsBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "CTABlockEditor",
-      "path": "src/components/result-editor/block-editors/CTABlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "CarouselBlockEditor",
-      "path": "src/components/result-editor/block-editors/CarouselBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "CustomCodeBlockEditor",
-      "path": "src/components/result-editor/block-editors/CustomCodeBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FAQBlockEditor",
-      "path": "src/components/result-editor/block-editors/FAQBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FinalCtaBlockEditor",
-      "path": "src/components/result-editor/block-editors/FinalCtaBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "GuaranteeBlockEditor",
-      "path": "src/components/result-editor/block-editors/GuaranteeBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeaderBlockEditor",
-      "path": "src/components/result-editor/block-editors/HeaderBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeadlineBlockEditor",
-      "path": "src/components/result-editor/block-editors/HeadlineBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeroSectionBlockEditor",
-      "path": "src/components/result-editor/block-editors/HeroSectionBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "IconBlockEditor",
-      "path": "src/components/result-editor/block-editors/IconBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ImageBlockEditor",
-      "path": "src/components/result-editor/block-editors/ImageBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PricingBlockEditor",
-      "path": "src/components/result-editor/block-editors/PricingBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ProductsBlockEditor",
-      "path": "src/components/result-editor/block-editors/ProductsBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultHeaderBlockEditor",
-      "path": "src/components/result-editor/block-editors/ResultHeaderBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SecondaryStylesBlockEditor",
-      "path": "src/components/result-editor/block-editors/SecondaryStylesBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SpacerBlockEditor",
-      "path": "src/components/result-editor/block-editors/SpacerBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StyleResultBlockEditor",
-      "path": "src/components/result-editor/block-editors/StyleResultBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TestimonialsBlockEditor",
-      "path": "src/components/result-editor/block-editors/TestimonialsBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TextBlockEditor",
-      "path": "src/components/result-editor/block-editors/TextBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TransitionBlockEditor",
-      "path": "src/components/result-editor/block-editors/TransitionBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TwoColumnBlockEditor",
-      "path": "src/components/result-editor/block-editors/TwoColumnBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "VideoBlockEditor",
-      "path": "src/components/result-editor/block-editors/VideoBlockEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AnimationBlockPreview",
-      "path": "src/components/result-editor/block-previews/AnimationBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "BenefitsBlockPreview",
-      "path": "src/components/result-editor/block-previews/BenefitsBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "CTABlockPreview",
-      "path": "src/components/result-editor/block-previews/CTABlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "CarouselBlockPreview",
-      "path": "src/components/result-editor/block-previews/CarouselBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "CustomCodeBlockPreview",
-      "path": "src/components/result-editor/block-previews/CustomCodeBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FAQBlockPreview",
-      "path": "src/components/result-editor/block-previews/FAQBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "GuaranteeBlockPreview",
-      "path": "src/components/result-editor/block-previews/GuaranteeBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeaderBlockPreview",
-      "path": "src/components/result-editor/block-previews/HeaderBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeadlineBlockPreview",
-      "path": "src/components/result-editor/block-previews/HeadlineBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeroSectionBlockPreview",
-      "path": "src/components/result-editor/block-previews/HeroSectionBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "IconBlockPreview",
-      "path": "src/components/result-editor/block-previews/IconBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ImageBlockPreview",
-      "path": "src/components/result-editor/block-previews/ImageBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PricingBlockPreview",
-      "path": "src/components/result-editor/block-previews/PricingBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ProductsBlockPreview",
-      "path": "src/components/result-editor/block-previews/ProductsBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SecondaryStylesBlockPreview",
-      "path": "src/components/result-editor/block-previews/SecondaryStylesBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SpacerBlockPreview",
-      "path": "src/components/result-editor/block-previews/SpacerBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StyleResultBlockPreview",
-      "path": "src/components/result-editor/block-previews/StyleResultBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TestimonialsBlockPreview",
-      "path": "src/components/result-editor/block-previews/TestimonialsBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TextBlockPreview",
-      "path": "src/components/result-editor/block-previews/TextBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TwoColumnBlockPreview",
-      "path": "src/components/result-editor/block-previews/TwoColumnBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "VideoBlockPreview",
-      "path": "src/components/result-editor/block-previews/VideoBlockPreview.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeaderEditor",
-      "path": "src/components/result-editor/editors/HeaderEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MainContentEditor",
-      "path": "src/components/result-editor/editors/MainContentEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "OfferEditor",
-      "path": "src/components/result-editor/editors/OfferEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "OfferHeroEditor",
-      "path": "src/components/result-editor/editors/OfferHeroEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "PricingEditor",
-      "path": "src/components/result-editor/editors/PricingEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HeaderEditor",
-      "path": "src/components/result-editor/sections/HeaderEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MainContentEditor",
-      "path": "src/components/result-editor/sections/MainContentEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "StyleEditor",
-      "path": "src/components/result-editor/style-editors/StyleEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TransformationBlock",
-      "path": "src/components/sales/TransformationBlock.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AdvancedTab",
-      "path": "src/components/settings/AdvancedTab.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AnalyticsTab",
-      "path": "src/components/settings/AnalyticsTab.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ApiIntegrationsTab",
-      "path": "src/components/settings/ApiIntegrationsTab.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AppearanceTab",
-      "path": "src/components/settings/AppearanceTab.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FacebookAdsTab",
-      "path": "src/components/settings/FacebookAdsTab.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "MarketingTab",
-      "path": "src/components/settings/MarketingTab.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "UtmSettingsTab",
-      "path": "src/components/settings/UtmSettingsTab.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ContentContainer",
-      "path": "src/components/shared/ContentContainer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "GridLayout",
-      "path": "src/components/shared/GridLayout.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ImprovedQuizResultSalesPage",
-      "path": "src/components/templates/ImprovedQuizResultSalesPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TemplateSelector",
-      "path": "src/components/templates/TemplateSelector.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizConfigTest",
-      "path": "src/components/test/QuizConfigTest.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "theme-provider",
-      "path": "src/components/theme-provider.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AutoFixedImages",
-      "path": "src/components/ui/AutoFixedImages.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorButton",
-      "path": "src/components/ui/EditorButton.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedAutoFixedImages",
-      "path": "src/components/ui/EnhancedAutoFixedImages.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedProgressiveImage",
-      "path": "src/components/ui/EnhancedProgressiveImage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FixedIntroImage",
-      "path": "src/components/ui/FixedIntroImage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FixedResultImage",
-      "path": "src/components/ui/FixedResultImage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FixedTransformationImage",
-      "path": "src/components/ui/FixedTransformationImage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "OptimizedAutoFixedImages",
-      "path": "src/components/ui/OptimizedAutoFixedImages.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "OptimizedImage",
-      "path": "src/components/ui/OptimizedImage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ProgressiveImage",
-      "path": "src/components/ui/ProgressiveImage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "animated-wrapper",
-      "path": "src/components/ui/animated-wrapper.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "aspect-ratio-container",
-      "path": "src/components/ui/aspect-ratio-container.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "countdown-timer",
-      "path": "src/components/ui/countdown-timer.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "image-uploader",
-      "path": "src/components/ui/image-uploader.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "limited-stock-indicator",
-      "path": "src/components/ui/limited-stock-indicator.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "loading-fallback",
-      "path": "src/components/ui/loading-fallback.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "loading-spinner-optimized",
-      "path": "src/components/ui/loading-spinner-optimized.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "loading-spinner",
-      "path": "src/components/ui/loading-spinner.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "loading-state",
-      "path": "src/components/ui/loading-state.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "logo",
-      "path": "src/components/ui/logo.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "optimized-image-enhanced",
-      "path": "src/components/ui/optimized-image-enhanced.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "optimized-image-v2",
-      "path": "src/components/ui/optimized-image-v2.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "optimized-image",
-      "path": "src/components/ui/optimized-image.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "progressive-image",
-      "path": "src/components/ui/progressive-image.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "sidebar",
-      "path": "src/components/ui/sidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "spinner",
-      "path": "src/components/ui/spinner.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorErrorHandler",
-      "path": "src/components/unified-editor/EditorErrorHandler.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TypeformEditor",
-      "path": "src/components/unified-editor/TypeformEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "UnifiedEditor",
-      "path": "src/components/unified-editor/UnifiedEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "UnifiedVisualEditor",
-      "path": "src/components/unified-editor/UnifiedVisualEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "UnifiedTemplateModal",
-      "path": "src/components/unified-editor/modals/UnifiedTemplateModal.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorNotifications",
-      "path": "src/components/unified-editor/notifications/EditorNotifications.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "QuizEditorPanel",
-      "path": "src/components/unified-editor/panels/QuizEditorPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultEditorPanel",
-      "path": "src/components/unified-editor/panels/ResultEditorPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SalesEditorPanel",
-      "path": "src/components/unified-editor/panels/SalesEditorPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "OfferSection",
-      "path": "src/components/unified-editor/sections/OfferSection.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ResultSection",
-      "path": "src/components/unified-editor/sections/ResultSection.tsx",
+      "path": "src\\components\\enhanced-editor\\properties\\PropertiesPanel.tsx",
       "type": "typescript"
     },
     {
       "name": "ComponentItem",
-      "path": "src/components/unified-editor/sidebar/ComponentItem.tsx",
+      "path": "src\\components\\enhanced-editor\\sidebar\\ComponentItem.tsx",
       "type": "typescript"
     },
     {
-      "name": "UnifiedComponentsSidebar",
-      "path": "src/components/unified-editor/sidebar/UnifiedComponentsSidebar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorToolbar",
-      "path": "src/components/unified-editor/toolbar/EditorToolbar.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AdvancedQuizEditor.backup",
-      "path": "src/components/visual-editor/AdvancedQuizEditor.backup.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AdvancedQuizEditor.test",
-      "path": "src/components/visual-editor/AdvancedQuizEditor.test.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AdvancedQuizEditor",
-      "path": "src/components/visual-editor/AdvancedQuizEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "DragDropQuizEditor",
-      "path": "src/components/visual-editor/DragDropQuizEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedQuizEditor",
-      "path": "src/components/visual-editor/EnhancedQuizEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FaithfulQuizEditor",
-      "path": "src/components/visual-editor/FaithfulQuizEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FinalRefactoredEditor",
-      "path": "src/components/visual-editor/FinalRefactoredEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "FinalWorkingEditor",
-      "path": "src/components/visual-editor/FinalWorkingEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ModernVisualEditor",
-      "path": "src/components/visual-editor/ModernVisualEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ModernVisualEditor_backup",
-      "path": "src/components/visual-editor/ModernVisualEditor_backup.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ModernVisualEditor_original",
-      "path": "src/components/visual-editor/ModernVisualEditor_original.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ModularRefactoredEditor",
-      "path": "src/components/visual-editor/ModularRefactoredEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "RefactoredAdvancedQuizEditor",
-      "path": "src/components/visual-editor/RefactoredAdvancedQuizEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SimpleDragDropEditor",
-      "path": "src/components/visual-editor/SimpleDragDropEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SimpleRefactoredEditor",
-      "path": "src/components/visual-editor/SimpleRefactoredEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "SimpleWorkingEditor",
-      "path": "src/components/visual-editor/SimpleWorkingEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "TestRefactoredEditor",
-      "path": "src/components/visual-editor/TestRefactoredEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "WorkingRefactoredEditor",
-      "path": "src/components/visual-editor/WorkingRefactoredEditor.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AccessibleCanvas",
-      "path": "src/components/visual-editor/components/AccessibleCanvas.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AccessiblePropertiesPanel",
-      "path": "src/components/visual-editor/components/AccessiblePropertiesPanel.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "AccessibleStepTree",
-      "path": "src/components/visual-editor/components/AccessibleStepTree.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "Canvas",
-      "path": "src/components/visual-editor/components/Canvas.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ComponentPalette",
-      "path": "src/components/visual-editor/components/ComponentPalette.tsx",
+      "name": "ComponentsSidebar",
+      "path": "src\\components\\enhanced-editor\\sidebar\\ComponentsSidebar.tsx",
       "type": "typescript"
     },
     {
       "name": "EditorToolbar",
-      "path": "src/components/visual-editor/components/EditorToolbar.tsx",
+      "path": "src\\components\\enhanced-editor\\toolbar\\EditorToolbar.tsx",
       "type": "typescript"
     },
     {
-      "name": "PropertiesPanel",
-      "path": "src/components/visual-editor/components/PropertiesPanel.tsx",
+      "name": "GeminiStyleAdvisor",
+      "path": "src\\components\\GeminiStyleAdvisor.tsx",
       "type": "typescript"
     },
     {
-      "name": "StepTree",
-      "path": "src/components/visual-editor/components/StepTree.tsx",
+      "name": "InLeadCanvas",
+      "path": "src\\components\\inlead-editor\\InLeadCanvas.tsx",
       "type": "typescript"
     },
     {
-      "name": "AdvancedConfigSidebar",
-      "path": "src/components/visual-editor/panels/AdvancedConfigSidebar.tsx",
+      "name": "InLeadEditor",
+      "path": "src\\components\\inlead-editor\\InLeadEditor.tsx",
       "type": "typescript"
     },
     {
-      "name": "AdvancedControlsPanel",
-      "path": "src/components/visual-editor/panels/AdvancedControlsPanel.tsx",
+      "name": "InLeadPreview",
+      "path": "src\\components\\inlead-editor\\InLeadPreview.tsx",
       "type": "typescript"
     },
     {
-      "name": "ComponentLibrary",
-      "path": "src/components/visual-editor/panels/ComponentLibrary.tsx",
+      "name": "InLeadSidebar",
+      "path": "src\\components\\inlead-editor\\InLeadSidebar.tsx",
       "type": "typescript"
     },
     {
-      "name": "ComponentLibrary_backup",
-      "path": "src/components/visual-editor/panels/ComponentLibrary_backup.tsx",
+      "name": "InlineEditor",
+      "path": "src\\components\\inline-editor\\InlineEditor.tsx",
       "type": "typescript"
     },
     {
-      "name": "ComponentLibrary_fixed",
-      "path": "src/components/visual-editor/panels/ComponentLibrary_fixed.tsx",
+      "name": "ResultPageWrapper",
+      "path": "src\\components\\layout\\ResultPageWrapper.tsx",
       "type": "typescript"
     },
     {
-      "name": "ModernConfigurationPanel",
-      "path": "src/components/visual-editor/panels/ModernConfigurationPanel.tsx",
+      "name": "InlineEditor",
+      "path": "src\\components\\live-editor\\inline-editor\\InlineEditor.tsx",
       "type": "typescript"
     },
     {
-      "name": "StageConfigurationPanel",
-      "path": "src/components/visual-editor/panels/StageConfigurationPanel.tsx",
+      "name": "LiveQuizEditor",
+      "path": "src\\components\\live-editor\\LiveQuizEditor.tsx",
       "type": "typescript"
     },
     {
-      "name": "AdminAuthContext",
-      "path": "src/context/AdminAuthContext.tsx",
+      "name": "OfferPreview",
+      "path": "src\\components\\live-editor\\preview\\components\\OfferPreview.tsx",
       "type": "typescript"
     },
     {
-      "name": "QuizContext",
-      "path": "src/context/QuizContext.tsx",
+      "name": "QuestionPreview",
+      "path": "src\\components\\live-editor\\preview\\components\\QuestionPreview.tsx",
       "type": "typescript"
     },
     {
-      "name": "AuthContext",
-      "path": "src/contexts/AuthContext.tsx",
+      "name": "QuizIntroPreview",
+      "path": "src\\components\\live-editor\\preview\\components\\QuizIntroPreview.tsx",
       "type": "typescript"
     },
     {
-      "name": "EditorContext",
-      "path": "src/contexts/EditorContext.tsx",
+      "name": "ResultPreview",
+      "path": "src\\components\\live-editor\\preview\\components\\ResultPreview.tsx",
       "type": "typescript"
     },
     {
-      "name": "useQuizConfig",
-      "path": "src/hooks/useQuizConfig.tsx",
+      "name": "LivePreview",
+      "path": "src\\components\\live-editor\\preview\\LivePreview.tsx",
       "type": "typescript"
     },
     {
-      "name": "useUniversalNavigation",
-      "path": "src/hooks/useUniversalNavigation.tsx",
+      "name": "ComponentsSidebar",
+      "path": "src\\components\\live-editor\\sidebar\\ComponentsSidebar.tsx",
       "type": "typescript"
     },
     {
-      "name": "AdminLayout",
-      "path": "src/layouts/AdminLayout.tsx",
+      "name": "PropertiesSidebar",
+      "path": "src\\components\\live-editor\\sidebar\\PropertiesSidebar.tsx",
       "type": "typescript"
     },
     {
-      "name": "AuthLayout",
-      "path": "src/layouts/AuthLayout.tsx",
+      "name": "StagesSidebar",
+      "path": "src\\components\\live-editor\\sidebar\\StagesSidebar.tsx",
       "type": "typescript"
     },
     {
-      "name": "UnifiedEditor",
-      "path": "src/lovables/UnifiedEditor.tsx",
+      "name": "SmartComponentPalette",
+      "path": "src\\components\\live-editor\\smart-components\\SmartComponentPalette.tsx",
       "type": "typescript"
     },
     {
-      "name": "ABTestManagerPage",
-      "path": "src/pages/ABTestManagerPage.tsx",
+      "name": "TemplateLibrary",
+      "path": "src\\components\\live-editor\\templates\\TemplateLibrary.tsx",
       "type": "typescript"
     },
     {
-      "name": "ABTestPage",
-      "path": "src/pages/ABTestPage.tsx",
+      "name": "FileLoadingScreen",
+      "path": "src\\components\\loaders\\FileLoadingScreen.tsx",
       "type": "typescript"
     },
     {
-      "name": "AccessLoaderPage",
-      "path": "src/pages/AccessLoaderPage.tsx",
+      "name": "FileLoadingSimulator",
+      "path": "src\\components\\loading\\FileLoadingSimulator.tsx",
       "type": "typescript"
     },
     {
-      "name": "AnalyticsPage",
-      "path": "src/pages/AnalyticsPage.tsx",
+      "name": "QuizCover.lovable",
+      "path": "src\\components\\lovable\\QuizCover.lovable.tsx",
       "type": "typescript"
     },
     {
-      "name": "CaktoEditorPage",
-      "path": "src/pages/CaktoEditorPage.tsx",
+      "name": "QuizLogic.lovable",
+      "path": "src\\components\\lovable\\QuizLogic.lovable.tsx",
       "type": "typescript"
     },
     {
-      "name": "CreativeAnalyticsPage",
-      "path": "src/pages/CreativeAnalyticsPage.tsx",
+      "name": "QuizQuestion.lovable",
+      "path": "src\\components\\lovable\\QuizQuestion.lovable.tsx",
       "type": "typescript"
     },
     {
-      "name": "CreativeAnalyticsPageNew",
-      "path": "src/pages/CreativeAnalyticsPageNew.tsx",
+      "name": "ResultPageEditor.lovable",
+      "path": "src\\components\\lovable\\ResultPageEditor.lovable.tsx",
       "type": "typescript"
     },
     {
-      "name": "CreativesPage",
-      "path": "src/pages/CreativesPage.tsx",
+      "name": "lovable-mocks",
+      "path": "src\\components\\lovable-mocks.tsx",
       "type": "typescript"
     },
     {
-      "name": "DashboardPage",
-      "path": "src/pages/DashboardPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorDashboard",
-      "path": "src/pages/EditorDashboard.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorNotFoundPage",
-      "path": "src/pages/EditorNotFoundPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorPage",
-      "path": "src/pages/EditorPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorTest",
-      "path": "src/pages/EditorTest.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EditorsHubPage",
-      "path": "src/pages/EditorsHubPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedEditorTestPage",
-      "path": "src/pages/EnhancedEditorTestPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "EnhancedResultPageEditorPage",
-      "path": "src/pages/EnhancedResultPageEditorPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ForgotPasswordPage",
-      "path": "src/pages/ForgotPasswordPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "HomePage",
-      "path": "src/pages/HomePage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "InLeadEditorPage",
-      "path": "src/pages/InLeadEditorPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "LandingPage",
-      "path": "src/pages/LandingPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "LiveEditorPage",
-      "path": "src/pages/LiveEditorPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "LoadingAccessPage",
-      "path": "src/pages/LoadingAccessPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "LoginPage",
-      "path": "src/pages/LoginPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "ModernEditorPage",
-      "path": "src/pages/ModernEditorPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "NewQuizPage",
-      "path": "src/pages/NewQuizPage.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "NotFound",
-      "path": "src/pages/NotFound.tsx",
-      "type": "typescript"
-    },
-    {
-      "name": "NotFoundPage",
-      "path": "src/pages/NotFoundPage.tsx",
+      "name": "copy-estrutura",
+      "path": "src\\components\\pages\\copy-estrutura.tsx",
       "type": "typescript"
     },
     {
       "name": "PreviewQuizOfferPage",
-      "path": "src/pages/PreviewQuizOfferPage.tsx",
+      "path": "src\\components\\pages\\PreviewQuizOfferPage.tsx",
       "type": "typescript"
     },
     {
-      "name": "QuizBuilderPage",
-      "path": "src/pages/QuizBuilderPage.tsx",
+      "name": "PixelInitializer",
+      "path": "src\\components\\PixelInitializer.tsx",
       "type": "typescript"
     },
     {
-      "name": "QuizEditorPage",
-      "path": "src/pages/QuizEditorPage.tsx",
+      "name": "ProtectedRoute",
+      "path": "src\\components\\ProtectedRoute.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AccessibilityTip",
+      "path": "src\\components\\quiz\\AccessibilityTip.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AnimatedNameForm",
+      "path": "src\\components\\quiz\\AnimatedNameForm.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AnimatedProgressIndicator",
+      "path": "src\\components\\quiz\\AnimatedProgressIndicator.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ElementRenderer",
+      "path": "src\\components\\quiz\\ElementRenderer.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "LoadingManager",
+      "path": "src\\components\\quiz\\LoadingManager.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "MainTransition",
+      "path": "src\\components\\quiz\\MainTransition.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuestionComponent",
+      "path": "src\\components\\quiz\\QuestionComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizContent",
+      "path": "src\\components\\quiz\\QuizContent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizElementRenderer",
+      "path": "src\\components\\quiz\\QuizElementRenderer.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizHeader",
+      "path": "src\\components\\quiz\\QuizHeader.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizNavigation",
+      "path": "src\\components\\quiz\\QuizNavigation.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizOptionImage",
+      "path": "src\\components\\quiz\\QuizOptionImage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StrategicQuestions",
+      "path": "src\\components\\quiz\\StrategicQuestions.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentRenderer",
+      "path": "src\\components\\quiz-builder\\ComponentRenderer.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "BuilderLayout",
+      "path": "src\\components\\quiz-builder\\components\\BuilderLayout.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "BuilderToolbar",
+      "path": "src\\components\\quiz-builder\\components\\BuilderToolbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentsSidebar",
+      "path": "src\\components\\quiz-builder\\components\\ComponentsSidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentToolbar",
+      "path": "src\\components\\quiz-builder\\components\\ComponentToolbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedImageProperties",
+      "path": "src\\components\\quiz-builder\\components\\EnhancedImageProperties.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeaderComponent",
+      "path": "src\\components\\quiz-builder\\components\\HeaderComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ImageComponent",
+      "path": "src\\components\\quiz-builder\\components\\ImageComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "MultipleChoiceComponent",
+      "path": "src\\components\\quiz-builder\\components\\MultipleChoiceComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PropertyPanel",
+      "path": "src\\components\\quiz-builder\\components\\PropertyPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizOptionEditor",
+      "path": "src\\components\\quiz-builder\\components\\QuizOptionEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizResultComponent",
+      "path": "src\\components\\quiz-builder\\components\\QuizResultComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizTemplateImporter",
+      "path": "src\\components\\quiz-builder\\components\\QuizTemplateImporter.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StageCoverComponent",
+      "path": "src\\components\\quiz-builder\\components\\StageCoverComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StageList",
+      "path": "src\\components\\quiz-builder\\components\\StageList.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StageQuestionComponent",
+      "path": "src\\components\\quiz-builder\\components\\StageQuestionComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StageResultComponent",
+      "path": "src\\components\\quiz-builder\\components\\StageResultComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TextComponent",
+      "path": "src\\components\\quiz-builder\\components\\TextComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentsSidebar",
+      "path": "src\\components\\quiz-builder\\ComponentsSidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedQuizBuilder",
+      "path": "src\\components\\quiz-builder\\EnhancedQuizBuilder.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentPreviewPanel",
+      "path": "src\\components\\quiz-builder\\preview\\ComponentPreviewPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentRenderer",
+      "path": "src\\components\\quiz-builder\\preview\\ComponentRenderer.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "DraggableComponent",
+      "path": "src\\components\\quiz-builder\\preview\\DraggableComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "NewComponentPreviewPanel",
+      "path": "src\\components\\quiz-builder\\preview\\NewComponentPreviewPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizPreview",
+      "path": "src\\components\\quiz-builder\\preview\\QuizPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPreview",
+      "path": "src\\components\\quiz-builder\\preview\\ResultPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StagePreview",
+      "path": "src\\components\\quiz-builder\\preview\\StagePreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PreviewPanel",
+      "path": "src\\components\\quiz-builder\\PreviewPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeaderProperties",
+      "path": "src\\components\\quiz-builder\\properties\\HeaderProperties.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ImageProperties",
+      "path": "src\\components\\quiz-builder\\properties\\ImageProperties.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "MultipleChoiceProperties",
+      "path": "src\\components\\quiz-builder\\properties\\MultipleChoiceProperties.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizResultProperties",
+      "path": "src\\components\\quiz-builder\\properties\\QuizResultProperties.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StyleProperties",
+      "path": "src\\components\\quiz-builder\\properties\\StyleProperties.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TextProperties",
+      "path": "src\\components\\quiz-builder\\properties\\TextProperties.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PropertiesPanel",
+      "path": "src\\components\\quiz-builder\\PropertiesPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizBuilder",
+      "path": "src\\components\\quiz-builder\\QuizBuilder.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StageSection",
+      "path": "src\\components\\quiz-builder\\stages\\StageSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StagesPanel",
+      "path": "src\\components\\quiz-builder\\StagesPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TemplateSelector",
+      "path": "src\\components\\quiz-builder\\TemplateSelector.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuestionEditor",
+      "path": "src\\components\\quiz-editor\\QuestionEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuestionOptionEditor",
+      "path": "src\\components\\quiz-editor\\QuestionOptionEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizCategoryTab",
+      "path": "src\\components\\quiz-editor\\QuizCategoryTab.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizEditor",
+      "path": "src\\components\\quiz-editor\\QuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TemplateSelector",
+      "path": "src\\components\\quiz-editor\\TemplateSelector.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EmbeddedQuizPreview",
+      "path": "src\\components\\quiz-offer\\EmbeddedQuizPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizOfferCTA",
+      "path": "src\\components\\quiz-offer\\QuizOfferCTA.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizOfferHero",
+      "path": "src\\components\\quiz-offer\\QuizOfferHero.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "OfferCard",
+      "path": "src\\components\\quiz-result\\OfferCard.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PrimaryStyleCard",
+      "path": "src\\components\\quiz-result\\PrimaryStyleCard.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultHeader",
+      "path": "src\\components\\quiz-result\\ResultHeader.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "BenefitList",
+      "path": "src\\components\\quiz-result\\sales\\BenefitList.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "Guarantee",
+      "path": "src\\components\\quiz-result\\sales\\Guarantee.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeroSection",
+      "path": "src\\components\\quiz-result\\sales\\HeroSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "OfferCard",
+      "path": "src\\components\\quiz-result\\sales\\OfferCard.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PricingSection",
+      "path": "src\\components\\quiz-result\\sales\\PricingSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ProductShowcase",
+      "path": "src\\components\\quiz-result\\sales\\ProductShowcase.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "Testimonials",
+      "path": "src\\components\\quiz-result\\sales\\Testimonials.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SecondaryStylesSection",
+      "path": "src\\components\\quiz-result\\SecondaryStylesSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FinalCtaSection",
+      "path": "src\\components\\quiz-sections\\FinalCtaSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultHeaderSection",
+      "path": "src\\components\\quiz-sections\\ResultHeaderSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TransitionSection",
+      "path": "src\\components\\quiz-sections\\TransitionSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizContent",
+      "path": "src\\components\\QuizContent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizFinalTransition",
+      "path": "src\\components\\QuizFinalTransition.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizFlow",
+      "path": "src\\components\\QuizFlow.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizIntro",
+      "path": "src\\components\\QuizIntro.tsx",
       "type": "typescript"
     },
     {
       "name": "QuizOfferPage",
-      "path": "src/pages/QuizOfferPage.tsx",
+      "path": "src\\components\\QuizOfferPage.tsx",
       "type": "typescript"
     },
     {
       "name": "QuizPage",
-      "path": "src/pages/QuizPage.tsx",
+      "path": "src\\components\\QuizPage.tsx",
       "type": "typescript"
     },
     {
-      "name": "RegisterPage",
-      "path": "src/pages/RegisterPage.tsx",
+      "name": "QuizPreview",
+      "path": "src\\components\\QuizPreview.tsx",
       "type": "typescript"
     },
     {
-      "name": "ResetPasswordPage",
-      "path": "src/pages/ResetPasswordPage.tsx",
+      "name": "QuizResult",
+      "path": "src\\components\\QuizResult.tsx",
       "type": "typescript"
     },
     {
-      "name": "ResultPage",
-      "path": "src/pages/ResultPage.tsx",
+      "name": "QuizTransition",
+      "path": "src\\components\\QuizTransition.tsx",
       "type": "typescript"
     },
     {
-      "name": "ResultPageEditorPage",
-      "path": "src/pages/ResultPageEditorPage.tsx",
+      "name": "QuizWelcome",
+      "path": "src\\components\\QuizWelcome.tsx",
       "type": "typescript"
     },
     {
-      "name": "ResultPagePrototype",
-      "path": "src/pages/ResultPagePrototype.tsx",
+      "name": "BeforeAfterTransformation",
+      "path": "src\\components\\result\\BeforeAfterTransformation.tsx",
       "type": "typescript"
     },
     {
-      "name": "ResultPageVisualEditorPage",
-      "path": "src/pages/ResultPageVisualEditorPage.tsx",
+      "name": "BenefitsSection",
+      "path": "src\\components\\result\\BenefitsSection.tsx",
       "type": "typescript"
     },
     {
-      "name": "ResultVisualEditorPage",
-      "path": "src/pages/ResultVisualEditorPage.tsx",
+      "name": "BonusCarousel",
+      "path": "src\\components\\result\\BonusCarousel.tsx",
       "type": "typescript"
     },
     {
-      "name": "SettingsPage",
-      "path": "src/pages/SettingsPage.tsx",
+      "name": "BonusSection",
+      "path": "src\\components\\result\\BonusSection.tsx",
       "type": "typescript"
     },
     {
-      "name": "Teste1Page",
-      "path": "src/pages/Teste1Page.tsx",
+      "name": "EditResultPageButton",
+      "path": "src\\components\\result\\EditResultPageButton.tsx",
       "type": "typescript"
     },
     {
-      "name": "UnifiedEditorPage",
-      "path": "src/pages/UnifiedEditorPage.tsx",
+      "name": "EnhancedPricingSection",
+      "path": "src\\components\\result\\EnhancedPricingSection.tsx",
       "type": "typescript"
     },
     {
-      "name": "VisualEditorPage",
-      "path": "src/pages/VisualEditorPage.tsx",
+      "name": "ErrorState",
+      "path": "src\\components\\result\\ErrorState.tsx",
       "type": "typescript"
     },
     {
-      "name": "ABTestPage",
-      "path": "src/pages/admin/ABTestPage.tsx",
+      "name": "FloatingCTA",
+      "path": "src\\components\\result\\FloatingCTA.tsx",
       "type": "typescript"
     },
     {
-      "name": "ABTestPage_new",
-      "path": "src/pages/admin/ABTestPage_new.tsx",
+      "name": "GuaranteeSeal",
+      "path": "src\\components\\result\\GuaranteeSeal.tsx",
       "type": "typescript"
     },
     {
-      "name": "AnalyticsPage",
-      "path": "src/pages/admin/AnalyticsPage.tsx",
+      "name": "GuaranteeSection",
+      "path": "src\\components\\result\\GuaranteeSection.tsx",
       "type": "typescript"
     },
     {
-      "name": "CreativesPage",
-      "path": "src/pages/admin/CreativesPage.tsx",
+      "name": "Header",
+      "path": "src\\components\\result\\Header.tsx",
       "type": "typescript"
     },
     {
-      "name": "DashboardPage",
-      "path": "src/pages/admin/DashboardPage.tsx",
+      "name": "HeroSection",
+      "path": "src\\components\\result\\HeroSection.tsx",
       "type": "typescript"
     },
     {
-      "name": "EditorPage",
-      "path": "src/pages/admin/EditorPage.tsx",
+      "name": "MentorSection",
+      "path": "src\\components\\result\\MentorSection.tsx",
       "type": "typescript"
     },
     {
-      "name": "LiveEditorPage",
-      "path": "src/pages/admin/LiveEditorPage.tsx",
+      "name": "MotivationSection",
+      "path": "src\\components\\result\\MotivationSection.tsx",
       "type": "typescript"
     },
     {
-      "name": "OverviewPage",
-      "path": "src/pages/admin/OverviewPage.tsx",
+      "name": "PerformanceMonitor",
+      "path": "src\\components\\result\\PerformanceMonitor.tsx",
       "type": "typescript"
     },
     {
-      "name": "QuizBuilderPage",
-      "path": "src/pages/admin/QuizBuilderPage.tsx",
+      "name": "PricingSection",
+      "path": "src\\components\\result\\PricingSection.tsx",
       "type": "typescript"
     },
     {
-      "name": "QuizEditorPage",
-      "path": "src/pages/admin/QuizEditorPage.tsx",
+      "name": "ResourcePreloader",
+      "path": "src\\components\\result\\ResourcePreloader.tsx",
       "type": "typescript"
     },
     {
-      "name": "QuizPage",
-      "path": "src/pages/admin/QuizPage.tsx",
+      "name": "ResultSkeleton",
+      "path": "src\\components\\result\\ResultSkeleton.tsx",
       "type": "typescript"
     },
     {
-      "name": "SettingsPage",
-      "path": "src/pages/admin/SettingsPage.tsx",
+      "name": "SecondaryStylesSection",
+      "path": "src\\components\\result\\SecondaryStylesSection.tsx",
       "type": "typescript"
     },
     {
-      "name": "QuizOfferPageEditor",
-      "path": "src/pages/admin/editors/QuizOfferPageEditor.tsx",
+      "name": "SecurePurchaseElement",
+      "path": "src\\components\\result\\SecurePurchaseElement.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StyleResult",
+      "path": "src\\components\\result\\StyleResult.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TestimonialsSection",
+      "path": "src\\components\\result\\TestimonialsSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AnimationBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\AnimationBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "BenefitsBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\BenefitsBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CarouselBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\CarouselBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CTABlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\CTABlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CustomCodeBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\CustomCodeBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FAQBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\FAQBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FinalCtaBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\FinalCtaBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "GuaranteeBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\GuaranteeBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeaderBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\HeaderBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeadlineBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\HeadlineBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeroSectionBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\HeroSectionBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "IconBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\IconBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ImageBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\ImageBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PricingBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\PricingBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ProductsBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\ProductsBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultHeaderBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\ResultHeaderBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SecondaryStylesBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\SecondaryStylesBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SpacerBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\SpacerBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StyleResultBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\StyleResultBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TestimonialsBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\TestimonialsBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TextBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\TextBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TransitionBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\TransitionBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TwoColumnBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\TwoColumnBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "VideoBlockEditor",
+      "path": "src\\components\\result-editor\\block-editors\\VideoBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AnimationBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\AnimationBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "BenefitsBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\BenefitsBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CarouselBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\CarouselBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CTABlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\CTABlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CustomCodeBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\CustomCodeBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FAQBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\FAQBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "GuaranteeBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\GuaranteeBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeaderBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\HeaderBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeadlineBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\HeadlineBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeroSectionBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\HeroSectionBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "IconBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\IconBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ImageBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\ImageBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PricingBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\PricingBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ProductsBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\ProductsBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SecondaryStylesBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\SecondaryStylesBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SpacerBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\SpacerBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StyleResultBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\StyleResultBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TestimonialsBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\TestimonialsBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TextBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\TextBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TwoColumnBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\TwoColumnBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "VideoBlockPreview",
+      "path": "src\\components\\result-editor\\block-previews\\VideoBlockPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "BlockRenderer",
+      "path": "src\\components\\result-editor\\BlockRenderer.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ColorPicker",
+      "path": "src\\components\\result-editor\\ColorPicker.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentRegistry",
+      "path": "src\\components\\result-editor\\ComponentRegistry.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentRenderers",
+      "path": "src\\components\\result-editor\\ComponentRenderers.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentsSidebar",
+      "path": "src\\components\\result-editor\\ComponentsSidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentToolbar",
+      "path": "src\\components\\result-editor\\ComponentToolbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "DragDropEditor",
+      "path": "src\\components\\result-editor\\DragDropEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "DraggableBlockList",
+      "path": "src\\components\\result-editor\\DraggableBlockList.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "DropZoneCanvas",
+      "path": "src\\components\\result-editor\\DropZoneCanvas.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditableBlock",
+      "path": "src\\components\\result-editor\\EditableBlock.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditableComponent",
+      "path": "src\\components\\result-editor\\EditableComponent.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditableSection",
+      "path": "src\\components\\result-editor\\EditableSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditableSections",
+      "path": "src\\components\\result-editor\\EditableSections.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorCompleto",
+      "path": "src\\components\\result-editor\\EditorCompleto.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorPreview",
+      "path": "src\\components\\result-editor\\EditorPreview.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeaderEditor",
+      "path": "src\\components\\result-editor\\editors\\HeaderEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "MainContentEditor",
+      "path": "src\\components\\result-editor\\editors\\MainContentEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "OfferEditor",
+      "path": "src\\components\\result-editor\\editors\\OfferEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "OfferHeroEditor",
+      "path": "src\\components\\result-editor\\editors\\OfferHeroEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PricingEditor",
+      "path": "src\\components\\result-editor\\editors\\PricingEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorSimples",
+      "path": "src\\components\\result-editor\\EditorSimples.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorToolbar",
+      "path": "src\\components\\result-editor\\EditorToolbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditSectionOverlay",
+      "path": "src\\components\\result-editor\\EditSectionOverlay.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedResultPageEditor",
+      "path": "src\\components\\result-editor\\EnhancedResultPageEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedResultPageEditorWrapper",
+      "path": "src\\components\\result-editor\\EnhancedResultPageEditorWrapper.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "GlobalStyleEditor",
+      "path": "src\\components\\result-editor\\GlobalStyleEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "GlobalStylesEditor",
+      "path": "src\\components\\result-editor\\GlobalStylesEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "JsonConfigEditor",
+      "path": "src\\components\\result-editor\\JsonConfigEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "LiveEditor",
+      "path": "src\\components\\result-editor\\LiveEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PreviewPanel",
+      "path": "src\\components\\result-editor\\PreviewPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PropertiesPanel",
+      "path": "src\\components\\result-editor\\PropertiesPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPageBlockEditor",
+      "path": "src\\components\\result-editor\\ResultPageBlockEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPageDuplicator",
+      "path": "src\\components\\result-editor\\ResultPageDuplicator.tsx",
       "type": "typescript"
     },
     {
       "name": "ResultPageEditor",
-      "path": "src/pages/admin/editors/ResultPageEditor.tsx",
+      "path": "src\\components\\result-editor\\ResultPageEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPageEditorWithControls",
+      "path": "src\\components\\result-editor\\ResultPageEditorWithControls.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPageVisualEditor",
+      "path": "src\\components\\result-editor\\ResultPageVisualEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SectionEditor",
+      "path": "src\\components\\result-editor\\SectionEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HeaderEditor",
+      "path": "src\\components\\result-editor\\sections\\HeaderEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "MainContentEditor",
+      "path": "src\\components\\result-editor\\sections\\MainContentEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SortableBlock",
+      "path": "src\\components\\result-editor\\SortableBlock.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SortableCanvasItem",
+      "path": "src\\components\\result-editor\\SortableCanvasItem.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StepsPanel",
+      "path": "src\\components\\result-editor\\StepsPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StyleEditor",
+      "path": "src\\components\\result-editor\\style-editors\\StyleEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StyleEditor",
+      "path": "src\\components\\result-editor\\StyleEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StyleSelector",
+      "path": "src\\components\\result-editor\\StyleSelector.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TransformationBlock",
+      "path": "src\\components\\sales\\TransformationBlock.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AdvancedTab",
+      "path": "src\\components\\settings\\AdvancedTab.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AnalyticsTab",
+      "path": "src\\components\\settings\\AnalyticsTab.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ApiIntegrationsTab",
+      "path": "src\\components\\settings\\ApiIntegrationsTab.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AppearanceTab",
+      "path": "src\\components\\settings\\AppearanceTab.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FacebookAdsTab",
+      "path": "src\\components\\settings\\FacebookAdsTab.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "MarketingTab",
+      "path": "src\\components\\settings\\MarketingTab.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "UtmSettingsTab",
+      "path": "src\\components\\settings\\UtmSettingsTab.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ContentContainer",
+      "path": "src\\components\\shared\\ContentContainer.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "GridLayout",
+      "path": "src\\components\\shared\\GridLayout.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ImprovedQuizResultSalesPage",
+      "path": "src\\components\\templates\\ImprovedQuizResultSalesPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TemplateSelector",
+      "path": "src\\components\\templates\\TemplateSelector.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizConfigTest",
+      "path": "src\\components\\test\\QuizConfigTest.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "theme-provider",
+      "path": "src\\components\\theme-provider.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "animated-wrapper",
+      "path": "src\\components\\ui\\animated-wrapper.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "aspect-ratio-container",
+      "path": "src\\components\\ui\\aspect-ratio-container.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AutoFixedImages",
+      "path": "src\\components\\ui\\AutoFixedImages.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "countdown-timer",
+      "path": "src\\components\\ui\\countdown-timer.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorButton",
+      "path": "src\\components\\ui\\EditorButton.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedAutoFixedImages",
+      "path": "src\\components\\ui\\EnhancedAutoFixedImages.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedProgressiveImage",
+      "path": "src\\components\\ui\\EnhancedProgressiveImage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FixedIntroImage",
+      "path": "src\\components\\ui\\FixedIntroImage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FixedResultImage",
+      "path": "src\\components\\ui\\FixedResultImage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FixedTransformationImage",
+      "path": "src\\components\\ui\\FixedTransformationImage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "image-uploader",
+      "path": "src\\components\\ui\\image-uploader.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "limited-stock-indicator",
+      "path": "src\\components\\ui\\limited-stock-indicator.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "loading-fallback",
+      "path": "src\\components\\ui\\loading-fallback.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "loading-spinner-optimized",
+      "path": "src\\components\\ui\\loading-spinner-optimized.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "loading-spinner",
+      "path": "src\\components\\ui\\loading-spinner.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "loading-state",
+      "path": "src\\components\\ui\\loading-state.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "logo",
+      "path": "src\\components\\ui\\logo.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "optimized-image-enhanced",
+      "path": "src\\components\\ui\\optimized-image-enhanced.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "optimized-image-v2",
+      "path": "src\\components\\ui\\optimized-image-v2.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "optimized-image",
+      "path": "src\\components\\ui\\optimized-image.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "OptimizedAutoFixedImages",
+      "path": "src\\components\\ui\\OptimizedAutoFixedImages.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "OptimizedImage",
+      "path": "src\\components\\ui\\OptimizedImage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "progressive-image",
+      "path": "src\\components\\ui\\progressive-image.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ProgressiveImage",
+      "path": "src\\components\\ui\\ProgressiveImage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "sidebar",
+      "path": "src\\components\\ui\\sidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "spinner",
+      "path": "src\\components\\ui\\spinner.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorErrorHandler",
+      "path": "src\\components\\unified-editor\\EditorErrorHandler.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "UnifiedTemplateModal",
+      "path": "src\\components\\unified-editor\\modals\\UnifiedTemplateModal.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorNotifications",
+      "path": "src\\components\\unified-editor\\notifications\\EditorNotifications.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizEditorPanel",
+      "path": "src\\components\\unified-editor\\panels\\QuizEditorPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultEditorPanel",
+      "path": "src\\components\\unified-editor\\panels\\ResultEditorPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SalesEditorPanel",
+      "path": "src\\components\\unified-editor\\panels\\SalesEditorPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "OfferSection",
+      "path": "src\\components\\unified-editor\\sections\\OfferSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultSection",
+      "path": "src\\components\\unified-editor\\sections\\ResultSection.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentItem",
+      "path": "src\\components\\unified-editor\\sidebar\\ComponentItem.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "UnifiedComponentsSidebar",
+      "path": "src\\components\\unified-editor\\sidebar\\UnifiedComponentsSidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorToolbar",
+      "path": "src\\components\\unified-editor\\toolbar\\EditorToolbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TypeformEditor",
+      "path": "src\\components\\unified-editor\\TypeformEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "UnifiedEditor",
+      "path": "src\\components\\unified-editor\\UnifiedEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "UnifiedVisualEditor",
+      "path": "src\\components\\unified-editor\\UnifiedVisualEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AdvancedQuizEditor.backup",
+      "path": "src\\components\\visual-editor\\AdvancedQuizEditor.backup.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AdvancedQuizEditor.test",
+      "path": "src\\components\\visual-editor\\AdvancedQuizEditor.test.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AdvancedQuizEditor",
+      "path": "src\\components\\visual-editor\\AdvancedQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AccessibleCanvas",
+      "path": "src\\components\\visual-editor\\components\\AccessibleCanvas.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AccessiblePropertiesPanel",
+      "path": "src\\components\\visual-editor\\components\\AccessiblePropertiesPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AccessibleStepTree",
+      "path": "src\\components\\visual-editor\\components\\AccessibleStepTree.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "Canvas",
+      "path": "src\\components\\visual-editor\\components\\Canvas.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentPalette",
+      "path": "src\\components\\visual-editor\\components\\ComponentPalette.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorToolbar",
+      "path": "src\\components\\visual-editor\\components\\EditorToolbar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PropertiesPanel",
+      "path": "src\\components\\visual-editor\\components\\PropertiesPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StepTree",
+      "path": "src\\components\\visual-editor\\components\\StepTree.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "DragDropQuizEditor",
+      "path": "src\\components\\visual-editor\\DragDropQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedQuizEditor",
+      "path": "src\\components\\visual-editor\\EnhancedQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FaithfulQuizEditor",
+      "path": "src\\components\\visual-editor\\FaithfulQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FinalRefactoredEditor",
+      "path": "src\\components\\visual-editor\\FinalRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "FinalWorkingEditor",
+      "path": "src\\components\\visual-editor\\FinalWorkingEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ModernVisualEditor",
+      "path": "src\\components\\visual-editor\\ModernVisualEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ModernVisualEditor_backup",
+      "path": "src\\components\\visual-editor\\ModernVisualEditor_backup.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ModernVisualEditor_original",
+      "path": "src\\components\\visual-editor\\ModernVisualEditor_original.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ModularRefactoredEditor",
+      "path": "src\\components\\visual-editor\\ModularRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AdvancedConfigSidebar",
+      "path": "src\\components\\visual-editor\\panels\\AdvancedConfigSidebar.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AdvancedControlsPanel",
+      "path": "src\\components\\visual-editor\\panels\\AdvancedControlsPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentLibrary",
+      "path": "src\\components\\visual-editor\\panels\\ComponentLibrary.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentLibrary_backup",
+      "path": "src\\components\\visual-editor\\panels\\ComponentLibrary_backup.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ComponentLibrary_fixed",
+      "path": "src\\components\\visual-editor\\panels\\ComponentLibrary_fixed.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ModernConfigurationPanel",
+      "path": "src\\components\\visual-editor\\panels\\ModernConfigurationPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "StageConfigurationPanel",
+      "path": "src\\components\\visual-editor\\panels\\StageConfigurationPanel.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "RefactoredAdvancedQuizEditor",
+      "path": "src\\components\\visual-editor\\RefactoredAdvancedQuizEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SimpleDragDropEditor",
+      "path": "src\\components\\visual-editor\\SimpleDragDropEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SimpleRefactoredEditor",
+      "path": "src\\components\\visual-editor\\SimpleRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SimpleWorkingEditor",
+      "path": "src\\components\\visual-editor\\SimpleWorkingEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "TestRefactoredEditor",
+      "path": "src\\components\\visual-editor\\TestRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "WorkingRefactoredEditor",
+      "path": "src\\components\\visual-editor\\WorkingRefactoredEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AdminAuthContext",
+      "path": "src\\context\\AdminAuthContext.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizContext",
+      "path": "src\\context\\QuizContext.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AuthContext",
+      "path": "src\\contexts\\AuthContext.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorContext",
+      "path": "src\\contexts\\EditorContext.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "useQuizConfig",
+      "path": "src\\hooks\\useQuizConfig.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "useUniversalNavigation",
+      "path": "src\\hooks\\useUniversalNavigation.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AdminLayout",
+      "path": "src\\layouts\\AdminLayout.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AuthLayout",
+      "path": "src\\layouts\\AuthLayout.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "UnifiedEditor",
+      "path": "src\\lovables\\UnifiedEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ABTestManagerPage",
+      "path": "src\\pages\\ABTestManagerPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ABTestPage",
+      "path": "src\\pages\\ABTestPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AccessLoaderPage",
+      "path": "src\\pages\\AccessLoaderPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ABTestPage",
+      "path": "src\\pages\\admin\\ABTestPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ABTestPage_new",
+      "path": "src\\pages\\admin\\ABTestPage_new.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AnalyticsPage",
+      "path": "src\\pages\\admin\\AnalyticsPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CreativesPage",
+      "path": "src\\pages\\admin\\CreativesPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "DashboardPage",
+      "path": "src\\pages\\admin\\DashboardPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorPage",
+      "path": "src\\pages\\admin\\EditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizOfferPageEditor",
+      "path": "src\\pages\\admin\\editors\\QuizOfferPageEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPageEditor",
+      "path": "src\\pages\\admin\\editors\\ResultPageEditor.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "LiveEditorPage",
+      "path": "src\\pages\\admin\\LiveEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "OverviewPage",
+      "path": "src\\pages\\admin\\OverviewPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizBuilderPage",
+      "path": "src\\pages\\admin\\QuizBuilderPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizEditorPage",
+      "path": "src\\pages\\admin\\QuizEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizPage",
+      "path": "src\\pages\\admin\\QuizPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SettingsPage",
+      "path": "src\\pages\\admin\\SettingsPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "AnalyticsPage",
+      "path": "src\\pages\\AnalyticsPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CaktoEditorPage",
+      "path": "src\\pages\\CaktoEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CreativeAnalyticsPage",
+      "path": "src\\pages\\CreativeAnalyticsPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CreativeAnalyticsPageNew",
+      "path": "src\\pages\\CreativeAnalyticsPageNew.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "CreativesPage",
+      "path": "src\\pages\\CreativesPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "DashboardPage",
+      "path": "src\\pages\\DashboardPage.tsx",
       "type": "typescript"
     },
     {
       "name": "editor-test",
-      "path": "src/pages/editor-test.tsx",
+      "path": "src\\pages\\editor-test.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorDashboard",
+      "path": "src\\pages\\EditorDashboard.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorNotFoundPage",
+      "path": "src\\pages\\EditorNotFoundPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorPage",
+      "path": "src\\pages\\EditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorsHubPage",
+      "path": "src\\pages\\EditorsHubPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EditorTest",
+      "path": "src\\pages\\EditorTest.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedEditorTestPage",
+      "path": "src\\pages\\EnhancedEditorTestPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "EnhancedResultPageEditorPage",
+      "path": "src\\pages\\EnhancedResultPageEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ForgotPasswordPage",
+      "path": "src\\pages\\ForgotPasswordPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "HomePage",
+      "path": "src\\pages\\HomePage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "InLeadEditorPage",
+      "path": "src\\pages\\InLeadEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "LandingPage",
+      "path": "src\\pages\\LandingPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "LiveEditorPage",
+      "path": "src\\pages\\LiveEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "LoadingAccessPage",
+      "path": "src\\pages\\LoadingAccessPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "LoginPage",
+      "path": "src\\pages\\LoginPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ModernEditorPage",
+      "path": "src\\pages\\ModernEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "NewQuizPage",
+      "path": "src\\pages\\NewQuizPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "NotFound",
+      "path": "src\\pages\\NotFound.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "NotFoundPage",
+      "path": "src\\pages\\NotFoundPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "PreviewQuizOfferPage",
+      "path": "src\\pages\\PreviewQuizOfferPage.tsx",
       "type": "typescript"
     },
     {
       "name": "quiz-descubra-seu-estilo-v2",
-      "path": "src/pages/quiz-descubra-seu-estilo-v2.tsx",
+      "path": "src\\pages\\quiz-descubra-seu-estilo-v2.tsx",
       "type": "typescript"
     },
     {
       "name": "quiz-descubra-seu-estilo",
-      "path": "src/pages/quiz-descubra-seu-estilo.tsx",
+      "path": "src\\pages\\quiz-descubra-seu-estilo.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizBuilderPage",
+      "path": "src\\pages\\QuizBuilderPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizEditorPage",
+      "path": "src\\pages\\QuizEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizOfferPage",
+      "path": "src\\pages\\QuizOfferPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "QuizPage",
+      "path": "src\\pages\\QuizPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "RegisterPage",
+      "path": "src\\pages\\RegisterPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResetPasswordPage",
+      "path": "src\\pages\\ResetPasswordPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPage",
+      "path": "src\\pages\\ResultPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPageEditorPage",
+      "path": "src\\pages\\ResultPageEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPagePrototype",
+      "path": "src\\pages\\ResultPagePrototype.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultPageVisualEditorPage",
+      "path": "src\\pages\\ResultPageVisualEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "ResultVisualEditorPage",
+      "path": "src\\pages\\ResultVisualEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "SettingsPage",
+      "path": "src\\pages\\SettingsPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "Teste1Page",
+      "path": "src\\pages\\Teste1Page.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "UnifiedEditorPage",
+      "path": "src\\pages\\UnifiedEditorPage.tsx",
+      "type": "typescript"
+    },
+    {
+      "name": "VisualEditorPage",
+      "path": "src\\pages\\VisualEditorPage.tsx",
       "type": "typescript"
     },
     {
       "name": "dynamicIconImport",
-      "path": "src/utils/dynamicIconImport.tsx",
+      "path": "src\\utils\\dynamicIconImport.tsx",
       "type": "typescript"
     }
   ]
