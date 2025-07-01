@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { EditorStage, EditorComponent } from '@/hooks/useLiveEditor';
+import { EditorStage, EditorComponent } from '../../LiveQuizEditor';
 import QuizIntro from '@/components/QuizIntro';
 
 interface QuizIntroPreviewProps {

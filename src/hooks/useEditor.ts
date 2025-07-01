@@ -1,101 +1,123 @@
 
-import { useContext } from 'react';
-import { EditorContext } from '@/contexts/EditorContext';
-import { EditorState, EditorAction, Block } from '@/types/editor';
+import { useState, useCallback, useEffect } from 'react';
+import { Block, EditorConfig, EditableContent, BlockType, EditorBlock } from '@/types/editor';
+import { toast } from '@/components/ui/use-toast';
+import { useHistory } from './useHistory';
+import { getDefaultContentForType } from '@/utils/editorDefaults';
+import { generateId } from '@/utils/idGenerator';
 
-// Hook that provides the expected interface for editor components
 export const useEditor = () => {
-  const context = useContext(EditorContext);
+  const [config, setConfig] = useState<EditorConfig>({
+    blocks: []
+  });
   
-  if (!context) {
-    throw new Error('useEditor must be used within an EditorProvider');
-  }
+  // Load config from localStorage on initial load
+  useEffect(() => {
+    try {
+      const savedConfig = localStorage.getItem('editor_config');
+      if (savedConfig) {
+        setConfig(JSON.parse(savedConfig));
+      }
+    } catch (error) {
+      console.error('Error loading editor config:', error);
+    }
+  }, []);
 
-  const { state, dispatch } = context;
+  // Setup history for undo/redo
+  const { past, present, future, saveState, undo, redo } = useHistory<EditorConfig>(config);
 
-  // Create a config object that matches what components expect
-  const config = {
-    blocks: state.blocks || [],
-    selectedBlockId: state.selectedBlockId,
-    isPreviewing: state.isPreviewing || false,
-    isGlobalStylesOpen: state.isGlobalStylesOpen || false,
-    // Add missing properties with defaults
-    isDirty: false,
-    current: state.currentStepId || null
-  };
+  useEffect(() => {
+    if (present && present !== config) {
+      setConfig(present);
+    }
+  }, [present]);
 
-  const addBlock = (type: Block['type']): string => {
-    const newBlock: Block = {
-      id: `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+  const addBlock = useCallback((type: BlockType) => {
+    const newBlock: EditorBlock = {
+      id: generateId(),
       type,
       content: getDefaultContentForType(type),
       order: config.blocks.length
     };
-
-    dispatch({
-      type: 'ADD_BLOCK',
-      payload: newBlock
-    });
-
+    
+    const newConfig: EditorConfig = {
+      ...config,
+      blocks: [...config.blocks, newBlock]
+    };
+    
+    setConfig(newConfig);
+    saveState(newConfig);
     return newBlock.id;
-  };
+  }, [config, saveState]);
 
-  const updateBlock = (id: string, content: any) => {
-    dispatch({
-      type: 'UPDATE_BLOCK',
-      payload: { id, content }
-    });
-  };
+  const updateBlock = useCallback((id: string, content: Partial<EditableContent>) => {
+    const newConfig: EditorConfig = {
+      ...config,
+      blocks: config.blocks.map(block => 
+        block.id === id ? { ...block, content: { ...block.content, ...content } } : block
+      ) as EditorBlock[]
+    };
+    
+    setConfig(newConfig);
+    saveState(newConfig);
+  }, [config, saveState]);
 
-  const deleteBlock = (id: string) => {
-    dispatch({
-      type: 'DELETE_BLOCK',
-      payload: { id }
-    });
-  };
+  const deleteBlock = useCallback((id: string) => {
+    const newBlocks = config.blocks.filter(block => block.id !== id);
+    
+    const newConfig: EditorConfig = {
+      ...config,
+      blocks: newBlocks.map((block, index) => ({ ...block, order: index })) as EditorBlock[]
+    };
+    
+    setConfig(newConfig);
+    saveState(newConfig);
+  }, [config, saveState]);
 
-  const reorderBlocks = (sourceIndex: number, destinationIndex: number) => {
-    dispatch({
-      type: 'REORDER_BLOCKS',
-      payload: { sourceIndex, destinationIndex }
-    });
-  };
+  const reorderBlocks = useCallback((sourceIndex: number, destinationIndex: number) => {
+    const newBlocks = Array.from(config.blocks);
+    const [removed] = newBlocks.splice(sourceIndex, 1);
+    newBlocks.splice(destinationIndex, 0, removed);
+    
+    const newConfig: EditorConfig = {
+      ...config,
+      blocks: newBlocks.map((block, index) => ({ ...block, order: index })) as EditorBlock[]
+    };
+    
+    setConfig(newConfig);
+    saveState(newConfig);
+  }, [config, saveState]);
+
+  const saveConfig = useCallback(() => {
+    try {
+      localStorage.setItem('editor_config', JSON.stringify(config));
+      toast({
+        title: "Configuração salva",
+        description: "Suas alterações foram salvas com sucesso."
+      });
+      return true;
+    } catch (error) {
+      console.error('Error saving editor config:', error);
+      toast({
+        title: "Erro ao salvar",
+        description: "Ocorreu um erro ao salvar as configurações.",
+        variant: "destructive"
+      });
+      return false;
+    }
+  }, [config]);
 
   return {
     config,
+    setConfig,
     addBlock,
     updateBlock,
     deleteBlock,
     reorderBlocks,
-    state,
-    dispatch
+    saveConfig,
+    undo,
+    redo,
+    canUndo: past.length > 0,
+    canRedo: future.length > 0
   };
 };
-
-// Helper function to get default content for different block types
-function getDefaultContentForType(type: Block['type']): any {
-  switch (type) {
-    case 'headline':
-      return {
-        title: 'Título Principal',
-        subtitle: 'Subtítulo ou descrição'
-      };
-    case 'text':
-      return {
-        text: 'Digite seu texto aqui...'
-      };
-    case 'image':
-      return {
-        imageUrl: '',
-        imageAlt: 'Imagem',
-        caption: ''
-      };
-    case 'button':
-      return {
-        text: 'Clique aqui',
-        action: 'next'
-      };
-    default:
-      return {};
-  }
-}

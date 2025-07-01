@@ -1,92 +1,128 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ComponentItem } from './ComponentItem';
-import { EditorBlockType } from '@/types/editor';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Type, 
   Image, 
-  Video, 
-  MousePointer, 
-  Minus,
+  ListChecks, 
+  MessageSquare, 
+  DollarSign, 
+  Shield, 
+  MousePointer,
   Layout,
-  Star,
-  Gift
+  Award,
+  Gift,
+  LayoutTemplate,
+  Quote,
+  ImagePlus
 } from 'lucide-react';
+import { Block } from '@/types/editor';
+import { ComponentItem } from './ComponentItem';
 
 interface ComponentsSidebarProps {
-  onAddBlock: (type: EditorBlockType) => void;
+  onComponentSelect: (type: Block['type']) => void;
 }
 
-const componentCategories = [
-  {
-    title: 'Texto',
-    icon: Type,
-    items: [
-      { type: 'headline' as EditorBlockType, label: 'Título', icon: Type },
-      { type: 'text' as EditorBlockType, label: 'Texto', icon: Type },
-      { type: 'spacer' as EditorBlockType, label: 'Espaçador', icon: Minus }
-    ]
-  },
-  {
-    title: 'Mídia',
-    icon: Image,
-    items: [
-      { type: 'image' as EditorBlockType, label: 'Imagem', icon: Image },
-      { type: 'video' as EditorBlockType, label: 'Vídeo', icon: Video }
-    ]
-  },
-  {
-    title: 'Interação',
-    icon: MousePointer,
-    items: [
-      { type: 'button' as EditorBlockType, label: 'Botão', icon: MousePointer },
-      { type: 'form' as EditorBlockType, label: 'Formulário', icon: Layout }
-    ]
-  },
-  {
-    title: 'Vendas',
-    icon: Star,
-    items: [
-      { type: 'testimonials' as EditorBlockType, label: 'Depoimentos', icon: Star },
-      { type: 'bonus' as EditorBlockType, label: 'Bônus', icon: Gift },
-      { type: 'guarantee' as EditorBlockType, label: 'Garantia', icon: Star }
-    ]
-  }
-];
-
-export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onAddBlock }) => {
+export function ComponentsSidebar({ onComponentSelect }: ComponentsSidebarProps) {
+  // Group components by category
+  const basicComponents = [
+    { type: 'headline', label: 'Título', icon: Type, description: 'Título e subtítulo' },
+    { type: 'text', label: 'Texto', icon: Type, description: 'Bloco de texto simples' },
+    { type: 'image', label: 'Imagem', icon: Image, description: 'Imagem com legenda opcional' },
+  ];
+  
+  const layoutComponents = [
+    { type: 'header', label: 'Cabeçalho', icon: LayoutTemplate, description: 'Seção de cabeçalho' },
+    { type: 'hero-section', label: 'Seção Hero', icon: Layout, description: 'Seção principal destacada' },
+    { type: 'columns', label: 'Colunas', icon: Layout, description: 'Layout em colunas' },
+  ];
+  
+  const contentComponents = [
+    { type: 'benefits', label: 'Benefícios', icon: ListChecks, description: 'Lista de benefícios' },
+    { type: 'testimonials', label: 'Depoimentos', icon: MessageSquare, description: 'Depoimentos de clientes' },
+    { type: 'guarantee', label: 'Garantia', icon: Shield, description: 'Seção de garantia' },
+    { type: 'cta', label: 'Botão CTA', icon: MousePointer, description: 'Chamada para ação' },
+  ];
+  
+  const quizComponents = [
+    { type: 'style-result', label: 'Resultado do Estilo', icon: Award, description: 'Exibe o resultado do estilo' },
+    { type: 'secondary-styles', label: 'Estilos Secundários', icon: Layout, description: 'Exibe estilos secundários' },
+    { type: 'bonus', label: 'Bônus', icon: Gift, description: 'Seção de bônus' },
+    { type: 'bonus-carousel', label: 'Carrossel de Bônus', icon: ImagePlus, description: 'Exibe bônus em carrossel' },
+  ];
+  
   return (
-    <Card className="h-full border-0 rounded-none">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-sm text-[#432818]">Componentes</CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <ScrollArea className="h-[calc(100vh-120px)]">
-          <div className="px-4 space-y-4">
-            {componentCategories.map((category) => (
-              <div key={category.title} className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-medium text-[#8F7A6A] uppercase tracking-wide">
-                  <category.icon className="w-3 h-3" />
-                  {category.title}
-                </div>
-                <div className="space-y-1">
-                  {category.items.map((item) => (
-                    <ComponentItem
-                      key={item.type}
-                      type={item.type}
-                      label={item.label}
-                      icon={item.icon}
-                      onAdd={() => onAddBlock(item.type)}
-                    />
-                  ))}
-                </div>
-              </div>
+    <div className="h-full bg-white flex flex-col border-r border-[#B89B7A]/20">
+      <div className="p-4 border-b border-[#B89B7A]/20">
+        <h2 className="font-medium text-[#432818]">Componentes</h2>
+      </div>
+      
+      <Tabs defaultValue="basic" className="flex-1 flex flex-col">
+        <div className="px-4 pt-2">
+          <TabsList className="w-full grid grid-cols-4">
+            <TabsTrigger value="basic">Básico</TabsTrigger>
+            <TabsTrigger value="layout">Layout</TabsTrigger>
+            <TabsTrigger value="content">Conteúdo</TabsTrigger>
+            <TabsTrigger value="quiz">Quiz</TabsTrigger>
+          </TabsList>
+        </div>
+        
+        <ScrollArea className="flex-1 p-4">
+          <TabsContent value="basic" className="m-0 space-y-2">
+            {basicComponents.map((component) => (
+              <ComponentItem
+                key={component.type}
+                type={component.type as Block['type']}
+                label={component.label}
+                icon={component.icon}
+                description={component.description}
+                onSelect={onComponentSelect}
+              />
             ))}
-          </div>
+          </TabsContent>
+          
+          <TabsContent value="layout" className="m-0 space-y-2">
+            {layoutComponents.map((component) => (
+              <ComponentItem
+                key={component.type}
+                type={component.type as Block['type']}
+                label={component.label}
+                icon={component.icon}
+                description={component.description}
+                onSelect={onComponentSelect}
+              />
+            ))}
+          </TabsContent>
+          
+          <TabsContent value="content" className="m-0 space-y-2">
+            {contentComponents.map((component) => (
+              <ComponentItem
+                key={component.type}
+                type={component.type as Block['type']}
+                label={component.label}
+                icon={component.icon}
+                description={component.description}
+                onSelect={onComponentSelect}
+              />
+            ))}
+          </TabsContent>
+          
+          <TabsContent value="quiz" className="m-0 space-y-2">
+            {quizComponents.map((component) => (
+              <ComponentItem
+                key={component.type}
+                type={component.type as Block['type']}
+                label={component.label}
+                icon={component.icon}
+                description={component.description}
+                onSelect={onComponentSelect}
+              />
+            ))}
+          </TabsContent>
         </ScrollArea>
-      </CardContent>
-    </Card>
+      </Tabs>
+    </div>
   );
-};
+}

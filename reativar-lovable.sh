@@ -58,8 +58,8 @@ fi
 # 4. Criar script de sincronização manual
 echo "🔧 Criando script de sincronização manual..."
 cat > scripts/manual-sync.js << 'EOF'
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 
 console.log('🔄 Iniciando sincronização manual do Lovable...');
 
@@ -86,7 +86,7 @@ EOF
 # 5. Criar script de teste de sincronização
 echo "🧪 Criando script de teste..."
 cat > scripts/test-sync.js << 'EOF'
-import https from 'https';
+const https = require('https');
 
 console.log('🧪 Testando conexão com Lovable...');
 

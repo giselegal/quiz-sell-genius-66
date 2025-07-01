@@ -1,158 +1,89 @@
-import React, { useState, useCallback } from "react";
-import {
-  DndContext,
-  DragEndEvent,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-  arrayMove,
-} from "@dnd-kit/sortable";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { ComponentsSidebar } from "./sidebar/ComponentsSidebar";
-import { PreviewPanel } from "./preview/PreviewPanel";
-import PropertiesPanel from "./properties/PropertiesPanel";
-import { EditorToolbar } from "./toolbar/EditorToolbar";
-import { Block } from "@/types/editor";
-import { useIsMobile } from "@/hooks/use-mobile";
-import useAutoSave from "@/hooks/useAutoSave";
-import { Eye, EyeOff, Smartphone, Tablet, Monitor, Save } from "lucide-react";
+
+import React from 'react';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { ComponentsSidebar } from './sidebar/ComponentsSidebar';
+import { PreviewPanel } from './preview/PreviewPanel';
+import { PropertiesPanel } from './properties/PropertiesPanel';
+import { EditorToolbar } from './toolbar/EditorToolbar';
+import { Block } from '@/types/editor';
+import { StyleResult } from '@/types/quiz';
 
 interface EnhancedEditorLayoutProps {
   blocks: Block[];
   selectedBlockId: string | null;
-  onBlockSelect: (id: string | null) => void;
-  onBlockAdd: (type: string) => void;
-  onBlockUpdate: (id: string, content: any) => void;
-  onBlockDelete: (id: string) => void;
-  onBlocksReorder: (blocks: Block[]) => void;
-  onSave?: () => void;
-  primaryStyle?: any;
+  isPreviewing: boolean;
+  primaryStyle?: StyleResult;
+  viewportSize: 'sm' | 'md' | 'lg' | 'xl';
+  onViewportSizeChange: (size: 'sm' | 'md' | 'lg' | 'xl') => void;
+  onSelectBlock: (id: string | null) => void;
+  onAddBlock: (type: Block['type']) => void;
+  onUpdateBlock: (id: string, content: any) => void;
+  onDeleteBlock: (id: string) => void;
+  onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
+  onTogglePreview: () => void;
+  onSave: () => void;
 }
 
-export function EnhancedEditorLayout({
+export const EnhancedEditorLayout: React.FC<EnhancedEditorLayoutProps> = ({
   blocks,
   selectedBlockId,
-  onBlockSelect,
-  onBlockAdd,
-  onBlockUpdate,
-  onBlockDelete,
-  onBlocksReorder,
-  onSave,
+  isPreviewing,
   primaryStyle,
-}: EnhancedEditorLayoutProps) {
-  const [isPreviewing, setIsPreviewing] = useState(false);
-  const [previewDevice, setPreviewDevice] = useState<
-    "mobile" | "tablet" | "desktop"
-  >("desktop");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const isMobile = useIsMobile();
-
-  // Auto-save functionality
-  const autoSave = useAutoSave({
-    blocks,
-    onSave,
-    autoSaveInterval: 3000, // 3 segundos
-    storageKey: "enhanced_editor_blocks",
-  });
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    })
-  );
-
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event;
-
-      if (over && active.id !== over.id) {
-        const oldIndex = blocks.findIndex((block) => block.id === active.id);
-        const newIndex = blocks.findIndex((block) => block.id === over.id);
-
-        const newBlocks = arrayMove(blocks, oldIndex, newIndex);
-        onBlocksReorder(newBlocks);
-      }
-    },
-    [blocks, onBlocksReorder]
-  );
-
-  const selectedBlock = selectedBlockId
-    ? blocks.find((b) => b.id === selectedBlockId) || null
-    : null;
-
+  viewportSize,
+  onViewportSizeChange,
+  onSelectBlock,
+  onAddBlock,
+  onUpdateBlock,
+  onDeleteBlock,
+  onReorderBlocks,
+  onTogglePreview,
+  onSave
+}) => {
   return (
-    <div className="h-screen flex flex-col bg-[#FAF9F7]">
-      {/* Toolbar */}
-      <EditorToolbar
+    <div className="h-screen flex flex-col overflow-hidden">
+      <EditorToolbar 
         isPreviewing={isPreviewing}
-        onPreviewToggle={() => setIsPreviewing(!isPreviewing)}
-        previewDevice={previewDevice}
-        onDeviceChange={setPreviewDevice}
-        onSave={autoSave.saveNow}
-        autoSaveStatus={{
-          lastSaved: autoSave.lastSaved,
-          isDirty: autoSave.isDirty,
-          isSaving: autoSave.isSaving,
-          saveIndicator: autoSave.saveIndicator,
-        }}
+        viewportSize={viewportSize}
+        onViewportSizeChange={onViewportSizeChange}
+        onTogglePreview={onTogglePreview}
+        onSave={onSave}
       />
-
-      <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar - Components */}
-        {!isPreviewing && (
-          <div
-            className={`bg-white border-r border-[#E5E5E5] transition-all duration-300 ${
-              sidebarOpen ? "w-64" : "w-0"
-            } overflow-hidden`}
-          >
-            <ComponentsSidebar onAddBlock={onBlockAdd} />
-          </div>
-        )}
-
-        {/* Main Content - Preview */}
-        <div className="flex-1 overflow-hidden">
-          <DndContext
-            sensors={sensors}
-            modifiers={[restrictToVerticalAxis]}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={blocks.map((b) => b.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              <PreviewPanel
-                blocks={blocks}
-                selectedBlockId={selectedBlockId}
-                isPreviewing={isPreviewing}
-                previewDevice={previewDevice}
-                onBlockSelect={onBlockSelect}
-                onBlockDelete={onBlockDelete}
-                primaryStyle={primaryStyle}
-              />
-            </SortableContext>
-          </DndContext>
-        </div>
-
-        {/* Properties Panel */}
-        {!isPreviewing && selectedBlock && (
-          <div className="w-80 bg-white border-l border-[#E5E5E5] overflow-y-auto">
-            <PropertiesPanel
-              selectedBlock={selectedBlock}
-              onUpdateBlock={onBlockUpdate}
-            />
-          </div>
-        )}
-      </div>
+      
+      <ResizablePanelGroup direction="horizontal" className="flex-1">
+        {/* Left Panel - Components */}
+        <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+          <ComponentsSidebar onComponentSelect={onAddBlock} />
+        </ResizablePanel>
+        
+        <ResizableHandle withHandle />
+        
+        {/* Center Panel - Preview */}
+        <ResizablePanel defaultSize={55}>
+          <PreviewPanel
+            blocks={blocks}
+            selectedBlockId={selectedBlockId}
+            onSelectBlock={onSelectBlock}
+            isPreviewing={isPreviewing}
+            viewportSize={viewportSize}
+            primaryStyle={primaryStyle}
+            onReorderBlocks={onReorderBlocks}
+          />
+        </ResizablePanel>
+        
+        <ResizableHandle withHandle />
+        
+        {/* Right Panel - Properties */}
+        <ResizablePanel defaultSize={25} minSize={20} maxSize={30}>
+          <PropertiesPanel
+            selectedBlockId={selectedBlockId}
+            blocks={blocks}
+            onClose={() => onSelectBlock(null)}
+            onUpdate={onUpdateBlock}
+            onDelete={onDeleteBlock}
+            isMobile={viewportSize === 'sm'}
+          />
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
-}
+};

@@ -11,44 +11,38 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 interface PreviewPanelProps {
   blocks: Block[];
   selectedBlockId: string | null;
-  onBlockSelect: (id: string) => void;
-  onBlockDelete: (id: string) => void;
+  onSelectBlock: (id: string) => void;
   isPreviewing: boolean;
-  previewDevice: 'mobile' | 'tablet' | 'desktop';
+  viewportSize: 'sm' | 'md' | 'lg' | 'xl';
   primaryStyle?: StyleResult;
-  onBlocksReorder?: (blocks: Block[]) => void;
+  onReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
 }
 
 const viewportWidths = {
-  mobile: 375,
-  tablet: 768,
-  desktop: 1024,
+  sm: 375, // Mobile
+  md: 768, // Tablet
+  lg: 1024, // Desktop
+  xl: 1280, // Large Desktop
 };
 
 export function PreviewPanel({
   blocks,
   selectedBlockId,
-  onBlockSelect,
-  onBlockDelete,
+  onSelectBlock,
   isPreviewing,
-  previewDevice,
+  viewportSize,
   primaryStyle,
-  onBlocksReorder
+  onReorderBlocks
 }: PreviewPanelProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     
-    if (!over || active.id === over.id || !onBlocksReorder) return;
+    if (!over || active.id === over.id) return;
     
     const oldIndex = blocks.findIndex(block => block.id === active.id);
     const newIndex = blocks.findIndex(block => block.id === over.id);
     
-    if (oldIndex !== -1 && newIndex !== -1) {
-      const newBlocks = [...blocks];
-      const [reorderedItem] = newBlocks.splice(oldIndex, 1);
-      newBlocks.splice(newIndex, 0, reorderedItem);
-      onBlocksReorder(newBlocks);
-    }
+    onReorderBlocks(oldIndex, newIndex);
   };
 
   return (
@@ -61,7 +55,7 @@ export function PreviewPanel({
               isPreviewing ? "shadow-md" : "shadow-sm"
             )}
             style={{ 
-              width: `${viewportWidths[previewDevice]}px`,
+              width: `${viewportWidths[viewportSize]}px`,
               maxWidth: '100%'
             }}
           >
@@ -86,8 +80,7 @@ export function PreviewPanel({
                           block={block}
                           isSelected={block.id === selectedBlockId}
                           isPreviewing={isPreviewing}
-                          onSelect={() => onBlockSelect(block.id)}
-                          onDelete={() => onBlockDelete(block.id)}
+                          onSelect={() => onSelectBlock(block.id)}
                           primaryStyle={primaryStyle}
                         />
                       ))

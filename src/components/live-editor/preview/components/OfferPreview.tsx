@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { EditorStage, EditorComponent } from '@/hooks/useLiveEditor';
+import { EditorStage, EditorComponent } from '../../LiveQuizEditor';
 
 interface OfferPreviewProps {
   stage: EditorStage;

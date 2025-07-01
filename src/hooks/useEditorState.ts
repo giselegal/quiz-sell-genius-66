@@ -32,20 +32,18 @@ const defaultSettings: EditorSettings = {
 
 const defaultEditorState: VisualEditorState = {
   elements: [],
-  stages: [
-    {
-      id: "stage-1",
-      title: "Etapa 1",
-      order: 0,
-      type: "quiz",
-      settings: {
-        showHeader: true,
-        showProgress: true,
-        allowBack: true,
-      },
-    },
-  ],
-  activeStageId: "stage-1",
+  stages: [{
+    id: 'stage-1',
+    title: 'Etapa 1',
+    order: 0,
+    type: 'quiz',
+    settings: {
+      showHeader: true,
+      showProgress: true,
+      allowBack: true
+    }
+  }],
+  activeStageId: 'stage-1',
   history: [],
   historyIndex: -1,
   globalStyles: defaultGlobalStyles,
@@ -94,10 +92,7 @@ const getComponentDefaults = (
       },
     },
     image: {
-      content: {
-        src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZjFmMWYxIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiPkltYWdlbTwvdGV4dD4KPHN2Zz4=",
-        alt: "Imagem",
-      },
+      content: { src: "https://via.placeholder.com/400x300", alt: "Imagem" },
       style: {
         width: "100%",
         height: "auto",
@@ -157,8 +152,7 @@ export function useEditorState(initialData?: VisualEditorData) {
       const newElement: VisualElement = {
         id,
         type: componentType as any,
-        stageId:
-          editorState.activeStageId || editorState.stages[0]?.id || "stage-1",
+        stageId: editorState.activeStageId || editorState.stages[0]?.id || 'stage-1',
         content,
         style,
         visible: true,
@@ -188,12 +182,7 @@ export function useEditorState(initialData?: VisualEditorData) {
       nextElementId.current += 1;
       return id;
     },
-    [
-      editorState.elements.length,
-      editorState.activeStageId,
-      editorState.stages,
-      saveToLocalStorage,
-    ]
+    [editorState.elements.length, editorState.activeStageId, editorState.stages, saveToLocalStorage]
   );
 
   const updateElement = useCallback(

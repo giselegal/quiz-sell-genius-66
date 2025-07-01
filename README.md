@@ -37,4 +37,3 @@ The CI/CD workflow consists of two jobs:
 - `deploy`: Takes the build artifacts and deploys them to Hostinger via FTP
 
 To manually trigger a deployment, you can use the "Run workflow" button on the Actions tab in GitHub.
-Force trigger: Fri Jun 20 02:45:08 UTC 2025

@@ -10,6 +10,7 @@ import { EditorToolbar } from './toolbar/EditorToolbar';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { UnifiedTemplateModal } from './modals/UnifiedTemplateModal';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
@@ -27,6 +28,7 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
   const [activeTab, setActiveTab] = useState<EditorTab>(initialActiveTab);
   const [isLoading, setIsLoading] = useState(false);
   const [viewportSize, setViewportSize] = useState<'sm' | 'md' | 'lg' | 'xl'>('lg');
+  const navigate = useNavigate();
   
   const {
     isPreviewing,
@@ -42,7 +44,9 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
   useEffect(() => {
     // Update the active mode in the unified editor hook
     setActiveMode(activeTab);
-  }, [activeTab, setActiveMode]);
+    // Update URL when tab changes
+    navigate(`/admin/editor?tab=${activeTab}`, { replace: true });
+  }, [activeTab, navigate, setActiveMode]);
   
   const handleTabChange = (value: string) => {
     const newTab = value as EditorTab;

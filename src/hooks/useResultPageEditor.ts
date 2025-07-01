@@ -1,28 +1,14 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { Block } from '@/types/editor';
+import { EditorState, BlockManipulationActions } from '@/types/editorTypes';
 import { toast } from '@/components/ui/use-toast';
 import { useResultPageConfig } from './useResultPageConfig';
 import { getDefaultContentForType } from '@/utils/editorDefaults';
 import { generateId } from '@/utils/idGenerator';
 
-// Local interfaces for this hook
-interface LocalEditorState {
-  selectedBlockId: string | null;
-  isPreviewing: boolean;
-  blocks: Block[];
-  isGlobalStylesOpen: boolean;
-}
-
-interface LocalBlockManipulationActions {
-  handleAddBlock: (type: Block['type']) => string;
-  handleUpdateBlock: (id: string, content: any) => void;
-  handleDeleteBlock: (id: string) => void;
-  handleReorderBlocks: (sourceIndex: number, destinationIndex: number) => void;
-}
-
 export const useResultPageEditor = (styleType: string) => {
-  const [state, setState] = useState<LocalEditorState>({
+  const [state, setState] = useState<EditorState>({
     selectedBlockId: null,
     isPreviewing: false,
     blocks: [],
@@ -164,13 +150,6 @@ export const useResultPageEditor = (styleType: string) => {
     }
   }, [importConfig]);
 
-  const actions: LocalBlockManipulationActions = {
-    handleAddBlock,
-    handleUpdateBlock,
-    handleDeleteBlock,
-    handleReorderBlocks
-  };
-
   return {
     resultPageConfig,
     loading,
@@ -186,7 +165,10 @@ export const useResultPageEditor = (styleType: string) => {
       togglePreview,
       updateSection,
       importConfig: handleImportConfig,
-      ...actions
+      handleAddBlock,
+      handleUpdateBlock,
+      handleDeleteBlock,
+      handleReorderBlocks
     }
   };
 };

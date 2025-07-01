@@ -1,4 +1,3 @@
-
 export type BlockType = 
   | 'text' 
   | 'title' 
@@ -24,11 +23,7 @@ export type BlockType =
   | 'terms'
   | 'loading'
   | 'level'
-  | 'calendar'
-  | 'headline'
-  | 'form'
-  | 'question-title'
-  | 'question-options';
+  | 'calendar';
 
 export interface ElementContent {
   text?: string;
@@ -60,8 +55,7 @@ export interface ElementStyle {
   [key: string]: any;
 }
 
-// Primary CanvasElement definition - this is the single source of truth
-export interface CanvasElement {
+export interface VisualElement {
   id: string;
   type: BlockType;
   stageId: string;
@@ -72,14 +66,14 @@ export interface CanvasElement {
   locked: boolean;
 }
 
-// Ensure VisualElement is just an alias to CanvasElement for backward compatibility
-export type VisualElement = CanvasElement;
+// Alias for compatibility with other components
+export type CanvasElement = VisualElement;
 
 export interface VisualStage {
   id: string;
   title: string;
   order: number;
-  type: 'intro' | 'quiz' | 'strategic' | 'transition' | 'result' | 'offer';
+  type: 'quiz' | 'result' | 'sales';
   settings: {
     showHeader: boolean;
     showProgress: boolean;

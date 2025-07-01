@@ -1,219 +1,344 @@
-/**
- * Utilitários para tracking e analytics
- */
-
-/**
- * Registra clique em botão
- */
-export const trackButtonClick = (buttonId: string, buttonText: string, section: string, additionalData?: Record<string, any>) => {
-  console.log('Button click tracked:', { buttonId, buttonText, section, additionalData });
+// Existing analytics functions
+export const trackPageView = (page: string, additionalData?: Record<string, any>) => {
+  console.log('Page view tracked:', page, additionalData);
+  // Implementation for page view tracking
   
-  // Facebook Pixel tracking
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('trackCustom', 'ButtonClick', {
-      button_id: buttonId,
-      button_text: buttonText,
-      section: section,
-      ...additionalData
-    });
-  }
-
-  // Google Analytics tracking
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'click', {
-      event_category: 'Button',
-      event_label: buttonText,
-      custom_parameter_button_id: buttonId,
-      custom_parameter_section: section,
-      ...additionalData
-    });
+  if (typeof window !== 'undefined') {
+    // Google Analytics
+    if (window.gtag) {
+      window.gtag('event', 'page_view', {
+        page_title: page,
+        page_location: window.location.href,
+        ...additionalData
+      });
+    }
+    
+    // DataLayer for Google Tag Manager
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: 'page_view',
+        pageName: page,
+        ...additionalData
+      });
+    }
   }
 };
 
-/**
- * Registra conversão de venda
- */
 export const trackSaleConversion = (email: string, value: number) => {
   console.log('Sale conversion tracked:', { email, value });
+  // Implementation for sale conversion tracking
   
-  // Facebook Pixel tracking
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('track', 'Purchase', {
-      value: value,
-      currency: 'BRL',
-      content_type: 'product',
-      content_ids: ['quiz-completo'],
-      email: email
-    });
-  }
-
-  // Google Analytics tracking
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'purchase', {
-      transaction_id: Date.now().toString(),
-      value: value,
-      currency: 'BRL',
-      items: [{
-        item_id: 'quiz-completo',
-        item_name: 'Quiz Completo + Bônus',
-        category: 'Digital Product',
-        quantity: 1,
-        price: value
-      }]
-    });
+  if (typeof window !== 'undefined') {
+    // Facebook Pixel
+    if (window.fbq) {
+      window.fbq('track', 'Purchase', {
+        value: value,
+        currency: 'BRL',
+        content_name: 'Guia de Estilo'
+      });
+    }
+    
+    // Google Analytics
+    if (window.gtag) {
+      window.gtag('event', 'purchase', {
+        transaction_id: 'T_' + Date.now(),
+        value: value,
+        currency: 'BRL'
+      });
+    }
   }
 };
 
-/**
- * Registra visualização de página
- */
-export const trackPageView = (pageName: string, additionalData?: Record<string, any>) => {
-  console.log('Page view tracked:', { pageName, additionalData });
+export const trackOfferClick = async (eventData: Record<string, any>) => {
+  console.log('Offer click tracked:', eventData);
   
-  const pageUrl = additionalData?.page_url || (typeof window !== 'undefined' ? window.location.href : '');
+  // Track with Facebook Pixel if available
+  if (typeof window !== 'undefined' && (window as any).fbq) {
+    (window as any).fbq('track', 'InitiateCheckout', {
+      content_name: eventData.style_category,
+      content_category: 'Quiz Result',
+      value: eventData.style_data?.score || 0,
+      currency: 'BRL'
+    });
+  }
   
-  // Facebook Pixel tracking
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('track', 'PageView', {
-      page_name: pageName,
-      page_url: pageUrl,
-      ...additionalData
-    });
-  }
-
-  // Google Analytics tracking
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'page_view', {
-      page_title: pageName,
-      page_location: pageUrl,
-      ...additionalData
-    });
-  }
-};
-
-/**
- * Registra evento personalizado
- */
-export const trackCustomEvent = (eventName: string, eventData: Record<string, any> = {}) => {
-  console.log('Custom event tracked:', { eventName, eventData });
-  
-  // Facebook Pixel tracking
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('trackCustom', eventName, eventData);
-  }
-
-  // Google Analytics tracking
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, eventData);
-  }
-};
-
-/**
- * Registra início do quiz
- */
-export const trackQuizStart = (quizName: string, additionalData?: Record<string, any>) => {
-  trackCustomEvent('QuizStart', {
-    quiz_name: quizName,
-    timestamp: new Date().toISOString(),
-    ...additionalData
-  });
-};
-
-/**
- * Registra resposta do quiz
- */
-export const trackQuizAnswer = (quizName: string, questionId: string, answer: string, additionalData?: Record<string, any>) => {
-  trackCustomEvent('QuizAnswer', {
-    quiz_name: quizName,
-    question_id: questionId,
-    answer: answer,
-    timestamp: new Date().toISOString(),
-    ...additionalData
-  });
-};
-
-/**
- * Registra conclusão do quiz
- */
-export const trackQuizComplete = (quizName: string, additionalData?: Record<string, any>) => {
-  trackCustomEvent('QuizComplete', {
-    quiz_name: quizName,
-    timestamp: new Date().toISOString(),
-    ...additionalData
-  });
-};
-
-/**
- * Registra visualização de resultado
- */
-export const trackResultView = (quizName: string, result: string, additionalData?: Record<string, any>) => {
-  trackCustomEvent('ResultView', {
-    quiz_name: quizName,
-    quiz_result: result,
-    timestamp: new Date().toISOString(),
-    ...additionalData
-  });
-};
-
-/**
- * Registra lead (captura de email)
- */
-export const trackLead = (email: string, source: string) => {
-  console.log('Lead tracked:', { email, source });
-  
-  // Facebook Pixel tracking
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('track', 'Lead', {
-      email: email,
-      source: source
-    });
-  }
-
-  // Google Analytics tracking
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'generate_lead', {
-      currency: 'BRL',
-      value: 0,
-      lead_source: source
-    });
-  }
-};
-
-/**
- * Inicializa Facebook Pixel
- */
-export const initFacebookPixel = () => {
-  console.log('Initializing Facebook Pixel...');
-  // This function is a placeholder for pixel initialization
-  // The actual pixel initialization should be handled by the pixel manager
-};
-
-/**
- * Obtém eventos de analytics armazenados
- */
-export const getAnalyticsEvents = () => {
+  // Store in localStorage for analytics
   try {
-    const events = localStorage.getItem('analytics_events');
-    return events ? JSON.parse(events) : [];
-  } catch (error) {
-    console.error('Error getting analytics events:', error);
-    return [];
-  }
-};
-
-/**
- * Armazena evento de analytics
- */
-export const storeAnalyticsEvent = (event: any) => {
-  try {
-    const events = getAnalyticsEvents();
-    events.push({
-      ...event,
-      timestamp: new Date().toISOString(),
-      id: Date.now()
+    const existingEvents = JSON.parse(localStorage.getItem('tracked_events') || '[]');
+    existingEvents.push({
+      ...eventData,
+      event_type: 'offer_click',
+      timestamp: new Date().toISOString()
     });
-    localStorage.setItem('analytics_events', JSON.stringify(events));
+    localStorage.setItem('tracked_events', JSON.stringify(existingEvents));
   } catch (error) {
     console.error('Error storing analytics event:', error);
   }
+};
+
+export const addUtmParamsToEvent = (eventData: Record<string, any>) => {
+  try {
+    const utmParams = JSON.parse(localStorage.getItem('utm_parameters') || '{}');
+    return {
+      ...eventData,
+      ...utmParams
+    };
+  } catch (error) {
+    console.error('Error adding UTM params:', error);
+    return eventData;
+  }
+};
+
+// Additional missing exports
+export const trackButtonClick = (buttonId: string, buttonText?: string, pageName?: string, eventData: Record<string, any> = {}) => {
+  if (typeof window === 'undefined') return;
+  
+  // Google Analytics
+  if (window.gtag) {
+    window.gtag('event', 'button_click', {
+      button_id: buttonId,
+      button_text: buttonText || buttonId,
+      page_name: pageName || 'unknown',
+      ...eventData
+    });
+  }
+  
+  // DataLayer for Google Tag Manager
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'button_click',
+      buttonId,
+      buttonText: buttonText || buttonId,
+      pageName: pageName || 'unknown',
+      ...eventData
+    });
+  }
+  
+  console.log(`[Analytics] Button click: ${buttonText || buttonId} (${buttonId}) on ${pageName || 'unknown'}`, eventData);
+};
+
+export const captureUTMParameters = () => {
+  if (typeof window === 'undefined') return {};
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const utmParams: Record<string, string> = {};
+  
+  const utmKeys = [
+    'utm_source', 
+    'utm_medium', 
+    'utm_campaign', 
+    'utm_term', 
+    'utm_content',
+    'ref',
+    'source'
+  ];
+  
+  utmKeys.forEach(key => {
+    const value = urlParams.get(key);
+    if (value) {
+      utmParams[key] = value;
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        console.warn(`[Analytics] Failed to store ${key} in localStorage`, e);
+      }
+    }
+  });
+  
+  if (window.gtag && Object.keys(utmParams).length > 0) {
+    window.gtag('set', 'user_properties', utmParams);
+  }
+  
+  if (window.dataLayer && Object.keys(utmParams).length > 0) {
+    window.dataLayer.push({
+      event: 'utm_capture',
+      ...utmParams
+    });
+  }
+  
+  console.log('[Analytics] UTM parameters captured:', utmParams);
+  return utmParams;
+};
+
+export const initFacebookPixel = () => {
+  if (typeof window === 'undefined') return;
+  
+  // Initialize Facebook Pixel
+  (function(f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
+    if (f.fbq) return;
+    n = f.fbq = function() {
+      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+    };
+    if (!f._fbq) f._fbq = n;
+    n.push = n;
+    n.loaded = !0;
+    n.version = '2.0';
+    n.queue = [];
+    t = b.createElement(e);
+    t.async = !0;
+    t.src = v;
+    s = b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t, s);
+  })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+  
+  // Initialize with a default pixel ID (should be configured per project)
+  if (window.fbq) {
+    window.fbq('init', '1234567890123456'); // This should be configured
+    window.fbq('track', 'PageView');
+  }
+};
+
+export const trackQuizStart = (quizId?: string, eventData: Record<string, any> = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { quiz_id: quizId || 'default_quiz', ...eventData };
+
+  if (window.gtag) {
+    window.gtag('event', 'quiz_start', data);
+  }
+  if (window.fbq) {
+    window.fbq('trackCustom', 'QuizStart', data);
+  }
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'quiz_start', ...data });
+  }
+  console.log(`[Analytics] Quiz started: ${quizId || 'default_quiz'}`, data);
+};
+
+export const trackQuizAnswer = (quizId?: string, questionId?: string, answer?: string, eventData: Record<string, any> = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { 
+    quiz_id: quizId || 'default_quiz', 
+    question_id: questionId || 'unknown', 
+    answer: answer || 'unknown', 
+    ...eventData 
+  };
+
+  if (window.gtag) {
+    window.gtag('event', 'quiz_answer', data);
+  }
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'quiz_answer', ...data });
+  }
+  console.log(`[Analytics] Quiz answer: ${questionId || 'unknown'} - ${answer || 'unknown'}`, data);
+};
+
+export const trackQuizComplete = (quizId?: string, eventData: Record<string, any> = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { quiz_id: quizId || 'default_quiz', ...eventData };
+
+  if (window.gtag) {
+    window.gtag('event', 'quiz_complete', data);
+  }
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'quiz_complete', ...data });
+  }
+  console.log(`[Analytics] Quiz completed: ${quizId || 'default_quiz'}`, data);
+};
+
+export const trackResultView = (quizId?: string, resultId?: string, eventData: Record<string, any> = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { 
+    quiz_id: quizId || 'default_quiz', 
+    result_id: resultId || 'unknown_result', 
+    ...eventData 
+  };
+
+  if (window.gtag) {
+    window.gtag('event', 'result_view', data);
+  }
+  if (window.fbq) {
+    window.fbq('trackCustom', 'ResultView', data);
+  }
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'result_view', ...data });
+  }
+  console.log(`[Analytics] Result view: ${quizId || 'default_quiz'} - ${resultId || 'unknown_result'}`, data);
+};
+
+export const getAnalyticsEvents = () => {
+  if (typeof window !== 'undefined' && window.dataLayer && Array.isArray(window.dataLayer)) {
+    return [...window.dataLayer];
+  }
+  return [];
+};
+
+export const clearAnalyticsData = () => {
+  if (typeof window === 'undefined') return;
+
+  if (window.dataLayer && Array.isArray(window.dataLayer)) {
+    window.dataLayer.length = 0;
+    console.log('[Analytics] window.dataLayer cleared.');
+  }
+
+  const utmKeys = [
+    'utm_source', 
+    'utm_medium', 
+    'utm_campaign', 
+    'utm_term', 
+    'utm_content',
+    'ref',
+    'source'
+  ];
+
+  utmKeys.forEach(key => {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.warn(`[Analytics] Failed to remove ${key} from localStorage`, e);
+    }
+  });
+  console.log('[Analytics] UTM parameters cleared from localStorage.');
+};
+
+export const testFacebookPixel = () => {
+  if (typeof window !== 'undefined' && window.fbq) {
+    window.fbq('trackCustom', 'QuizStart', { test: true });
+    console.log('[Analytics] Test QuizStart event sent to Facebook Pixel.');
+    return true;
+  }
+  console.warn('[Analytics] Facebook Pixel (window.fbq) not found.');
+  return false;
+};
+
+export const trackLeadGeneration = (formId: string, leadData: Record<string, any> = {}) => {
+  if (typeof window === 'undefined') return;
+  const data = { form_id: formId, ...leadData };
+
+  if (window.gtag) {
+    window.gtag('event', 'lead', data);
+  }
+  if (window.fbq) {
+    window.fbq('track', 'Lead', data);
+  }
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'lead', ...data });
+  }
+  console.log(`[Analytics] Lead generation: ${formId}`, data);
+};
+
+export const trackConversion = (conversionType: string, conversionData: Record<string, any> = {}) => {
+  if (typeof window === 'undefined') return;
+  
+  if (window.gtag) {
+    window.gtag('event', conversionType, conversionData);
+  }
+  
+  if (window.fbq) {
+    if (conversionType === 'purchase') {
+      window.fbq('track', 'Purchase', conversionData);
+    } else if (conversionType === 'lead') {
+      window.fbq('track', 'Lead', conversionData);
+    } else {
+      window.fbq('trackCustom', conversionType, conversionData);
+    }
+  }
+  
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: conversionType,
+      ...conversionData
+    });
+  }
+  
+  console.log(`[Analytics] Conversion: ${conversionType}`, conversionData);
 };
