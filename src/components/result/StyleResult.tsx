@@ -72,6 +72,3 @@ export const StyleResultSection: React.FC<StyleResultSectionProps> = ({
     </Card>
   );
 };
-
-// Add default export
-export default StyleResultSection;

@@ -1,57 +1,36 @@
-
-import React, { Suspense, lazy } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { AdminSidebar } from '../../components/admin/AdminSidebar';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-
-// Lazy loading das páginas do dashboard
-const DashboardOverview = lazy(() => import('./OverviewPage'));
-const QuizPage = lazy(() => import('./QuizPage'));
-const ABTestPage = lazy(() => import('./ABTestPage'));
-const SettingsPage = lazy(() => import('./SettingsPage'));
-const CreativesPage = lazy(() => import('./CreativesPage'));
-const AnalyticsPage = lazy(() => import('./AnalyticsPage'));
-const EditorPage = lazy(() => import('./EditorPage'));
-
-// Componente de loading
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center h-64">
-    <div className="text-center">
-      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
-      <p className="mt-4 text-gray-600">Carregando...</p>
-    </div>
-  </div>
-);
+import React from 'react';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const DashboardPage: React.FC = () => {
   return (
-    <div className="min-h-screen flex bg-[#FAF9F7]">
-      {/* Sidebar */}
-      <AdminSidebar />
-      
-      {/* Conteúdo principal */}
-      <div className="flex-1 overflow-hidden">
-        <main className="h-full overflow-y-auto">
-          <Suspense fallback={<LoadingFallback />}>
-            <Routes>
-              {/* Rota principal - Overview */}
-              <Route index element={<DashboardOverview />} />
-              
-              {/* Rotas do dashboard conforme solicitado */}
-              <Route path="quiz" element={<QuizPage />} />
-              <Route path="ab-tests" element={<ABTestPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-              <Route path="criativos" element={<CreativesPage />} />
-              <Route path="analytics" element={<AnalyticsPage />} />
-              <Route path="editor" element={<EditorPage />} />
-              
-              {/* Redirecionamento para rota não encontrada */}
-              <Route path="*" element={<Navigate to="/admin" replace />} />
-            </Routes>
-          </Suspense>
-        </main>
+    <AdminLayout>
+      <div className="p-6">
+        <h1 className="text-2xl font-bold text-[#432818] mb-4">Dashboard Overview</h1>
+        <p className="text-[#8F7A6A]">Bem-vindo ao painel de controle</p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#D4C4A0]">
+            <h3 className="text-lg font-semibold text-[#432818] mb-2">Total de Usuários</h3>
+            <p className="text-2xl font-bold text-[#B89B7A]">1,234</p>
+          </div>
+          
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#D4C4A0]">
+            <h3 className="text-lg font-semibold text-[#432818] mb-2">Quiz Completados</h3>
+            <p className="text-2xl font-bold text-[#B89B7A]">856</p>
+          </div>
+          
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#D4C4A0]">
+            <h3 className="text-lg font-semibold text-[#432818] mb-2">Taxa de Conversão</h3>
+            <p className="text-2xl font-bold text-[#B89B7A]">68%</p>
+          </div>
+          
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-[#D4C4A0]">
+            <h3 className="text-lg font-semibold text-[#432818] mb-2">Vendas</h3>
+            <p className="text-2xl font-bold text-[#B89B7A]">42</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 

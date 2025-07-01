@@ -12,12 +12,12 @@ interface QuizOfferHeroProps {
 
 export const QuizOfferHero: React.FC<QuizOfferHeroProps> = ({ onStartQuizClick }) => {
   const handleCtaClick = () => {
-    trackButtonClick('hero-cta', 'Comprar Quiz', 'hero');
+    trackButtonClick('hero-cta', 'Comprar Quiz', 'hero', 'primary-cta');
     window.location.href = getCtaUrl();
   };
   
   const handleStartQuizClick = () => {
-    trackButtonClick('hero-start-quiz', 'Começar Quiz', 'hero');
+    trackButtonClick('hero-start-quiz', 'Começar Quiz', 'hero', 'start-quiz');
     onStartQuizClick();
   };
 

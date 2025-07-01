@@ -1,73 +1,69 @@
 
-export interface StyleResult {
-  category: 'Natural' | 'Clássico' | 'Contemporâneo' | 'Elegante' | 'Romântico' | 'Sexy' | 'Dramático' | 'Criativo';
-  score: number;
-  percentage: number;
-}
+import { UserAnswer } from '../utils/resultsCalculator';
 
-export interface QuizResult {
-  primaryStyle: StyleResult;
-  secondaryStyles: StyleResult[];
-  totalSelections: number;
-  userName?: string;
-}
-
-export interface QuizComponentData {
+export interface QuizQuestion {
   id: string;
-  type: string;
-  content: any;
-  position: number;
-  data?: any;
+  title: string;
+  description?: string;
+  options: QuizOption[];
+  imageUrl?: string;
+  multiSelect?: number;
+  type?: "image" | "text" | "both"; // Restrict to valid types
 }
 
-export type BlockType =
-  | "hero"
-  | "image"
-  | "text"
-  | "video"
-  | "button"
-  | "divider"
-  | "spacer"
-  | "code"
-  | "list"
-  | "table"
-  | "form"
-  | "social"
-  | "map"
-  | "raw-html"
-  | "raw-js"
-  | "transformation"
-  | "pricing"
-  | "testimonials"
-  | "guarantee"
-  | "faq"
-  | "bonus"
-  | "scarcity-timer"
-  | "dynamic-content"
-  | "integrations"
-  | "legal"
-  | "custom-code"
-  | "heading"
-  | "paragraph";
+export interface QuizOption {
+  id: string;
+  text: string;
+  imageUrl?: string;
+  stylePoints?: Record<string, number>;
+  styleCategory?: string;
+  points?: number;
+}
 
 export interface UserResponse {
   questionId: string;
   selectedOptions: string[];
 }
 
-export interface QuizQuestion {
-  id: string;
-  title: string;
-  type: 'image' | 'text' | 'both'; // Added 'both' to the union
-  options: QuizOption[];
-  multiSelect: number;
+export interface QuizContextType {
+  currentQuestion: QuizQuestion | null;
+  currentQuestionIndex: number;
+  totalQuestions: number;
+  isLastQuestion: boolean;
+  currentAnswers: string[];
+  answers: Record<string, UserAnswer[]>;
+  userName: string;
+  handleNext: () => void;
+  handlePrevious: () => void;
+  handleAnswer: (questionId: string, optionIds: string[]) => void;
+  calculateResults: () => void;
+  isSubmitted: boolean;
+}
+
+export interface StyleResult {
+  category: string;
+  name?: string;
+  description?: string;
+  score: number;
+  percentage: number; // Added percentage property
+  colorPalette?: string[];
+  attributes?: string[];
   imageUrl?: string;
 }
 
-export interface QuizOption {
+export interface QuizResult {
+  primaryStyle: StyleResult;
+  secondaryStyles: StyleResult[];
+  userName: string;
+  answers?: Record<string, UserAnswer[]>;
+  strategicAnswers?: Record<string, string[]>;
+  timestamp?: number;
+  totalSelections?: number; // Added totalSelections property
+}
+
+export interface BlockType {
   id: string;
-  text: string;
-  styleCategory: string;
-  imageUrl?: string;
-  points?: number;
+  type: string;
+  content: any;
+  settings?: Record<string, any>;
 }

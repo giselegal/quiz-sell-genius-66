@@ -6,30 +6,17 @@
     "branch": "main"
   },
   "projectName": "Quiz Sell Genius",
-  "projectId": "quiz-sell-genius-66", 
-  "version": "2.2.$(date +%s)",
-  "lastUpdate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "projectId": "quiz-sell-genius-66",
+  "version": "2.0.0",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
     "enhancedSync": true,
-    "visualEditor": true,
-    "forceSync": true,
-    "webhookSync": true
+    "visualEditor": true
   },
   "editor": {
     "enableLiveMode": true,
     "autoSave": true,
     "componentHighlighting": true
-  },
-  "sync": {
-    "method": "webhook",
-    "forced": true,
-    "timestamp": $(date +%s),
-    "scripts": {
-      "prepare": "./scripts/lovable-prepare.sh",
-      "test": "./scripts/lovable-test.sh",
-      "diagnose": "./scripts/lovable-diagnose.sh"
-    }
   }
 }

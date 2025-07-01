@@ -1,85 +1,94 @@
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState } from 'react';
+import { useUnifiedEditor } from '@/hooks/useUnifiedEditor';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { UnifiedComponentsSidebar } from '../sidebar/UnifiedComponentsSidebar';
+import { toast } from '@/components/ui/use-toast';
+import { QuizComponentType } from '@/types/quizBuilder';
 
 interface QuizEditorPanelProps {
-  isVisible: boolean;
-  isPreviewing?: boolean;
+  isPreviewing: boolean;
 }
 
-const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isVisible, isPreviewing = false }) => {
-  const [selectedStyle, setSelectedStyle] = useState<"Natural" | "Clássico" | "Contemporâneo" | "Elegante" | "Romântico" | "Sexy" | "Dramático" | "Criativo">("Natural");
-  const [quizConfig, setQuizConfig] = useState({
-    title: 'Descubra Seu Estilo Pessoal',
-    description: 'Um quiz para descobrir seu estilo único',
-    questionsCount: 15
+const QuizEditorPanel: React.FC<QuizEditorPanelProps> = ({ isPreviewing }) => {
+  // Pass a default primaryStyle to useUnifiedEditor to satisfy the parameter requirement
+  const unifiedEditor = useUnifiedEditor({
+    category: 'default',
+    score: 0,
+    percentage: 0
   });
+  
+  // Access properties from quizBuilder instead of directly
+  const { quizBuilder } = unifiedEditor;
+  
+  // For tracking active stage type (moved from root level)
+  const [activeStageType, setActiveStageType] = useState<string | null>(null);
 
-  if (!isVisible) return null;
+  const handleComponentSelect = (type: QuizComponentType) => {
+    try {
+      // Call an appropriate method from quizBuilder
+      if (quizBuilder && typeof quizBuilder.addComponent === 'function') {
+        quizBuilder.addComponent(type);
+        toast({
+          title: "Componente adicionado",
+          description: `Um novo componente do tipo ${type} foi adicionado ao editor.`,
+        });
+      } else {
+        console.error("Method addComponent not found on quizBuilder");
+        toast({
+          title: "Funcionalidade incompleta",
+          description: "A funcionalidade de adicionar componente ainda não está disponível.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error adding component:", error);
+      toast({
+        title: "Erro ao adicionar componente",
+        description: "Não foi possível adicionar o componente. Tente novamente.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Editor do Quiz</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div>
-          <Label htmlFor="quiz-title">Título do Quiz</Label>
-          <Input
-            id="quiz-title"
-            value={quizConfig.title}
-            onChange={(e) => setQuizConfig(prev => ({ ...prev, title: e.target.value }))}
+    <ResizablePanelGroup direction="horizontal" className="h-full">
+      <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+        <div className="h-full border-r bg-white overflow-y-auto">
+          <UnifiedComponentsSidebar 
+            onComponentSelect={handleComponentSelect} 
+            activeTab="quiz"
+            activeStageType={activeStageType}
           />
         </div>
-
-        <div>
-          <Label htmlFor="quiz-description">Descrição</Label>
-          <Textarea
-            id="quiz-description"
-            value={quizConfig.description}
-            onChange={(e) => setQuizConfig(prev => ({ ...prev, description: e.target.value }))}
-          />
+      </ResizablePanel>
+      
+      <ResizableHandle withHandle />
+      
+      <ResizablePanel defaultSize={55}>
+        <div className="h-full bg-[#FAF9F7] p-4 overflow-y-auto">
+          {/* Quiz Editor Preview/Editing Area */}
+          <div className="bg-white rounded-lg shadow-sm min-h-full p-6">
+            {/* Your quiz editor component goes here */}
+            <p>Quiz Editor Content</p>
+            {unifiedEditor.quizBuilder && unifiedEditor.quizBuilder.components && (
+              <div>
+                <p>Number of components: {unifiedEditor.quizBuilder.components.length}</p>
+              </div>
+            )}
+          </div>
         </div>
-
-        <div>
-          <Label htmlFor="style-select">Estilo Padrão</Label>
-          <Select value={selectedStyle} onValueChange={(value: any) => setSelectedStyle(value)}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Natural">Natural</SelectItem>
-              <SelectItem value="Clássico">Clássico</SelectItem>
-              <SelectItem value="Contemporâneo">Contemporâneo</SelectItem>
-              <SelectItem value="Elegante">Elegante</SelectItem>
-              <SelectItem value="Romântico">Romântico</SelectItem>
-              <SelectItem value="Sexy">Sexy</SelectItem>
-              <SelectItem value="Dramático">Dramático</SelectItem>
-              <SelectItem value="Criativo">Criativo</SelectItem>
-            </SelectContent>
-          </Select>
+      </ResizablePanel>
+      
+      <ResizableHandle withHandle />
+      
+      <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+        <div className="h-full border-l bg-white overflow-y-auto p-4">
+          <h3 className="font-medium mb-4">Propriedades</h3>
+          {/* Properties Panel */}
         </div>
-
-        <div>
-          <Label htmlFor="questions-count">Número de Questões</Label>
-          <Input
-            id="questions-count"
-            type="number"
-            value={quizConfig.questionsCount}
-            onChange={(e) => setQuizConfig(prev => ({ ...prev, questionsCount: parseInt(e.target.value) }))}
-          />
-        </div>
-
-        <Button className="w-full">
-          Salvar Configurações do Quiz
-        </Button>
-      </CardContent>
-    </Card>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };
 

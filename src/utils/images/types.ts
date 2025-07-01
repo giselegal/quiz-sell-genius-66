@@ -1,105 +1,62 @@
 
-export interface ImageMetadata {
+export interface ImageAnalysis {
   url: string;
-  width?: number;
-  height?: number;
+  element: HTMLImageElement;
+  issues: string[];
+  dimensions?: {
+    natural: { width: number; height: number },
+    display: { width: number; height: number }
+  };
+  downloadSize?: number;
   format?: string;
-  size?: number;
-  quality?: number;
-  natural?: { width: number; height: number; };
-  display?: { width: number; height: number; };
-}
-
-export interface ImageCacheEntry {
-  url: string;
-  timestamp: number;
-  metadata: ImageMetadata;
-  blob?: Blob;
-  lastAccessed?: number;
-  loadStatus?: 'loading' | 'loaded' | 'error';
-}
-
-export interface ImageSettings {
-  quality: number;
-  format: 'webp' | 'jpeg' | 'png' | 'auto';
-  maxWidth?: number;
-  maxHeight?: number;
-  width?: number;
-  height?: number;
-  crop?: boolean;
-  responsive?: boolean;
-}
-
-export interface ImageOptimizationOptions {
+  isOptimized?: boolean;
+  isResponsive?: boolean;
   quality?: number;
   width?: number;
   height?: number;
-  format?: 'webp' | 'jpeg' | 'png' | 'auto';
-  crop?: boolean;
+  suggestedImprovements?: string[];
 }
 
-export interface PreloadOptions {
+export interface ImageDiagnosticResult {
+  url?: string;
+  issues?: string[];
+  recommendations?: string[];
+  optimizationPotential?: number;
+  summary?: {
+    totalImagesRendered: number;
+    totalImagesWithIssues: number;
+    totalDownloadedBytes: number;
+    estimatedPerformanceImpact: string;
+  };
+  detailedIssues?: ImageAnalysis[];
+}
+
+export interface FixBlurryImagesOptions {
   quality?: number;
-  batchSize?: number;
-  onProgress?: (loaded: number, total: number) => void;
-  onComplete?: () => void;
   format?: string;
-  timeout?: number;
+  skipOptimized?: boolean;
+  forceOptimize?: boolean;
+  debug?: boolean;
+  placeholderColor?: string;
 }
 
 export interface PreloadImageDefinition {
   src: string;
   id: string;
-  alt?: string;
-  category?: string;
+  alt: string;
+  category: string;
   preloadPriority?: number;
-}
-
-export interface ImageAnalysis {
-  dimensions: {
-    width: number;
-    height: number;
-    natural?: { width: number; height: number; };
-    display?: { width: number; height: number; };
-  };
-  format: string;
-  size: number;
-  quality: number;
-  isOptimized?: boolean;
-  isResponsive?: boolean;
-  suggestedImprovements?: string[];
-}
-
-export interface ImageDiagnosticResult {
-  url: string;
-  status: 'success' | 'error' | 'loading';
-  analysis?: ImageAnalysis;
-  error?: string;
-  loadTime?: number;
-  summary?: {
-    totalImages: number;
-    optimizedImages: number;
-    totalSize: number;
-    potentialSavings: number;
-    totalImagesRendered?: number;
-    totalImagesWithIssues?: number;
-    totalDownloadedBytes?: number;
-    estimatedPerformanceImpact?: number;
-  };
-  detailedIssues?: Array<{
-    type: string;
-    severity: 'low' | 'medium' | 'high';
-    description: string;
-    recommendation: string;
-    url?: string;
-    dimensions?: { width: number; height: number; natural?: { width: number; height: number; }; display?: { width: number; height: number; }; };
-    issues?: any[];
-  }>;
-}
-
-export interface FixBlurryImagesOptions {
+  tags?: string[];
   quality?: number;
-  upscaleFactor?: number;
-  sharpening?: boolean;
-  autoDetect?: boolean;
+}
+
+// Add PreloadOptions interface to fix imports
+export interface PreloadOptions {
+  quality?: number;
+  priority?: 'high' | 'low' | 'auto';
+  categories?: string[];
+  limit?: number;
+  timeout?: number;
+  batchSize?: number;
+  format?: string;
 }

@@ -1,41 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { preloadCriticalImages } from "@/utils/images/preloading";
-import FixedIntroImage from "@/components/ui/FixedIntroImage";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import MentorSection from "@/components/result/MentorSection";
-import {
-  ChevronRight,
-  Check,
-  Clock,
-  Star,
-  ShoppingBag,
-  Heart,
-  Users,
-  Award,
-  Shield,
-  ArrowRight,
-  TrendingUp,
-  BadgeCheck,
-  Lock,
-  Gift,
-  ShoppingCart,
-  CheckCircle,
-  ArrowDown,
-  Hourglass,
-  Zap,
-  Target,
-  Sparkles,
-  Crown,
-  Flame,
-  Eye,
-} from "lucide-react";
-import { trackButtonClick } from "@/utils/analytics";
-import { storeUserForHotmart } from "@/utils/hotmartWebhook";
+import React, { useEffect, useState } from 'react';
+import { preloadCriticalImages } from '@/utils/images/preloading';
+import FixedIntroImage from '@/components/ui/FixedIntroImage';
+import { ChevronRight, Check, Clock, Star, ShoppingBag, Heart, Users, Award, Shield, ArrowRight, TrendingUp, BadgeCheck, Lock, Gift, ShoppingCart, CheckCircle, ArrowDown, Hourglass } from 'lucide-react';
+import { trackButtonClick } from '@/utils/analytics';
 
-// CSS aprimorado para versão B - mais persuasivo e dinâmico
+// CSS optimizado e responsivo
 const customStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
   
   :root {
     --primary: #B89B7A;
@@ -46,14 +17,10 @@ const customStyles = `
     --text-dark: #432818;
     --text-medium: #6B4F43;
     --text-light: #8B7355;
-    --brand-light: #D4C4B0;
-    --brand-gradient: linear-gradient(135deg, #B89B7A 0%, #aa6b5d 100%);
-    --urgency-gradient: linear-gradient(135deg, #B89B7A 0%, #8B6F4D 100%);
-    --success-final: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    --success: #22c55e;
     --shadow-sm: 0 2px 8px rgba(184, 155, 122, 0.08);
     --shadow-md: 0 4px 20px rgba(184, 155, 122, 0.12);
     --shadow-lg: 0 8px 32px rgba(184, 155, 122, 0.16);
-    --shadow-brand: 0 8px 24px rgba(184, 155, 122, 0.4);
   }
   
   .container-main { 
@@ -66,1112 +33,608 @@ const customStyles = `
     margin-bottom: 4rem; 
   }
   
-  /* Cards com mais impacto */
-  .card-impact { 
+  .card-clean { 
     background: white; 
-    border-radius: 24px; 
+    border-radius: 20px; 
     padding: 2.5rem; 
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(184, 155, 122, 0.08);
+    transition: all 0.3s ease;
+  }
+  
+  .card-clean:hover {
     box-shadow: var(--shadow-lg);
-    border: 2px solid rgba(255, 107, 107, 0.1);
-    position: relative;
-    overflow: hidden;
+    transform: translateY(-2px);
   }
   
-  .card-impact::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--brand-gradient);
-  }
-  
-  /* Botões mais impactantes - Paleta da marca */
-  .btn-impact {
-    background: var(--brand-gradient);
+  .btn-primary-clean {
+    background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);
     color: white;
-    padding: 1.5rem 3rem;
-    border-radius: 16px;
-    border: none;
     font-weight: 700;
-    font-size: 1.125rem;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-brand);
-  }
-  
-  /* Botão CTA Final - Verde estratégico */
-  .btn-final {
-    background: var(--success-final);
-    color: white;
-    padding: 1.75rem 3.5rem;
-    border-radius: 20px;
+    border-radius: 16px;
+    padding: 1.25rem 2.5rem;
     border: none;
-    font-weight: 800;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     display: inline-flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.4);
-    animation: pulse-success 2s infinite;
   }
   
-  @keyframes pulse-success {
-    0%, 100% { 
-      box-shadow: 0 8px 32px rgba(34, 197, 94, 0.4);
-      transform: scale(1);
-    }
-    50% { 
-      box-shadow: 0 12px 40px rgba(34, 197, 94, 0.6);
-      transform: scale(1.02);
-    }
-  }
-  
-  .btn-impact::before {
+  .btn-primary-clean::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.6s ease;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
   }
   
-  .btn-impact:hover::before {
+  .btn-primary-clean:hover::before {
     left: 100%;
   }
   
-  .btn-impact:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 16px 48px rgba(255, 107, 107, 0.6);
+  .btn-primary-clean:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.3);
   }
   
-  /* Tipografia hierárquica mais impactante */
   .text-hierarchy-1 { 
-    font-size: clamp(2.5rem, 6vw, 5rem); 
-    font-weight: 800; 
+    font-size: clamp(2rem, 5vw, 4rem); 
+    font-weight: 700; 
     line-height: 1.1; 
     margin-bottom: 1.5rem;
-    background: var(--gradient-warm);
+  }
+  
+  .text-hierarchy-2 { 
+    font-size: clamp(1.5rem, 4vw, 2.5rem); 
+    font-weight: 600; 
+    line-height: 1.2; 
+    margin-bottom: 1.25rem;
+  }
+  
+  .text-hierarchy-3 { 
+    font-size: clamp(1.25rem, 3vw, 1.75rem); 
+    font-weight: 600; 
+    line-height: 1.3; 
+    margin-bottom: 1rem;
+  }
+  
+  .text-body { 
+    font-size: clamp(1rem, 2.5vw, 1.25rem); 
+    line-height: 1.6; 
+    margin-bottom: 1rem;
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   
-  .text-hierarchy-2 { 
-    font-size: clamp(1.75rem, 4.5vw, 3rem); 
-    font-weight: 700; 
-    line-height: 1.2; 
-    margin-bottom: 1.25rem;
-    color: var(--text-dark);
+  .glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
   
-  .text-hierarchy-3 { 
-    font-size: clamp(1.375rem, 3.5vw, 2rem); 
-    font-weight: 600; 
-    line-height: 1.3; 
-    margin-bottom: 1rem;
-    color: var(--text-dark);
+  .animate-fade-in {
+    animation: fadeInUp 0.6s ease-out forwards;
   }
   
-  .text-body { 
-    font-size: clamp(1.125rem, 2.8vw, 1.375rem); 
-    line-height: 1.6; 
-    margin-bottom: 1rem;
-    color: var(--text-medium);
-  }
-  
-  /* Elementos de Urgência - Paleta da marca */
-  .urgency-banner {
-    background: var(--urgency-gradient);
-    color: white;
-    padding: 1rem;
-    border-radius: 16px;
-    text-align: center;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    animation: urgent-pulse 1.5s infinite;
-    box-shadow: var(--shadow-brand);
-  }
-  
-  @keyframes urgent-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
-  }
-  
-  /* Prova Social com cores da marca */
-  .social-proof {
-    background: var(--brand-gradient);
-    color: white;
-    padding: 1.5rem;
-    border-radius: 20px;
-    text-align: center;
-    margin: 2rem 0;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-brand);
-  }
-  
-  .social-proof::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-    animation: shine 3s infinite;
-  }
-  
-  @keyframes shine {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  /* Countdown mais dramático - cores da marca */
-  .countdown-dramatic {
-    background: linear-gradient(135deg, #432818 0%, #6B4F43 100%);
-    color: white;
-    padding: 2rem;
-    border-radius: 20px;
-    text-align: center;
-    margin: 2rem 0;
-    border: 3px solid #B89B7A;
-    box-shadow: 0 0 30px rgba(184, 155, 122, 0.5);
-  }
-  
-  .countdown-numbers {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  
-  .countdown-item {
-    background: #B89B7A;
-    color: white;
-    padding: 1rem;
-    border-radius: 12px;
-    min-width: 80px;
-    font-weight: 800;
-    font-size: 1.5rem;
-    box-shadow: 0 4px 16px rgba(184, 155, 122, 0.4);
-  }
-  
-  /* Preço com cores da marca */
-  .price-impact {
-    background: var(--brand-gradient);
-    color: white;
-    padding: 2.5rem;
-    border-radius: 24px;
-    text-align: center;
-    margin: 2rem 0;
-    box-shadow: var(--shadow-brand);
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    position: relative;
-  }
-  
-  .price-badge {
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #B89B7A;
-    color: white;
-    padding: 0.75rem 2rem;
-    border-radius: 25px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 16px rgba(184, 155, 122, 0.4);
-  }
-  
-  .price-original {
-    text-decoration: line-through;
-    opacity: 0.7;
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .price-current {
-    font-size: clamp(3rem, 8vw, 5rem);
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-  }
-  
-  /* Grid responsivo melhorado */
-  .grid-impact {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 1fr;
-  }
-  
-  /* Animations melhoradas */
-  .animate-slide-up {
-    animation: slideUp 0.8s ease-out forwards;
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  
-  @keyframes slideUp {
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
   
-  .animate-delay-1 { animation-delay: 0.1s; }
-  .animate-delay-2 { animation-delay: 0.2s; }
-  .animate-delay-3 { animation-delay: 0.3s; }
-  .animate-delay-4 { animation-delay: 0.4s; }
-  
-  /* Elementos Before/After */
-  .before-after {
+  .grid-responsive {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 2rem;
-    align-items: center;
-    margin: 3rem 0;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
   }
   
-  .before-section {
-    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-    padding: 2rem;
-    border-radius: 16px;
-    border-left: 4px solid #f44336;
-  }
-  
-  .after-section {
-    background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
-    padding: 2rem;
-    border-radius: 16px;
-    border-left: 4px solid #4caf50;
-  }
-  
-  .vs-element {
-    background: var(--brand-gradient);
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    items-center: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 1.25rem;
-    box-shadow: var(--shadow-brand);
-  }
-  
-  /* Responsivo aprimorado */
   @media (min-width: 640px) {
     .container-main { padding: 0 1.5rem; }
-    .grid-impact { grid-template-columns: repeat(2, 1fr); }
-    .card-impact { padding: 3rem; }
+    .grid-responsive { grid-template-columns: repeat(2, 1fr); }
+    .btn-primary-clean { font-size: 1.25rem; }
   }
   
   @media (min-width: 768px) {
     .container-main { padding: 0 2rem; }
     .section-gap { margin-bottom: 5rem; }
-    .grid-impact { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+    .card-clean { padding: 3rem; }
+    .grid-responsive { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
   }
   
   @media (min-width: 1024px) {
-    .grid-impact { gap: 3rem; }
+    .grid-responsive { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
   }
   
   @media (max-width: 639px) {
-    .btn-impact { 
+    .btn-primary-clean { 
       width: 100%; 
       justify-content: center; 
-      padding: 1.75rem; 
+      padding: 1.5rem; 
       font-size: 1.125rem;
     }
-    .card-impact { padding: 1.5rem; }
+    .card-clean { padding: 1.5rem; }
     .section-gap { margin-bottom: 3rem; }
-    .countdown-numbers { 
-      flex-wrap: wrap; 
-      gap: 0.5rem; 
-    }
-    .countdown-item { 
-      min-width: 60px; 
-      padding: 0.75rem; 
-      font-size: 1.25rem; 
-    }
-    .before-after {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-    .vs-element {
-      width: 40px;
-      height: 40px;
-      font-size: 1rem;
-      margin: 0 auto;
-    }
   }
 `;
 
-// URLs das imagens (mantidas da versão original)
-const HERO_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
-const HERO_COMPLEMENTARY_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1746838118/20250509_2137_Desordem_e_Reflex%C3%A3o_simple_compose_01jtvszf8sfaytz493z9f16rf2_z1c2up.jpg";
-const PROBLEM_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_9_mgkdnb.webp";
-const SOLUTION_QUIZ_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921098/Espanhol_Portugu%C3%AAs_5_cptzyb.webp";
-const GUIDES_BENEFITS_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp";
-const BONUS_1_KEY_PIECES_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921227/Espanhol_Portugu%C3%AAs_6_y4kqao.webp";
-const BONUS_2_VISAGISM_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921365/Espanhol_Portugu%C3%AAs_7_eqgdqz.webp";
-const GUARANTEE_IMAGE_URL =
-  "https://res.cloudinary.com/dqljyf76t/image/upload/v1744921750/Garantia_7_dias_j8mxth.webp";
+// URLs otimizadas das imagens
+const HERO_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp";
+const HERO_COMPLEMENTARY_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp";
+const PROBLEM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.webp";
+const SOLUTION_QUIZ_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp";
+const GUIDES_BENEFITS_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp";
+const BONUS_1_KEY_PIECES_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp";
+const BONUS_2_VISAGISM_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp";
+const GUARANTEE_IMAGE_URL = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744916216/C%C3%B3pia_de_01._P%C3%A1gina_-_Produto_de_Entrada_2_hamaox.webp";
 
-// Dados para as seções da página
-const painPoints = [
-  {
-    icon: Heart,
-    title: "Problemas de autoestima",
-    description:
-      "Você se sente insegura com sua imagem e não sabe como melhorar",
-  },
-  {
-    icon: ShoppingBag,
-    title: "Compras sem direção",
-    description: "Gasta dinheiro em roupas que não combinam com você",
-  },
-  {
-    icon: Clock,
-    title: "Perda de tempo",
-    description: "Demora horas para se arrumar e ainda não fica satisfeita",
-  },
-];
-
-const benefits = [
-  {
-    icon: Crown,
-    title: "Descobrir seu estilo único",
-    description:
-      "Identifique qual estilo combina perfeitamente com sua personalidade",
-  },
-  {
-    icon: Target,
-    title: "Compras estratégicas",
-    description: "Saiba exatamente o que comprar para valorizar sua beleza",
-  },
-  {
-    icon: Sparkles,
-    title: "Confiança renovada",
-    description: "Sinta-se linda e confiante todos os dias",
-  },
-];
-
-const realTestimonials = [
-  {
-    name: "Mariangela",
-    author: "Mariangela, Engenheira",
-    text: "Antes, a roupa me vestia. Hoje, eu me visto de propósito. A consultoria me fez dar vida à mulher que sempre existiu em mim.",
-    rating: 5,
-    location: "Engenheira",
-  },
-  {
-    name: "Patrícia Paranhos",
-    author: "Patrícia Paranhos, Advogada",
-    text: "Aprendi a me valorizar e a dar valor para a imagem que transmito. As pessoas começaram a me olhar diferente — porque eu estava diferente.",
-    rating: 5,
-    location: "Advogada",
-  },
-  {
-    name: "Sônia Spier",
-    author: "Sônia Spier, Terapeuta",
-    text: "A Gisele me ensinou a entender o que comunico com as roupas. Hoje compro com consciência, estilo e propósito.",
-    rating: 5,
-    location: "Terapeuta",
-  },
-];
-
-// Função para lidar com cliques em CTAs
-const handleCTAClick = (buttonId: string, action: string = "Comprar Agora") => {
-  return (event: React.MouseEvent) => {
-    event.preventDefault();
-    const emailInput = document.querySelector(
-      'input[type="email"]'
-    ) as HTMLInputElement;
-    trackButtonClick(buttonId, action, "quiz_offer_page");
-
-    if (emailInput?.value) {
-      const userName = emailInput.value;
-      storeUserForHotmart({ name: userName });
-
-      // Redirecionar para checkout
-      const checkoutUrl =
-        "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB";
-
-      if (window.innerWidth >= 768) {
-        window.open(checkoutUrl, "_blank");
-      } else {
-        window.location.href = checkoutUrl;
-      }
-    }
-  };
-};
-
-// Componente de Popup de Prova Social Dinâmica
-const SocialProofPopup = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [currentUser, setCurrentUser] = useState("");
-
-  const users = [
-    "Ana Carolina acabou de comprar",
-    "Maria Silva descobriu seu estilo",
-    "Juliana Santos transformou seu guarda-roupa",
-    "Fernanda Costa está encantada",
-    "Camila Oliveira recomenda",
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentUser(users[Math.floor(Math.random() * users.length)]);
-      setIsVisible(true);
-      setTimeout(() => setIsVisible(false), 4000);
-    }, 8000);
-
-    return () => clearInterval(interval);
-  }, [users]);
-
-  return (
-    <div
-      className={`fixed bottom-4 left-4 z-50 transition-all duration-500 ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
-      }`}
-    >
-      <div className="bg-green-500 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 max-w-sm">
-        <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
-          <Check size={16} />
+// Componente de estrelas para avaliações (mantido)
+const RatingStars = ({ rating }) => {
+    return (
+        <div className="flex">
+            {[...Array(5)].map((_, i) => (
+                <Star
+                    key={i}
+                    size={16}
+                    className={`${i < rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'} mr-0.5`}
+                />
+            ))}
         </div>
-        <div>
-          <p className="font-semibold text-sm">{currentUser}</p>
-          <p className="text-xs opacity-90">há poucos minutos</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Componente de Avaliações com Estrelas
-const StarRating = ({ rating }: { rating: number }) => {
-  return (
-    <div className="flex items-center gap-1">
-      {[...Array(5)].map((_, i) => (
-        <Star
-          key={i}
-          size={20}
-          className={`${
-            i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-          }`}
-        />
-      ))}
-    </div>
-  );
-};
-
-// Componente de Contagem Regressiva Dramática
-const DramaticCountdown = () => {
-  const [time, setTime] = useState({
-    hours: 2,
-    minutes: 47,
-    seconds: 33,
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime((prevTime) => {
-        if (prevTime.seconds > 0) {
-          return { ...prevTime, seconds: prevTime.seconds - 1 };
-        } else if (prevTime.minutes > 0) {
-          return { ...prevTime, minutes: prevTime.minutes - 1, seconds: 59 };
-        } else if (prevTime.hours > 0) {
-          return { hours: prevTime.hours - 1, minutes: 59, seconds: 59 };
-        } else {
-          return { hours: 23, minutes: 59, seconds: 59 };
-        }
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const formatNumber = (num: number) => num.toString().padStart(2, "0");
-
-  return (
-    <div className="countdown-dramatic">
-      <div className="flex items-center justify-center gap-2 mb-3">
-        <Flame className="text-orange-400" size={24} />
-        <h3 className="text-xl font-bold">OFERTA EXPIRA EM:</h3>
-        <Flame className="text-orange-400" size={24} />
-      </div>
-      <div className="countdown-numbers">
-        <div className="countdown-item">
-          <div className="text-xs opacity-75">HORAS</div>
-          <div>{formatNumber(time.hours)}</div>
-        </div>
-        <div className="countdown-item">
-          <div className="text-xs opacity-75">MIN</div>
-          <div>{formatNumber(time.minutes)}</div>
-        </div>
-        <div className="countdown-item">
-          <div className="text-xs opacity-75">SEG</div>
-          <div>{formatNumber(time.seconds)}</div>
-        </div>
-      </div>
-      <p className="mt-3 text-sm opacity-90">
-        Não perca esta oportunidade única!
-      </p>
-    </div>
-  );
-};
-
-// Componente FAQ Aprimorado
-const FaqSectionAdvanced = () => {
-  const [openItem, setOpenItem] = useState<number | null>(null);
-
-  const faqItems = [
-    {
-      question: "É realmente possível descobrir meu estilo em 5 minutos?",
-      answer:
-        "Sim! Nosso quiz foi desenvolvido com base em anos de experiência e metodologia científica. Em poucos minutos, você terá uma análise precisa do seu estilo predominante entre os 7 estilos universais.",
-    },
-    {
-      question: "O que acontece se eu não gostar do resultado?",
-      answer:
-        "Oferecemos 7 dias de garantia total. Se não ficar satisfeita, devolvemos 100% do seu dinheiro sem perguntas. Sua satisfação é nossa prioridade.",
-    },
-    {
-      question: "Quanto tempo terei acesso aos materiais?",
-      answer:
-        "O acesso é vitalício! Você poderá baixar todos os materiais e consultá-los sempre que precisar, sem prazo de expiração.",
-    },
-    {
-      question: "Funciona para todas as idades e tipos de corpo?",
-      answer:
-        "Absolutamente! Nosso método é universal e funciona para mulheres de todas as idades, tipos de corpo e estilos de vida. O importante é descobrir e expressar sua essência única.",
-    },
-    {
-      question: "Como recebo os materiais após a compra?",
-      answer:
-        "Logo após a confirmação do pagamento, você recebe um email com o link de acesso à área exclusiva onde poderá fazer o quiz e baixar todos os materiais imediatamente.",
-    },
-  ];
-
-  const toggleItem = (index: number) => {
-    setOpenItem(openItem === index ? null : index);
-  };
-
-  return (
-    <div className="w-full max-w-4xl mx-auto">
-      <div className="space-y-4">
-        {faqItems.map((item, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-2xl shadow-md overflow-hidden border-2 border-gray-100 hover:border-orange-200 transition-all duration-300"
-          >
-            <button
-              onClick={() => toggleItem(index)}
-              className="w-full px-6 py-6 text-left flex justify-between items-center hover:bg-orange-50 transition-colors"
-            >
-              <span className="font-semibold text-[#432818] text-lg pr-4">
-                {item.question}
-              </span>
-              <ChevronRight
-                size={24}
-                className={`text-orange-500 transition-transform duration-300 flex-shrink-0 ${
-                  openItem === index ? "transform rotate-90" : ""
-                }`}
-              />
-            </button>
-
-            {openItem === index && (
-              <div className="px-6 py-4 text-gray-700 bg-orange-50 border-t border-orange-100 text-base leading-relaxed">
-                {item.answer}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const DescubraSeuEstilo: React.FC = () => {
-  useEffect(() => {
-    const styleElement = document.createElement("style");
-    styleElement.textContent = customStyles;
-    document.head.appendChild(styleElement);
-
-    preloadCriticalImages(
-      [
-        HERO_IMAGE_URL,
-        HERO_COMPLEMENTARY_IMAGE_URL,
-        PROBLEM_IMAGE_URL,
-        SOLUTION_QUIZ_IMAGE_URL,
-        GUIDES_BENEFITS_IMAGE_URL,
-        BONUS_1_KEY_PIECES_IMAGE_URL,
-        BONUS_2_VISAGISM_IMAGE_URL,
-        GUARANTEE_IMAGE_URL,
-      ],
-      { quality: 95 }
     );
-
-    if (typeof window !== "undefined" && "performance" in window) {
-      window.performance.mark("offer-page-v2-mounted");
-    }
-
-    return () => {
-      document.head.removeChild(styleElement);
-    };
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-[#FAF9F7]">
-      {/* Hero Section */}
-      <section className="py-8 md:py-16 px-4 md:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            {/* Mobile: Text first, Desktop: Text left */}
-            <div className="order-1 md:order-1 space-y-6">
-              <div className="text-center md:text-left mb-6">
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp"
-                  alt="Gisele Galvão - Logo da Marca"
-                  className="h-12 md:h-16 mx-auto md:mx-0 mb-4"
-                />
-              </div>
-
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair text-[#432818] text-center md:text-left leading-tight">
-                Chega de um guarda-roupa lotado e da sensação de que nada
-                combina com você.
-              </h1>
-
-              <p className="text-lg md:text-xl text-[#8F7A6A] text-center md:text-left">
-                Descubra seu Estilo e aprenda a montar looks que realmente
-                refletem sua essência, com praticidade e confiança.
-              </p>
-
-              <div className="flex justify-center md:justify-start">
-                <Button
-                  onClick={handleCTAClick("hero-cta", "Descobrir Meu Estilo")}
-                  size="lg"
-                  className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  <span className="hidden md:inline">
-                    Descobrir Meu Estilo - 5x R$ 8,83
-                  </span>
-                  <span className="md:hidden">Descobrir Meu Estilo</span>
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Mobile: Image second, Desktop: Image right */}
-            <div className="order-2 md:order-2 relative">
-              <div className="relative rounded-lg overflow-hidden shadow-2xl">
-                <img
-                  src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745193445/4fb35a75-02dd-40b9-adae-854e90228675_ibkrmt.jpg"
-                  alt="Mulher descobrindo seu estilo autêntico"
-                  className="w-full h-auto object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Problema/Dor Section */}
-      <section className="py-12 md:py-16 px-4 md:px-8 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Você Reconhece Esses Problemas?
-            </h2>
-            <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto">
-              Armário cheio, mas nada para vestir? Você não está sozinha.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {painPoints.map((point, index) => (
-              <Card
-                key={index}
-                className="border-[#B89B7A]/20 hover:shadow-lg transition-shadow duration-300 rounded-lg"
-              >
-                <CardContent className="p-6 text-center flex flex-col items-center">
-                  <point.icon className="w-8 h-8 text-[#B89B7A] mb-4" />
-                  <h3 className="text-base md:text-lg font-semibold text-[#432818] mb-2 mt-4">
-                    {point.title}
-                  </h3>
-                  <p className="text-[#8F7A6A] text-sm">{point.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <p className="text-lg text-[#8F7A6A] italic max-w-4xl mx-auto">
-              A solução está em descobrir seu estilo autêntico. Com essa
-              clareza, você criará um guarda-roupa harmonioso que expressa
-              verdadeiramente quem você é.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Mentora Section */}
-      <section className="py-12 md:py-16 px-4 md:px-8">
-        <div className="max-w-6xl mx-auto">
-          <MentorSection />
-        </div>
-      </section>
-
-      {/* Solução Section */}
-      <section className="py-12 md:py-16 px-4 md:px-8 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Seu Guia Completo Para um Estilo Autêntico
-            </h2>
-            <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto mb-8"></p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
-            <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1746650306/oie_1_gcozz9.webp"
-                alt="Qual é o Seu Estilo - Quiz Completo"
-                className="w-full rounded-lg shadow-lg"
-              />
-            </div>
-            <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744920983/Espanhol_Portugu%C3%AAs_8_cgrhuw.webp"
-                alt="Mockup completo com bônus"
-                className="w-full rounded-lg shadow-lg"
-              />
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-[#B89B7A]/20">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-[#432818] mb-4">
-                  Quiz de Estilo Personalizado
-                </h3>
-                <p className="text-[#8F7A6A]">
-                  Um método preciso que analisa suas preferências reais e
-                  identifica seu estilo predominante entre os 8 estilos
-                  universais.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-[#B89B7A]/20">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-[#432818] mb-4">
-                  Guia de Imagem e Estilo
-                </h3>
-                <p className="text-[#8F7A6A]">
-                  Específico para o seu resultado no Quiz, com orientações
-                  práticas para valorizar e expressar sua personalidade.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-[#B89B7A]/20">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-[#432818] mb-4">
-                  Bônus Exclusivos
-                </h3>
-                <p className="text-[#8F7A6A]">
-                  Guia das Peças-Chave do Guarda-Roupa de Sucesso e Guia de
-                  Visagismo Facial para complementar sua transformação.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefícios Section */}
-      <section className="py-12 md:py-16 px-4 md:px-8 bg-[#F9F7F4]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Transformações que Você Experimentará
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745071347/MOCKUP_TABLETE_-_GUIA_DE_IMAGEM_E_ESTILO_ncctzi.webp"
-                alt="Mockup tablet com guia de imagem e estilo"
-                className="w-full rounded-lg shadow-lg object-cover h-auto"
-              />
-            </div>
-            <div className="space-y-6">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <Check className="h-6 w-6 text-[#B89B7A] flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="text-[#432818] text-base md:text-lg font-semibold">
-                      {benefit.title}
-                    </h4>
-                    <p className="text-[#8F7A6A] text-sm">
-                      {benefit.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center mt-12">
-          <p className="text-lg text-[#8F7A6A] max-w-4xl mx-auto italic">
-            Com o nosso método, você não apenas descobrirá seu estilo, mas
-            também aprenderá a usá-lo como uma ferramenta poderosa para
-            expressar sua autenticidade e aumentar sua confiança.
-          </p>
-        </div>
-      </section>
-
-      {/* Bônus Sections */}
-      <section className="py-12 md:py-16 px-4 md:px-8 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Bônus Especiais Inclusos
-            </h2>
-          </div>
-
-          {/* Bônus 1 */}
-          <div className="grid md:grid-cols-2 gap-8 items-center mb-16">
-            <div>
-              <h3 className="text-xl font-semibold text-[#432818] mb-4">
-                Bônus 1: Peças-Chave do Guarda-Roupa de Sucesso
-              </h3>
-              <p className="text-[#8F7A6A] mb-4">
-                Um manual completo para construir um armário funcional, versátil
-                e alinhado com sua identidade.
-              </p>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-[#B89B7A]" />
-                  <span className="text-sm text-[#432818]">
-                    Peças essenciais que toda mulher deveria ter
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-[#B89B7A]" />
-                  <span className="text-sm text-[#432818]">
-                    Como adaptar ao seu estilo predominante
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-[#B89B7A]" />
-                  <span className="text-sm text-[#432818]">
-                    Estratégias para maximizar combinações
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911687/C%C3%B3pia_de_MOCKUPS_12_w8fwrn.webp"
-                alt="Guia das Peças-Chave"
-                className="w-full rounded-lg shadow-lg"
-              />
-            </div>
-          </div>
-
-          {/* Bônus 2 */}
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="order-2 md:order-1">
-              <img
-                src="https://res.cloudinary.com/dqljyf76t/image/upload/v1745515076/C%C3%B3pia_de_MOCKUPS_10_-_Copia_bvoccn.webp"
-                alt="Guia de Visagismo Facial"
-                className="w-full rounded-lg shadow-lg"
-              />
-            </div>
-            <div className="order-1 md:order-2">
-              <h3 className="text-xl font-semibold text-[#432818] mb-4">
-                Bônus 2: Guia de Visagismo Facial
-              </h3>
-              <p className="text-[#8F7A6A] mb-4">
-                Uma ferramenta poderosa para valorizar seus traços naturais e
-                potencializar sua beleza única.
-              </p>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-[#B89B7A]" />
-                  <span className="text-sm text-[#432818]">
-                    Como identificar o formato do seu rosto
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-[#B89B7A]" />
-                  <span className="text-sm text-[#432818]">
-                    Acessórios e Cortes de cabelo que valorizam seus traços
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-[#B89B7A]" />
-                  <span className="text-sm text-[#432818]">
-                    Maquiagem que harmoniza com seu estilo
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Depoimentos Reais */}
-      <section className="py-12 md:py-16 px-4 md:px-8 bg-[#F9F7F4]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#432818] mb-6">
-              Depoimentos de mulheres que já viveram essa transformação:
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {realTestimonials.map((testimonial, index) => (
-              <Card
-                key={index}
-                className="border-[#B89B7A]/20 hover:shadow-lg transition-shadow duration-300"
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div>
-                      <p className="font-medium text-[#432818]">
-                        {testimonial.author}
-                      </p>
-                      <div className="flex gap-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className="h-4 w-4 fill-[#B89B7A] text-[#B89B7A]"
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-[#8F7A6A] italic">"{testimonial.text}"</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Garantia e CTA Final */}
-      <section className="py-12 md:py-16 px-4 md:px-8 bg-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-[#F9F7F4] rounded-2xl p-8 mb-8">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <Shield className="h-12 w-12 text-[#B89B7A]" />
-              <div>
-                <h3 className="text-xl font-semibold text-[#432818]">
-                  Garantia de 7 Dias
-                </h3>
-                <p className="text-[#8F7A6A]">100% do seu dinheiro de volta</p>
-              </div>
-            </div>
-            <p className="text-[#8F7A6A]">
-              Estou tão confiante de que estes materiais vão transformar sua
-              relação com a sua imagem pessoal que ofereço uma garantia
-              incondicional de 7 dias.
-            </p>
-          </div>
-
-          <div className="bg-gradient-to-r from-[#B89B7A] to-[#A68A6A] rounded-2xl p-8 text-white mb-8">
-            <h3 className="text-2xl font-playfair mb-4">Investimento Único</h3>
-            <div className="text-center mb-6">
-              <span className="text-4xl font-bold">R$ 39,00</span>
-              <p className="text-white/80">à vista ou 5x de R$ 8,83</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4 text-left mb-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4" />
-                  <span className="text-sm">Quiz de Estilo Personalizado</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4" />
-                  <span className="text-sm">Guia de Imagem e Estilo</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4" />
-                  <span className="text-sm">Guia das Peças-Chave</span>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4" />
-                  <span className="text-sm">Guia de Visagismo Facial</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  <span className="text-sm">Compra segura</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  <span className="text-sm">Garantia de 7 dias</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <Button
-            onClick={handleCTAClick(
-              "final-cta",
-              "Quero Transformar Minha Imagem"
-            )}
-            size="lg"
-            className="bg-[#B89B7A] hover:bg-[#A68A6A] text-white px-8 py-4 text-xl font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 w-full md:w-auto"
-          >
-            <span className="hidden md:inline">
-              Quero Descobrir Meu Estilo!
-            </span>
-            <span className="md:hidden">Descobrir Meu Estilo!</span>
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-
-          <p className="text-sm text-[#8F7A6A] mt-4">
-            Pense bem: quanto você já gastou com roupas que nunca usou? Este
-            investimento em autoconhecimento vai muito além de roupas - é um
-            investimento em você mesma.
-          </p>
-        </div>
-      </section>
-    </div>
-  );
 };
 
-export default DescubraSeuEstilo;
+// Componente de contagem regressiva melhorado (mantido)
+const CountdownTimer = () => {
+    const [time, setTime] = useState({
+        hours: 1,
+        minutes: 59,
+        seconds: 59
+    });
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime(prevTime => {
+                if (prevTime.seconds > 0) {
+                    return { ...prevTime, seconds: prevTime.seconds - 1 };
+                } else if (prevTime.minutes > 0) {
+                    return { ...prevTime, minutes: prevTime.minutes - 1, seconds: 59 };
+                } else if (prevTime.hours > 0) {
+                    return { hours: prevTime.hours - 1, minutes: 59, seconds: 59 };
+                } else {
+                    return { hours: 1, minutes: 59, seconds: 59 };
+                }
+            });
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const formatNumber = (num) => num.toString().padStart(2, '0');
+
+    return (
+        <div className="flex flex-col items-center animate-fade-in">
+            <p className="text-[#432818] font-semibold mb-3 flex items-center text-sm sm:text-base">
+                <Clock size={18} className="mr-2 text-[#B89B7A]" />
+                Esta oferta expira em:
+            </p>
+            <div className="flex items-center justify-center gap-2">
+                <div className="bg-[#432818] text-white px-3 py-2 rounded-xl text-lg font-mono font-bold shadow-md">
+                    {formatNumber(time.hours)}
+                </div>
+                <span className="text-[#B89B7A] font-bold text-xl">:</span>
+                <div className="bg-[#432818] text-white px-3 py-2 rounded-xl text-lg font-mono font-bold shadow-md">
+                    {formatNumber(time.minutes)}
+                </div>
+                <span className="text-[#B89B7A] font-bold text-xl">:</span>
+                <div className="bg-[#432818] text-white px-3 py-2 rounded-xl text-lg font-mono font-bold shadow-md">
+                    {formatNumber(time.seconds)}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Componente FAQ (mantido)
+const FaqSectionNew = () => {
+    const [openItem, setOpenItem] = useState(null);
+
+    const faqItems = [
+        {
+            question: "Quanto tempo leva para fazer o quiz?",
+            answer: "O quiz leva apenas alguns minutos para ser completado. São perguntas simples e objetivas sobre suas preferências e estilo de vida."
+        },
+        {
+            question: "Como recebo os materiais após a compra?",
+            answer: "Imediatamente após a confirmação do pagamento, você receberá um e-mail com as instruções de acesso a todos os materiais."
+        },
+        {
+            question: "Os guias servem para qualquer tipo físico?",
+            answer: "Sim! Os guias foram desenvolvidos considerando a diversidade de tipos físicos. O mais importante é o seu estilo predominante, e as orientações são adaptáveis para valorizar seu corpo único."
+        },
+        {
+            question: "Preciso ter conhecimento prévio sobre moda?",
+            answer: "Não! Os guias foram criados justamente para quem quer aprender do zero ou aprimorar seus conhecimentos sobre estilo pessoal. Tudo é explicado de forma clara e didática."
+        },
+        {
+            question: "Posso acessar os materiais pelo celular?",
+            answer: "Sim! Todos os materiais são digitais e podem ser acessados por qualquer dispositivo: computador, tablet ou smartphone."
+        },
+        {
+            question: "E se eu não gostar do conteúdo?",
+            answer: "Você tem 7 dias de garantia incondicional. Se não ficar satisfeita, basta solicitar o reembolso e devolveremos 100% do seu investimento."
+        },
+        {
+            question: "Quanto tempo terei acesso aos materiais?",
+            answer: "O acesso é vitalício! Você poderá consultar os guias sempre que precisar, sem prazo de expiração."
+        },
+        {
+            question: "Os guias funcionam para qualquer idade?",
+            answer: "Absolutamente! Os princípios de estilo pessoal são atemporais e adaptáveis para mulheres de todas as idades. O importante é expressar sua essência, independente da sua fase de vida."
+        }
+    ];
+
+    const toggleItem = (index) => {
+        setOpenItem(openItem === index ? null : index);
+    };
+
+    return (
+        <div className="w-full max-w-4xl mx-auto">
+            <div className="space-y-3">
+                {faqItems.map((item, index) => (
+                    <div
+                        key={index}
+                        className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300"
+                    >
+                        <button
+                            onClick={() => toggleItem(index)}
+                            className="w-full px-6 py-5 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                        >
+                            <span className="font-medium text-[#432818] text-base sm:text-lg pr-4">{item.question}</span>
+                            <ChevronRight
+                                size={24}
+                                className={`text-[#B89B7A] transition-transform duration-300 flex-shrink-0 ${openItem === index ? 'transform rotate-90' : ''}`}
+                            />
+                        </button>
+
+                        {openItem === index && (
+                            <div className="px-6 py-4 text-gray-700 bg-gray-50 border-t border-gray-100 text-sm sm:text-base leading-relaxed">
+                                {item.answer}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const QuizOfferPage: React.FC = () => {
+    useEffect(() => {
+        const styleElement = document.createElement('style');
+        styleElement.textContent = customStyles;
+        document.head.appendChild(styleElement);
+        
+        preloadCriticalImages([
+            HERO_IMAGE_URL,
+            HERO_COMPLEMENTARY_IMAGE_URL,
+            PROBLEM_IMAGE_URL,
+            SOLUTION_QUIZ_IMAGE_URL,
+            GUIDES_BENEFITS_IMAGE_URL,
+            BONUS_1_KEY_PIECES_IMAGE_URL,
+            BONUS_2_VISAGISM_IMAGE_URL,
+            GUARANTEE_IMAGE_URL
+        ], { quality: 95 });
+
+        if (typeof window !== 'undefined' && 'performance' in window) {
+            window.performance.mark('offer-page-mounted');
+        }
+        
+        return () => {
+            document.head.removeChild(styleElement);
+        };
+    }, []);
+
+    const handleCtaClick = (buttonId: string, action: string = 'Comprar Agora') => {
+        trackButtonClick(buttonId, action, 'quiz_offer_page');
+    };
+
+    return (
+        <div className="min-h-screen bg-[var(--background)]" style={{ fontFamily: 'Inter, sans-serif' }}>
+            {/* Header otimizado */}
+            <header className="py-4 px-4 sm:px-6 sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+                <div className="container-main flex justify-center">
+                    <FixedIntroImage
+                        src={HERO_IMAGE_URL}
+                        alt="Logo Gisele Galvão"
+                        width={180}
+                        height={80}
+                        className="h-auto object-contain max-w-[150px] sm:max-w-[180px]"
+                    />
+                </div>
+            </header>
+
+            <main>
+                {/* Hero Section melhorado */}
+                <section className="section-gap pt-6 sm:pt-8">
+                    <div className="container-main">
+                        <div className="card-clean text-center animate-fade-in">
+                            {/* Badge de credibilidade */}
+                            <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200 mb-6 text-sm sm:text-base">
+                                <Award size={18} className="text-green-600" />
+                                <span className="font-semibold text-green-700">3000+ mulheres transformadas</span>
+                            </div>
+
+                            {/* Headline responsiva */}
+                            <h1 className="text-hierarchy-1 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                Descubra Seu <span className="gradient-text">Estilo Predominante</span>
+                                <br />em 5 Minutos
+                            </h1>
+                            
+                            {/* Subheadline */}
+                            <p className="text-body text-[var(--text-medium)] mb-8 max-w-3xl mx-auto">
+                                Tenha finalmente um guarda-roupa que <strong>funciona 100%</strong>, onde tudo combina e reflete sua personalidade
+                            </p>
+
+                            {/* Hero image responsiva */}
+                            <div className="mb-8 max-w-sm sm:max-w-lg mx-auto">
+                                <FixedIntroImage
+                                    src={HERO_COMPLEMENTARY_IMAGE_URL}
+                                    alt="Transformação de guarda-roupa"
+                                    width={600}
+                                    height={400}
+                                    className="w-full h-auto rounded-2xl shadow-lg"
+                                />
+                            </div>
+
+                            {/* CTA principal */}
+                            <button
+                                onClick={() => {
+                                    handleCtaClick('hero_cta', 'Descobrir Meu Estilo');
+                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                }}
+                                className="btn-primary-clean mb-6"
+                            >
+                                <ArrowRight size={20} />
+                                Descobrir Meu Estilo Agora
+                            </button>
+                            
+                            {/* Trust elements */}
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-sm text-[var(--text-light)]">
+                                <div className="flex items-center gap-2">
+                                    <Lock size={16} className="text-green-600" />
+                                    <span>100% Seguro</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Shield size={16} className="text-green-600" />
+                                    <span>7 Dias Garantia</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Problema - Layout melhorado */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean">
+                            <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+                                <div className="order-2 lg:order-1">
+                                    <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                        Você se identifica com isso?
+                                    </h2>
+                                    <div className="space-y-4 text-body text-[var(--text-medium)]">
+                                        <p className="flex items-start gap-3">
+                                            <span className="text-red-500 mt-1">✗</span>
+                                            <span><strong>Guarda-roupa cheio</strong> mas nunca tem o que vestir?</span>
+                                        </p>
+                                        <p className="flex items-start gap-3">
+                                            <span className="text-red-500 mt-1">✗</span>
+                                            <span><strong>Compra peças</strong> que nunca combinam com nada?</span>
+                                        </p>
+                                        <p className="flex items-start gap-3">
+                                            <span className="text-red-500 mt-1">✗</span>
+                                            <span><strong>Sente que "nada fica bom"</strong> em você?</span>
+                                        </p>
+                                    </div>
+                                    <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-4 sm:p-6 rounded-2xl border-l-4 border-orange-400 mt-6">
+                                        <p className="text-[var(--text-dark)] font-semibold">
+                                            Isso acontece porque você ainda não descobriu seu <strong>estilo predominante</strong>.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="order-1 lg:order-2">
+                                    <FixedIntroImage
+                                        src={PROBLEM_IMAGE_URL}
+                                        alt="Frustração com guarda-roupa"
+                                        width={500}
+                                        height={350}
+                                        className="w-full h-auto rounded-2xl shadow-md"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Solução - Design aprimorado */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean text-center">
+                            <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                A Solução: <span className="gradient-text">Quiz de Estilo</span>
+                            </h2>
+                            
+                            <div className="max-w-md mx-auto mb-8">
+                                <FixedIntroImage
+                                    src={SOLUTION_QUIZ_IMAGE_URL}
+                                    alt="Quiz de Estilo"
+                                    width={400}
+                                    height={300}
+                                    className="w-full h-auto rounded-2xl shadow-md"
+                                />
+                            </div>
+
+                            <p className="text-body text-[var(--text-medium)] mb-8 max-w-2xl mx-auto">
+                                Método preciso para identificar seu estilo entre os <strong>7 estilos universais</strong> + guia personalizado completo.
+                            </p>
+
+                            <button
+                                onClick={() => {
+                                    handleCtaClick('solution_cta', 'Fazer Quiz');
+                                    window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                }}
+                                className="btn-primary-clean mb-8"
+                            >
+                                <ShoppingBag size={20} />
+                                Fazer o Quiz Agora
+                            </button>
+
+                            <CountdownTimer />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Valor - Grid responsivo */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean">
+                            <div className="text-center mb-8">
+                                <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                    Transformação <span className="gradient-text">Completa</span>
+                                </h2>
+                                <p className="text-body text-[var(--text-medium)]">
+                                    Tudo que você precisa para descobrir e aplicar seu estilo
+                                </p>
+                            </div>
+
+                            {/* Grid responsivo de produtos */}
+                            <div className="grid-responsive mb-8">
+                                <div className="text-center group">
+                                    <div className="aspect-[4/5] bg-white rounded-2xl mb-4 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all">
+                                        <FixedIntroImage
+                                            src={GUIDES_BENEFITS_IMAGE_URL}
+                                            alt="Guia Personalizado"
+                                            width={250}
+                                            height={312}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
+                                    <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Guia Personalizado</h3>
+                                    <p className="text-sm text-[var(--text-medium)]">Para seu estilo específico</p>
+                                </div>
+                                <div className="text-center group">
+                                    <div className="aspect-[4/5] bg-white rounded-2xl mb-4 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all">
+                                        <FixedIntroImage
+                                            src={BONUS_1_KEY_PIECES_IMAGE_URL}
+                                            alt="Bônus Peças-Chave"
+                                            width={250}
+                                            height={312}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
+                                    <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Peças-Chave</h3>
+                                    <p className="text-sm text-[var(--text-medium)]">Guarda-roupa funcional</p>
+                                </div>
+                                <div className="text-center group">
+                                    <div className="aspect-[4/5] bg-white rounded-2xl mb-4 flex items-center justify-center overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all">
+                                        <FixedIntroImage
+                                            src={BONUS_2_VISAGISM_IMAGE_URL}
+                                            alt="Bônus Visagismo"
+                                            width={250}
+                                            height={312}
+                                            className="w-full h-full object-contain"
+                                        />
+                                    </div>
+                                    <h3 className="text-hierarchy-3 text-[var(--text-dark)] mb-2">Bônus: Visagismo</h3>
+                                    <p className="text-sm text-[var(--text-medium)]">Valorize seus traços</p>
+                                </div>
+                            </div>
+
+                            {/* Preço destacado */}
+                            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl p-6 sm:p-8 text-white text-center mb-8 shadow-lg">
+                                <div className="flex items-center justify-center gap-2 mb-2">
+                                    <Gift size={20} />
+                                    <p className="text-sm sm:text-base opacity-90">Oferta por tempo limitado</p>
+                                </div>
+                                <div className="mb-4">
+                                    <span className="text-sm sm:text-base">5x de</span>
+                                    <span className="text-3xl sm:text-4xl font-bold mx-2">R$ 8,83</span>
+                                </div>
+                                <p className="text-lg sm:text-xl">ou à vista <strong>R$ 39,90</strong></p>
+                                <p className="text-sm mt-2 opacity-75">77% OFF - Economia de R$ 135,10</p>
+                            </div>
+
+                            {/* CTA Final */}
+                            <div className="text-center">
+                                <button
+                                    onClick={() => {
+                                        handleCtaClick('final_cta', 'Garantir Transformação');
+                                        window.open("https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912", "_blank");
+                                    }}
+                                    className="btn-primary-clean"
+                                >
+                                    <ShoppingCart size={20} />
+                                    Garantir Minha Transformação
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Garantia - Simplificada */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean text-center">
+                            <div className="max-w-sm mx-auto mb-6">
+                                <FixedIntroImage
+                                    src={GUARANTEE_IMAGE_URL}
+                                    alt="Garantia 7 dias"
+                                    width={200}
+                                    height={200}
+                                    className="w-full h-auto"
+                                />
+                            </div>
+                            <h2 className="text-hierarchy-2 text-[var(--text-dark)] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                <span className="gradient-text">7 Dias</span> de Garantia
+                            </h2>
+                            <p className="text-body text-[var(--text-medium)] max-w-2xl mx-auto">
+                                Se não ficar satisfeita, devolvemos <strong>100% do seu dinheiro</strong>. Sem perguntas.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* FAQ - Layout melhorado */}
+                <section className="section-gap">
+                    <div className="container-main">
+                        <div className="card-clean">
+                            <h2 className="text-hierarchy-2 text-[var(--text-dark)] text-center mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                Perguntas <span className="gradient-text">Frequentes</span>
+                            </h2>
+                            <FaqSectionNew />
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    );
+};
+
+export default QuizOfferPage;
