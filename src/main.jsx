@@ -9,7 +9,6 @@ import {
 import { fixMainRoutes } from "./utils/fixMainRoutes";
 import { checkMainRoutes } from "./utils/routeChecker";
 import "./utils/hotmartWebhookSimulator"; // Carregar simulador de webhook
-import "./utils/hotmartSimulator"; // Carregar simulador de dados da Hotmart
 
 // 1) Initialize critical resources and route fixing
 initializeResourcePreloading();

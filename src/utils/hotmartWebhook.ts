@@ -1,235 +1,485 @@
+// Sistema de Webhook Hotmart
+// ID: agQzTLUehWUfhPzjhdwntVQz0JNT5E0216ae0d-00a9-48ae-85d1-f0d14bd8e0df
 
-// Tipos para integração com Hotmart
-export interface HotmartPurchase {
-  transaction: string;
-  checkout_country: string;
-  approved_date: string;
-}
+import { trackSaleConversion, captureUTMParameters } from "./analytics.ts";
+import { trackConversion } from "./analytics.js";
 
+// Interfaces para dados do webhook Hotmart
 export interface HotmartBuyer {
   email: string;
   name: string;
   document: string;
+  phone?: string;
 }
 
-export interface HotmartTransaction {
-  id: string;
-  timestamp: string;
+export interface HotmartPrice {
+  value: number;
+  currency_value: string;
 }
 
-export interface HotmartWebhookData {
-  event: "PURCHASE_COMPLETE" | "PURCHASE_APPROVED" | "PURCHASE_CANCELED" | "PURCHASE_REFUNDED";
-  webhook_id: string;
-  timestamp: string;
-  data: {
-    purchase: HotmartPurchase;
-    buyer: HotmartBuyer;
-    transaction: HotmartTransaction;
+export interface HotmartPurchase {
+  price: HotmartPrice;
+  transaction: string;
+  product: {
+    id: number;
+    name: string;
+  };
+  commission?: {
+    value: number;
   };
 }
 
-// Analytics metrics interface
-export interface HotmartAnalyticsMetrics {
-  totalSales: number;
-  totalRevenue: number;
-  conversionRate: number;
-  averageOrderValue: number;
-  salesTrend: number;
-  revenueTrend: number;
-  lastSaleDate?: string;
-  topBuyerEmails: string[];
+export interface HotmartWebhookData {
+  event: string;
+  data: {
+    buyer: HotmartBuyer;
+    purchase: HotmartPurchase;
+    transaction: {
+      id: string;
+      timestamp: string;
+    };
+    affiliate?: {
+      name: string;
+      email: string;
+    };
+  };
+  webhook_id: string;
+  timestamp: string;
 }
 
-class HotmartWebhookManager {
-  private salesData: HotmartWebhookData[] = [];
-  private readonly STORAGE_KEY = "hotmart_sales_data";
-  private readonly ANALYTICS_KEY = "hotmart_analytics_metrics";
+// Estrutura para dados do usuário armazenados
+export interface UserAnalyticsData {
+  email: string;
+  utm_parameters: {
+    utm_source?: string;
+    utm_medium?: string;
+    utm_campaign?: string;
+    utm_content?: string;
+    utm_term?: string;
+    utm_id?: string;
+  };
+  session_id: string;
+  timestamp: string;
+  fbclid?: string;
+  gclid?: string;
+  page_url: string;
+  quiz_results?: Record<string, unknown>;
+  funnel_step: string;
+}
+
+// Classe principal para gerenciar webhooks Hotmart
+export class HotmartWebhookManager {
+  private readonly WEBHOOK_ID =
+    "agQzTLUehWUfhPzjhdwntVQz0JNT5E0216ae0d-00a9-48ae-85d1-f0d14bd8e0df";
+  private userDataStore: Map<string, UserAnalyticsData> = new Map();
 
   constructor() {
-    this.loadFromStorage();
+    this.initializeUserDataRetrieval();
   }
 
-  /**
-   * Processa um webhook recebido da Hotmart
-   */
-  async processWebhook(webhookData: HotmartWebhookData): Promise<void> {
-    console.log("[Hotmart Webhook] Processando webhook:", webhookData);
-
+  // Armazenar dados do usuário para correlação futura
+  public storeUserData(email: string, data: Partial<UserAnalyticsData>): void {
     try {
-      // Validar dados obrigatórios
-      this.validateWebhookData(webhookData);
+      const existingData =
+        this.userDataStore.get(email) || ({} as UserAnalyticsData);
 
-      // Adicionar aos dados de vendas
-      this.salesData.push(webhookData);
+      const userData: UserAnalyticsData = {
+        ...existingData,
+        email,
+        utm_parameters: data.utm_parameters || this.getStoredUTMParameters(),
+        session_id: data.session_id || this.generateSessionId(),
+        timestamp: new Date().toISOString(),
+        fbclid: data.fbclid || this.getStoredValue("fbclid"),
+        gclid: data.gclid || this.getStoredValue("gclid"),
+        page_url: data.page_url || window.location.href,
+        quiz_results: data.quiz_results,
+        funnel_step: data.funnel_step || "quiz_completion",
+      };
 
-      // Salvar no localStorage
-      this.saveToStorage();
+      this.userDataStore.set(email, userData);
 
-      // Atualizar métricas
-      this.updateAnalyticsMetrics();
+      // Armazenar também no localStorage para persistência
+      this.persistUserData(email, userData);
 
-      console.log("[Hotmart Webhook] ✅ Webhook processado com sucesso!");
+      console.log("[Hotmart Webhook] Dados do usuário armazenados:", {
+        email,
+        userData,
+      });
     } catch (error) {
-      console.error("[Hotmart Webhook] ❌ Erro ao processar webhook:", error);
-      throw error;
+      console.error(
+        "[Hotmart Webhook] Erro ao armazenar dados do usuário:",
+        error
+      );
     }
   }
 
-  /**
-   * Valida os dados do webhook
-   */
-  private validateWebhookData(data: HotmartWebhookData): void {
-    if (!data.event || !data.webhook_id || !data.timestamp) {
-      throw new Error("Dados obrigatórios do webhook ausentes");
-    }
-
-    if (!data.data?.purchase?.transaction || !data.data?.buyer?.email) {
-      throw new Error("Dados de compra ou comprador ausentes");
-    }
-
-    if (!data.data?.buyer?.document || !data.data?.transaction?.timestamp) {
-      throw new Error("Documento do comprador ou timestamp da transação ausentes");
-    }
-  }
-
-  /**
-   * Retorna todas as vendas
-   */
-  getAllSales(): HotmartWebhookData[] {
-    return [...this.salesData];
-  }
-
-  /**
-   * Retorna o total de vendas
-   */
-  getTotalSales(): number {
-    return this.salesData.filter(sale => 
-      sale.event === "PURCHASE_COMPLETE" || sale.event === "PURCHASE_APPROVED"
-    ).length;
-  }
-
-  /**
-   * Retorna a receita total (simulada - em implementação real viria do webhook)
-   */
-  getTotalRevenue(): number {
-    const completedSales = this.salesData.filter(sale => 
-      sale.event === "PURCHASE_COMPLETE" || sale.event === "PURCHASE_APPROVED"
-    );
-    
-    // Valor simulado por venda (R$ 39,00)
-    return completedSales.length * 39;
-  }
-
-  /**
-   * Verifica se há dados reais de vendas
-   */
-  hasRealSalesData(): boolean {
-    return this.salesData.length > 0;
-  }
-
-  /**
-   * Retorna métricas para analytics
-   */
-  getAnalyticsMetrics(): HotmartAnalyticsMetrics | null {
-    if (!this.hasRealSalesData()) {
-      return null;
-    }
-
-    const totalSales = this.getTotalSales();
-    const totalRevenue = this.getTotalRevenue();
-    const averageOrderValue = totalSales > 0 ? totalRevenue / totalSales : 0;
-
-    // Calcular trends (simulado - em implementação real seria baseado em dados históricos)
-    const salesTrend = Math.floor(Math.random() * 20) + 5; // +5-25%
-    const revenueTrend = Math.floor(Math.random() * 15) + 3; // +3-18%
-
-    const lastSale = this.salesData
-      .filter(sale => sale.event === "PURCHASE_COMPLETE" || sale.event === "PURCHASE_APPROVED")
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
-
-    const topBuyerEmails = this.salesData
-      .map(sale => sale.data.buyer.email)
-      .slice(0, 5);
-
-    return {
-      totalSales,
-      totalRevenue,
-      conversionRate: Math.min(totalSales * 2.5, 100), // Taxa de conversão estimada
-      averageOrderValue,
-      salesTrend,
-      revenueTrend,
-      lastSaleDate: lastSale?.timestamp,
-      topBuyerEmails,
-    };
-  }
-
-  /**
-   * Atualiza as métricas de analytics
-   */
-  private updateAnalyticsMetrics(): void {
-    const metrics = this.getAnalyticsMetrics();
-    if (metrics) {
-      localStorage.setItem(this.ANALYTICS_KEY, JSON.stringify(metrics));
-    }
-  }
-
-  /**
-   * Carrega dados do localStorage
-   */
-  private loadFromStorage(): void {
+  // Processar webhook recebido da Hotmart
+  public async processWebhook(webhookData: HotmartWebhookData): Promise<void> {
     try {
-      const savedData = localStorage.getItem(this.STORAGE_KEY);
-      if (savedData) {
-        this.salesData = JSON.parse(savedData);
-        console.log(`[Hotmart Webhook] Carregados ${this.salesData.length} registros de vendas`);
+      console.log("[Hotmart Webhook] Processando webhook:", webhookData);
+
+      // Validar webhook ID
+      if (!this.validateWebhookId(webhookData.webhook_id)) {
+        console.warn(
+          "[Hotmart Webhook] ID do webhook inválido:",
+          webhookData.webhook_id
+        );
+        return;
+      }
+
+      // Processar diferentes tipos de eventos
+      switch (webhookData.event) {
+        case "PURCHASE_COMPLETE":
+        case "PURCHASE_APPROVED":
+          await this.handlePurchaseApproved(webhookData);
+          break;
+
+        case "PURCHASE_CANCELED":
+          await this.handlePurchaseCanceled(webhookData);
+          break;
+
+        case "PURCHASE_REFUNDED":
+          await this.handlePurchaseRefunded(webhookData);
+          break;
+
+        default:
+          console.log(
+            "[Hotmart Webhook] Evento não tratado:",
+            webhookData.event
+          );
       }
     } catch (error) {
-      console.error("[Hotmart Webhook] Erro ao carregar dados:", error);
-      this.salesData = [];
+      console.error("[Hotmart Webhook] Erro ao processar webhook:", error);
     }
   }
 
-  /**
-   * Salva dados no localStorage
-   */
-  private saveToStorage(): void {
+  // Tratar compra aprovada
+  private async handlePurchaseApproved(
+    data: HotmartWebhookData
+  ): Promise<void> {
+    console.log("[Hotmart Webhook] Compra aprovada:", data.data.transaction.id);
+
     try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.salesData));
+      // Buscar dados do usuário armazenados
+      const userEmail = data.data.buyer.email;
+      const userData = this.getUserData(userEmail);
+
+      if (!userData) {
+        console.warn(
+          "[Hotmart Webhook] Dados do usuário não encontrados para:",
+          userEmail
+        );
+        // Mesmo assim, processar a venda sem UTMs
+      }
+
+      // Preparar dados do evento Purchase para Facebook Pixel
+      const purchaseEventData = {
+        value: data.data.purchase.price.value,
+        currency: data.data.purchase.price.currency_value,
+        transaction_id: data.data.transaction.id,
+        content_name: data.data.purchase.product.name,
+        content_type: "product",
+        event_id: `purchase_${data.data.transaction.id}`,
+        ...userData?.utm_parameters, // Adicionar UTMs se disponíveis
+      };
+
+      // Enviar evento Purchase para Facebook Pixel
+      if (typeof window !== "undefined" && window.fbq) {
+        window.fbq("track", "Purchase", purchaseEventData);
+        console.log(
+          "[Hotmart Webhook] Evento Purchase enviado ao Facebook Pixel:",
+          purchaseEventData
+        );
+      }
+
+      // Enviar para Google Analytics se disponível
+      if (typeof window !== "undefined" && window.gtag) {
+        window.gtag("event", "purchase", {
+          transaction_id: data.data.transaction.id,
+          value: data.data.purchase.price.value,
+          currency: data.data.purchase.price.currency_value,
+          items: [
+            {
+              item_id: data.data.purchase.product.id.toString(),
+              item_name: data.data.purchase.product.name,
+              price: data.data.purchase.price.value,
+              quantity: 1,
+            },
+          ],
+          ...userData?.utm_parameters,
+        });
+        console.log(
+          "[Hotmart Webhook] Evento purchase enviado ao Google Analytics"
+        );
+      }
+
+      // Usar o sistema de analytics interno
+      trackSaleConversion(
+        data.data.purchase.price.value,
+        data.data.purchase.price.currency_value,
+        data.data.purchase.product.name
+      );
+
+      // Notificar outros sistemas se necessário
+      await this.notifyExternalSystems(data, userData);
     } catch (error) {
-      console.error("[Hotmart Webhook] Erro ao salvar dados:", error);
+      console.error(
+        "[Hotmart Webhook] Erro ao processar compra aprovada:",
+        error
+      );
     }
   }
 
-  /**
-   * Limpa todos os dados
-   */
-  clearAllData(): void {
-    this.salesData = [];
-    localStorage.removeItem(this.STORAGE_KEY);
-    localStorage.removeItem(this.ANALYTICS_KEY);
-    console.log("[Hotmart Webhook] Todos os dados foram limpos");
+  // Tratar cancelamento de compra
+  private async handlePurchaseCanceled(
+    data: HotmartWebhookData
+  ): Promise<void> {
+    console.log(
+      "[Hotmart Webhook] Compra cancelada:",
+      data.data.transaction.id
+    );
+
+    // Enviar evento de cancelamento se necessário
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "PurchaseCanceled", {
+        transaction_id: data.data.transaction.id,
+        value: data.data.purchase.price.value,
+        currency: data.data.purchase.price.currency_value,
+        event_id: `cancel_${data.data.transaction.id}`,
+      });
+    }
+  }
+
+  // Tratar reembolso de compra
+  private async handlePurchaseRefunded(
+    data: HotmartWebhookData
+  ): Promise<void> {
+    console.log(
+      "[Hotmart Webhook] Compra reembolsada:",
+      data.data.transaction.id
+    );
+
+    // Enviar evento de reembolso se necessário
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "PurchaseRefunded", {
+        transaction_id: data.data.transaction.id,
+        value: data.data.purchase.price.value,
+        currency: data.data.purchase.price.currency_value,
+        event_id: `refund_${data.data.transaction.id}`,
+      });
+    }
+  }
+
+  // Validar ID do webhook
+  private validateWebhookId(webhookId: string): boolean {
+    return webhookId === this.WEBHOOK_ID;
+  }
+
+  // Recuperar dados do usuário
+  private getUserData(email: string): UserAnalyticsData | null {
+    // Primeiro, tentar do cache em memória
+    let userData = this.userDataStore.get(email);
+
+    // Se não encontrar, tentar do localStorage
+    if (!userData) {
+      userData = this.retrieveUserDataFromStorage(email);
+      if (userData) {
+        this.userDataStore.set(email, userData);
+      }
+    }
+
+    return userData || null;
+  }
+
+  // Recuperar dados do localStorage
+  private retrieveUserDataFromStorage(email: string): UserAnalyticsData | null {
+    try {
+      const key = `user_data_${email}`;
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : null;
+    } catch (error) {
+      console.error(
+        "[Hotmart Webhook] Erro ao recuperar dados do storage:",
+        error
+      );
+      return null;
+    }
+  }
+
+  // Persistir dados no localStorage
+  private persistUserData(email: string, userData: UserAnalyticsData): void {
+    try {
+      const key = `user_data_${email}`;
+      localStorage.setItem(key, JSON.stringify(userData));
+    } catch (error) {
+      console.error("[Hotmart Webhook] Erro ao persistir dados:", error);
+    }
+  }
+
+  // Recuperar parâmetros UTM armazenados
+  private getStoredUTMParameters(): Record<string, string> {
+    try {
+      return JSON.parse(localStorage.getItem("utm_parameters") || "{}");
+    } catch {
+      return {};
+    }
+  }
+
+  // Recuperar valor específico do localStorage
+  private getStoredValue(key: string): string | undefined {
+    try {
+      return localStorage.getItem(key) || undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  // Gerar ID de sessão único
+  private generateSessionId(): string {
+    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  // Inicializar recuperação de dados do usuário
+  private initializeUserDataRetrieval(): void {
+    // Carregar dados existentes do localStorage na inicialização
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith("user_data_")) {
+          const email = key.replace("user_data_", "");
+          const userData = this.retrieveUserDataFromStorage(email);
+          if (userData) {
+            this.userDataStore.set(email, userData);
+          }
+        }
+      }
+      console.log(
+        "[Hotmart Webhook] Dados de usuário carregados:",
+        this.userDataStore.size
+      );
+    } catch (error) {
+      console.error(
+        "[Hotmart Webhook] Erro ao carregar dados iniciais:",
+        error
+      );
+    }
+  }
+
+  // Notificar sistemas externos (CRM, etc.)
+  private async notifyExternalSystems(
+    data: HotmartWebhookData,
+    userData?: UserAnalyticsData | null
+  ): Promise<void> {
+    try {
+      // Aqui você pode adicionar integrações com CRM, Email Marketing, etc.
+      console.log("[Hotmart Webhook] Notificando sistemas externos...");
+
+      // Exemplo: Enviar para API de CRM
+      // await this.sendToCRM(data, userData);
+
+      // Exemplo: Enviar para Email Marketing
+      // await this.sendToEmailMarketing(data, userData);
+    } catch (error) {
+      console.error(
+        "[Hotmart Webhook] Erro ao notificar sistemas externos:",
+        error
+      );
+    }
+  }
+
+  // Método público para armazenar dados quando o usuário completa o quiz
+  public storeQuizCompletionData(
+    email: string,
+    quizResults: Record<string, unknown>
+  ): void {
+    this.storeUserData(email, {
+      quiz_results: quizResults,
+      funnel_step: "quiz_completion",
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  // Método público para armazenar dados quando o usuário inicia o checkout
+  public storeCheckoutInitiationData(email: string): void {
+    this.storeUserData(email, {
+      funnel_step: "checkout_initiation",
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  // Método para limpar dados antigos (executar periodicamente)
+  public cleanupOldData(daysToKeep: number = 30): void {
+    try {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
+
+      for (const [email, userData] of this.userDataStore) {
+        const dataDate = new Date(userData.timestamp);
+        if (dataDate < cutoffDate) {
+          this.userDataStore.delete(email);
+          localStorage.removeItem(`user_data_${email}`);
+        }
+      }
+
+      console.log("[Hotmart Webhook] Limpeza de dados antigos concluída");
+    } catch (error) {
+      console.error("[Hotmart Webhook] Erro na limpeza de dados:", error);
+    }
   }
 }
 
-// Instância singleton
+// Instância global do gerenciador de webhook
 export const hotmartWebhookManager = new HotmartWebhookManager();
 
-// Função auxiliar para armazenar dados do usuário para tracking
-export const storeUserForHotmart = (userData: { name?: string; email?: string }) => {
-  try {
-    const hotmartUserData = {
-      timestamp: new Date().toISOString(),
-      ...userData
-    };
-    localStorage.setItem('hotmart_user_data', JSON.stringify(hotmartUserData));
-    console.log('[Hotmart] Dados do usuário armazenados para tracking:', hotmartUserData);
-  } catch (error) {
-    console.error('[Hotmart] Erro ao armazenar dados do usuário:', error);
-  }
+// Função utilitária para fácil uso nos componentes
+export const storeUserForHotmart = (
+  email: string,
+  additionalData?: Partial<UserAnalyticsData>
+) => {
+  hotmartWebhookManager.storeUserData(email, additionalData || {});
 };
 
-// Para uso no console do navegador durante desenvolvimento
-if (typeof window !== "undefined") {
-  (window as any).hotmartWebhookManager = hotmartWebhookManager;
-  (window as any).storeUserForHotmart = storeUserForHotmart;
-}
+// Função para simular webhook em desenvolvimento (apenas para testes)
+export const simulateHotmartWebhook = (
+  email: string,
+  transactionId?: string
+) => {
+  if (process.env.NODE_ENV !== "development") {
+    console.warn(
+      "[Hotmart Webhook] Simulação disponível apenas em desenvolvimento"
+    );
+    return;
+  }
+
+  const mockWebhookData: HotmartWebhookData = {
+    event: "PURCHASE_COMPLETE",
+    data: {
+      buyer: {
+        email: email,
+        name: "Cliente Teste",
+        document: "12345678900",
+      },
+      purchase: {
+        price: {
+          value: 297,
+          currency_value: "BRL",
+        },
+        transaction: transactionId || `test_${Date.now()}`,
+        product: {
+          id: 123456,
+          name: "Transformação de Imagem - Gisele Galvão",
+        },
+      },
+      transaction: {
+        id: transactionId || `test_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+      },
+    },
+    webhook_id:
+      "agQzTLUehWUfhPzjhdwntVQz0JNT5E0216ae0d-00a9-48ae-85d1-f0d14bd8e0df",
+    timestamp: new Date().toISOString(),
+  };
+
+  console.log("[Hotmart Webhook] Simulando webhook:", mockWebhookData);
+  hotmartWebhookManager.processWebhook(mockWebhookData);
+};

@@ -517,18 +517,20 @@ const handleCTAClick = (buttonId: string, action: string = "Comprar Agora") => {
     trackButtonClick(buttonId, action, "quiz_offer_page");
 
     if (emailInput?.value) {
-      const userName = emailInput.value;
-      storeUserForHotmart({ name: userName });
+      storeUserForHotmart(emailInput.value, {
+        funnel_step: "quiz_offer_checkout",
+        page_url: window.location.href,
+      });
+    }
 
-      // Redirecionar para checkout
-      const checkoutUrl =
-        "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB";
+    // Redirecionar para checkout
+    const checkoutUrl =
+      "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeB";
 
-      if (window.innerWidth >= 768) {
-        window.open(checkoutUrl, "_blank");
-      } else {
-        window.location.href = checkoutUrl;
-      }
+    if (window.innerWidth >= 768) {
+      window.open(checkoutUrl, "_blank");
+    } else {
+      window.location.href = checkoutUrl;
     }
   };
 };

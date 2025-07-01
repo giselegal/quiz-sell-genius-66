@@ -1,74 +1,152 @@
 #!/bin/bash
 
-echo "🚀 REATIVAÇÃO LOVABLE - DIAGNÓSTICO E CORREÇÃO"
-echo "=============================================="
+echo "🔄 Reativando Sincronização Lovable"
+echo "===================================="
 
-# 1. Verificar conectividade
-echo "1️⃣ Testando conectividade..."
-if curl -s --head https://lovable.dev > /dev/null; then
-    echo "✅ lovable.dev acessível"
-else
-    echo "❌ lovable.dev inacessível"
+# 1. Atualizar timestamp no arquivo .lovable-trigger
+echo "📅 Atualizando timestamp de sincronização..."
+CURRENT_TIMESTAMP=$(date +%s)
+echo "LOVABLE_FORCE_SYNC=$CURRENT_TIMESTAMP" > .lovable-trigger
+
+# 2. Atualizar configuração .lovable
+echo "⚙️ Atualizando configuração .lovable..."
+cat > .lovable << EOF
+{
+  "github": {
+    "autoSyncFromGithub": true,
+    "autoPushToGithub": true,
+    "branch": "main"
+  },
+  "projectName": "Quiz Sell Genius",
+  "projectId": "quiz-sell-genius-66",
+  "version": "2.1.$CURRENT_TIMESTAMP",
+  "lastUpdate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "features": {
+    "componentTagger": true,
+    "liveEditing": true,
+    "enhancedSync": true,
+    "visualEditor": true,
+    "forceSync": true,
+    "webhookAlternative": true
+  },
+  "editor": {
+    "enableLiveMode": true,
+    "autoSave": true,
+    "componentHighlighting": true
+  },
+  "sync": {
+    "forced": true,
+    "timestamp": $CURRENT_TIMESTAMP,
+    "method": "webhook-alternative",
+    "tokenRequired": false
+  },
+  "scripts": {
+    "prepare": "node scripts/prepare-lovable.js",
+    "sync": "node scripts/manual-sync.js",
+    "test": "node scripts/test-sync.js"
+  }
+}
+EOF
+
+# 3. Verificar se o diretório scripts existe
+echo "📁 Verificando diretório scripts..."
+if [ ! -d "scripts" ]; then
+    mkdir -p scripts
+    echo "✅ Diretório scripts criado"
 fi
 
-if curl -s --head https://api.lovable.dev > /dev/null; then
-    echo "✅ api.lovable.dev acessível"
-else
-    echo "❌ api.lovable.dev inacessível - PROBLEMA PRINCIPAL"
-fi
+# 4. Criar script de sincronização manual
+echo "🔧 Criando script de sincronização manual..."
+cat > scripts/manual-sync.js << 'EOF'
+const fs = require('fs');
+const path = require('path');
 
-# 2. Verificar última sincronização
-echo -e "\n2️⃣ Verificando última sincronização..."
-LAST_UPDATE=$(grep -o '"lastUpdate": "[^"]*"' .lovable | cut -d'"' -f4)
-echo "📅 Última atualização: $LAST_UPDATE"
+console.log('🔄 Iniciando sincronização manual do Lovable...');
 
-# 3. Verificar workflows GitHub
-echo -e "\n3️⃣ Verificando workflows GitHub..."
-if [ -f ".github/workflows/lovable-sync.yml" ]; then
-    echo "✅ Workflow lovable-sync.yml encontrado"
-else
-    echo "❌ Workflow lovable-sync.yml não encontrado"
-fi
+// Atualizar timestamp
+const timestamp = Math.floor(Date.now() / 1000);
+const triggerContent = `LOVABLE_FORCE_SYNC=${timestamp}`;
 
-# 4. Verificar configurações
-echo -e "\n4️⃣ Verificando configurações..."
-if [ -f ".lovable" ]; then
-    echo "✅ Arquivo .lovable presente"
-    echo "📋 Auto-sync GitHub: $(grep -o '"autoPushToGithub": [^,]*' .lovable | cut -d':' -f2 | tr -d ' ')"
-    echo "📋 Branch: $(grep -o '"branch": "[^"]*"' .lovable | cut -d'"' -f4)"
-else
-    echo "❌ Arquivo .lovable não encontrado"
-fi
+fs.writeFileSync('.lovable-trigger', triggerContent);
+console.log('✅ Timestamp atualizado:', timestamp);
 
-# 5. Soluções recomendadas
-echo -e "\n🔧 SOLUÇÕES RECOMENDADAS:"
-echo "========================="
-echo "1. Verificar se o projeto está ativo no Lovable Studio:"
-echo "   → Acesse: https://lovable.dev"
-echo "   → Abra: Quiz Sell Genius"
-echo "   → Settings → GitHub → Verificar auto-sync"
+// Verificar configuração
+if (fs.existsSync('.lovable')) {
+    const config = JSON.parse(fs.readFileSync('.lovable', 'utf8'));
+    config.sync.timestamp = timestamp;
+    config.lastUpdate = new Date().toISOString();
+    
+    fs.writeFileSync('.lovable', JSON.stringify(config, null, 2));
+    console.log('✅ Configuração .lovable atualizada');
+}
+
+console.log('🎉 Sincronização manual concluída!');
+EOF
+
+# 5. Criar script de teste de sincronização
+echo "🧪 Criando script de teste..."
+cat > scripts/test-sync.js << 'EOF'
+const https = require('https');
+
+console.log('🧪 Testando conexão com Lovable...');
+
+// Testar conexão com api.lovable.dev
+const testConnection = (hostname) => {
+    return new Promise((resolve, reject) => {
+        const req = https.request({
+            hostname: hostname,
+            port: 443,
+            path: '/',
+            method: 'HEAD'
+        }, (res) => {
+            console.log(`✅ ${hostname}: ${res.statusCode}`);
+            resolve(res.statusCode);
+        });
+        
+        req.on('error', (error) => {
+            console.log(`❌ ${hostname}: ${error.message}`);
+            reject(error);
+        });
+        
+        req.setTimeout(5000, () => {
+            console.log(`⏰ ${hostname}: Timeout`);
+            req.destroy();
+            reject(new Error('Timeout'));
+        });
+        
+        req.end();
+    });
+};
+
+Promise.all([
+    testConnection('lovable.dev').catch(() => null),
+    testConnection('api.lovable.dev').catch(() => null)
+]).then(() => {
+    console.log('🎉 Teste de conectividade concluído!');
+});
+EOF
+
+# 6. Fazer os scripts executáveis
+chmod +x scripts/manual-sync.js
+chmod +x scripts/test-sync.js
+
+# 7. Executar sincronização manual
+echo "🚀 Executando sincronização manual..."
+node scripts/manual-sync.js
+
+# 8. Testar conectividade
+echo "🌐 Testando conectividade..."
+node scripts/test-sync.js
+
+# 9. Verificar status do git
+echo "📊 Status do repositório:"
+git status --porcelain
+
 echo ""
-echo "2. Reconfigurar GitHub Token (se necessário):"
-echo "   → GitHub: Settings → Developer settings → Personal tokens"
-echo "   → Gerar novo token com permissões de repo"
-echo "   → Lovable: Project Settings → GitHub → Atualizar token"
+echo "✅ Reativação do Lovable concluída!"
 echo ""
-echo "3. Forçar sincronização manual:"
-echo "   → Execute: ./force-lovable-update.sh"
-echo "   → Ou faça uma alteração no Lovable Studio"
-echo ""
-echo "4. Verificar conectividade de rede:"
-echo "   → Pode ser problema temporário da API"
-echo "   → Tente novamente em alguns minutos"
-
-# 6. Testar manual sync
-echo -e "\n5️⃣ Testando sincronização manual..."
-if [ -f "scripts/manual-sync.js" ]; then
-    echo "📝 Executando sync manual..."
-    node scripts/manual-sync.js 2>/dev/null && echo "✅ Sync manual OK" || echo "❌ Sync manual falhou"
-else
-    echo "⚠️  Script de sync manual não encontrado"
-fi
-
-echo -e "\n📊 DIAGNÓSTICO CONCLUÍDO"
-echo "========================"
+echo "📋 Próximos passos:"
+echo "1. Verifique se o token LOVABLE_TOKEN está configurado no GitHub"
+echo "2. Acesse https://lovable.dev e verifique as configurações do projeto"
+echo "3. Teste fazendo uma pequena alteração no Lovable Studio"
+echo "4. Execute 'git log --oneline -5' para ver se novos commits aparecem"

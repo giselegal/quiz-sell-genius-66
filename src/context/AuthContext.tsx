@@ -3,8 +3,8 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface User {
   userName: string;
-  email?: string;
-  role?: string;
+  email?: string; // Added email as optional property
+  role?: string;  // Added role property for admin access
 }
 
 interface AuthContextType {
@@ -13,8 +13,7 @@ interface AuthContextType {
   logout: () => void;
 }
 
-// Export the context so it can be imported by useAuth hook
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
@@ -39,6 +38,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       localStorage.setItem('userEmail', email);
     }
     
+    // Preservar o status de admin caso exista
     const savedRole = localStorage.getItem('userRole');
     if (savedRole) {
       userData.role = savedRole;
