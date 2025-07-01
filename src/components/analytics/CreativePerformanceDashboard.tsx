@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BarChart, TrendingUp, Eye, MousePointer, DollarSign, Users, Zap } from 'lucide-react';
+import { getCreativePerformance } from '@/utils/analytics';
 
 interface CreativeStats {
   creative_name: string;
@@ -22,38 +23,13 @@ export const CreativePerformanceDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadCreativeData = async () => {
+    const loadCreativeData = () => {
       setIsLoading(true);
       try {
-        // Mock data for now since getCreativePerformance doesn't work as expected
-        const mockData: Record<string, CreativeStats> = {
-          'creative-1': {
-            creative_name: 'Elegante Mulher Vestido',
-            page_views: 1250,
-            quiz_starts: 890,
-            quiz_completions: 678,
-            leads: 234,
-            purchases: 45,
-            revenue: 4500,
-            conversion_rate: '2.3',
-            cost_per_lead: 15.50
-          },
-          'creative-2': {
-            creative_name: 'Casual Moderna',
-            page_views: 980,
-            quiz_starts: 720,
-            quiz_completions: 540,
-            leads: 180,
-            purchases: 32,
-            revenue: 3200,
-            conversion_rate: '1.8',
-            cost_per_lead: 18.20
-          }
-        };
-        setCreativesData(mockData);
+        const data = getCreativePerformance(selectedPeriod);
+        setCreativesData(data);
       } catch (error) {
         console.error('Erro ao carregar dados de criativos:', error);
-        setCreativesData({});
       } finally {
         setIsLoading(false);
       }

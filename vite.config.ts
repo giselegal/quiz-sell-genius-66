@@ -3,7 +3,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import compression from "vite-plugin-compression";
-import { componentTagger } from "./src/plugins/lovable-component-tagger.js";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -28,7 +27,6 @@ export default defineConfig(({ mode }) => ({
   
   plugins: [
     react(),
-    componentTagger(),
     // Compressão GZIP
     compression({
       algorithm: 'gzip',
@@ -106,10 +104,9 @@ export default defineConfig(({ mode }) => ({
     devSourcemap: mode === 'development',
   },
 
-  // Lovable integration configuration (sem token)
+  // Lovable integration configuration
   define: {
     __LOVABLE_PROJECT_ID__: JSON.stringify("quiz-sell-genius-66"),
     __LOVABLE_ENABLED__: JSON.stringify(true),
-    __LOVABLE_SYNC_METHOD__: JSON.stringify("webhook-alternative"),
   },
 }));

@@ -1,65 +1,121 @@
-
 import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { getLowQualityPlaceholder } from '@/utils/imageUtils';
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface ProgressiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface ProgressiveImageProps {
   src: string;
+  lowQualitySrc?: string;
   alt: string;
   className?: string;
-  lowQualitySrc?: string;
+  width?: number;
+  height?: number;
   onLoad?: () => void;
-  priority?: boolean;
+  loading?: 'lazy' | 'eager';
   fetchPriority?: 'high' | 'low' | 'auto';
+  sizes?: string;
+  style?: React.CSSProperties;
+  fit?: 'cover' | 'contain' | 'fill';
 }
 
 const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   src,
+  lowQualitySrc,
   alt,
   className = '',
-  lowQualitySrc,
+  width,
+  height,
   onLoad,
-  priority = false,
+  loading = 'lazy',
   fetchPriority = 'auto',
-  ...props
+  sizes,
+  style,
+  fit = 'cover'
 }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState(lowQualitySrc || src);
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+  const [loadStartTime] = useState(Date.now());
 
+  // Gerar placeholder de baixa qualidade se não for fornecido
+  const placeholder = lowQualitySrc || getLowQualityPlaceholder(src, { width: 30, quality: 15 });
+
+  // Controlar o carregamento da imagem
+  const handleLoad = () => {
+    // Log do tempo de carregamento para otimizações futuras
+    const loadTime = Date.now() - loadStartTime;
+    console.debug(`[Image] Carregada em ${loadTime}ms: ${src}`);
+    
+    setLoaded(true);
+    if (onLoad) onLoad();
+  };
+
+  // Lidar com erro de carregamento
+  const handleError = () => {
+    console.warn(`[Image] Erro ao carregar: ${src}`);
+    setError(true);
+    // Garantir que o callback onLoad seja chamado mesmo em erro
+    // para não travar a progressão do carregamento
+    if (onLoad) onLoad();
+  };
+
+  // Iniciar temporizador para garantir eventual carregamento
   useEffect(() => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => {
-      setCurrentSrc(src);
-      setIsLoaded(true);
-      onLoad?.();
-    };
-    img.onerror = () => {
-      setIsError(true);
-    };
-  }, [src, onLoad]);
+    // Timeout de 5 segundos para garantir que a imagem seja considerada carregada
+    // mesmo sem eventos de onload/onerror (fallback de segurança)
+    const safetyTimer = setTimeout(() => {
+      if (!loaded && !error) {
+        console.warn(`[Image] Timeout de carregamento: ${src}`);
+        setLoaded(true);
+        if (onLoad) onLoad();
+      }
+    }, 5000);
 
-  if (isError) {
-    return (
-      <div className={cn('bg-gray-200 flex items-center justify-center', className)}>
-        <span className="text-gray-500 text-sm">Imagem não disponível</span>
-      </div>
-    );
-  }
+    return () => clearTimeout(safetyTimer);
+  }, [loaded, error, src, onLoad]);
 
   return (
-    <img
-      src={currentSrc}
-      alt={alt}
-      className={cn(
-        'transition-all duration-500',
-        !isLoaded && lowQualitySrc ? 'blur-sm' : '',
-        className
+    <div className={`progressive-image-container relative overflow-hidden ${className}`} style={style}>
+      {/* Imagem de baixa qualidade para carregamento progressivo */}
+      {!loaded && !error && (
+        <div className="absolute inset-0 overflow-hidden">
+          <img 
+            src={placeholder} 
+            alt={alt} 
+            className="w-full h-full blur-lg scale-110 transition-opacity" 
+            style={{ objectFit: fit }} 
+            aria-hidden="true"
+            width={width}
+            height={height}
+          />
+          <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
+        </div>
       )}
-      loading={priority ? 'eager' : 'lazy'}
-      fetchPriority={fetchPriority}
-      {...props}
-    />
+
+      {/* Imagem principal com efeito de fade-in */}
+      <AnimatePresence>
+        {!error ? (
+          <motion.img 
+            src={src} 
+            alt={alt} 
+            width={width}
+            height={height}
+            loading={loading}
+            fetchPriority={fetchPriority}
+            sizes={sizes}
+            onLoad={handleLoad}
+            onError={handleError}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: loaded ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+            className="w-full h-full transition-all"
+            style={{ objectFit: fit }}
+          />
+        ) : (
+          <div className="flex items-center justify-center w-full h-full bg-gray-100 text-gray-400 text-sm py-4">
+            Não foi possível carregar a imagem
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 

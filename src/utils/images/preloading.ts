@@ -1,6 +1,7 @@
+
 import { type BankImage, getAllImages, getImageById } from '@/data/imageBank';
 import { optimizeCloudinaryUrl } from './optimization';
-import { PreloadOptions, ImageCacheEntry } from './types';
+import { PreloadOptions } from './types';
 import { updateImageCache, hasImageWithStatus } from './caching';
 
 /**
@@ -67,13 +68,16 @@ export const preloadImages = (
   options: PreloadOptions = {}
 ): Promise<boolean> => {
   if (!images || images.length === 0) {
+    if (options.onComplete) options.onComplete();
     return Promise.resolve(true);
   }
 
   const {
     quality = 85,
     format = 'auto',
+    timeout = 3000,
     onProgress,
+    onComplete,
     batchSize = 4
   } = options;
 
@@ -81,6 +85,13 @@ export const preloadImages = (
   const total = images.length;
 
   return new Promise((resolve) => {
+    // Iniciar temporizador para garantir que a promessa sempre resolva
+    const timeoutId = setTimeout(() => {
+      console.warn(`[Image Manager] Timeout ao carregar ${total} imagens. Carregadas: ${loaded}`);
+      if (onComplete) onComplete();
+      resolve(loaded === total);
+    }, timeout);
+
     // Função para carregar uma imagem
     const loadImage = (src: string): Promise<void> => {
       return new Promise((resolveImage) => {
@@ -91,16 +102,11 @@ export const preloadImages = (
 
         updateImageCache(src, { url: src, loadStatus: 'loading' });
 
-        // Ensure format is a valid type
-        const validFormat = ['webp', 'jpeg', 'png', 'auto'].includes(format as string) 
-          ? format as 'webp' | 'jpeg' | 'png' | 'auto'
-          : 'auto';
-
-        const optimizedSrc = optimizeCloudinaryUrl(src, { quality, format: validFormat });
+        const optimizedSrc = optimizeCloudinaryUrl(src, { quality, format });
         const img = new Image();
 
         img.onload = () => {
-          updateImageCache(src, { url: src, loadStatus: 'loaded' });
+          updateImageCache(src, { url: src, loadStatus: 'loaded', imageElement: img });
           loaded++;
           if (onProgress) onProgress(loaded, total);
           resolveImage();
@@ -133,6 +139,8 @@ export const preloadImages = (
     let batchIndex = 0;
     const processNextBatch = () => {
       if (batchIndex >= batches.length) {
+        clearTimeout(timeoutId);
+        if (onComplete) onComplete();
         resolve(loaded === total);
         return;
       }
@@ -279,39 +287,6 @@ export const getLowQualityImage = (url: string, options: { width?: number, quali
     quality,
     width: placeholderWidth,
     format: 'auto',
-    crop: true
-  });
-};
-
-/**
- * Pré-carrega uma imagem
- * @param url URL da imagem para pré-carregar
- * @param options Opções de pré-carregamento
- */
-export const preloadImage = (url: string, options: PreloadOptions = {}): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    
-    const cacheEntry: Partial<ImageCacheEntry> = {
-      url,
-      timestamp: Date.now(),
-      loadStatus: 'loading',
-      metadata: {
-        url,
-        format: options.format === 'auto' ? 'webp' : (options.format || 'webp')
-      }
-    };
-
-    img.onload = () => {
-      cacheEntry.loadStatus = 'loaded';
-      resolve();
-    };
-
-    img.onerror = () => {
-      cacheEntry.loadStatus = 'error';
-      reject(new Error(`Failed to preload image: ${url}`));
-    };
-
-    img.src = url;
+    crop: 'limit'
   });
 };

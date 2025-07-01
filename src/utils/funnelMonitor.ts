@@ -1,4 +1,3 @@
-
 // Utilitário para monitorar e otimizar o funil de vendas
 export function monitorFunnelRoutes() {
   console.log('🔄 Inicializando monitoramento do funil de vendas...');
@@ -143,21 +142,20 @@ function checkSalesComponents() {
 }
 
 // Registrar progresso no funil para analytics
-function registerFunnelProgress(currentRoute: string) {
+function registerFunnelProgress(currentRoute) {
   try {
     // Se o Facebook Pixel estiver disponível, registrar evento
     if (typeof window.fbq === 'function') {
-      // Facebook Pixel - REMOVIDO: ViewContent não é um evento principal
-      // Mantemos apenas QuizStart, ResultView e Purchase/Lead
+      // Enviar evento específico baseado na rota
       switch (currentRoute) {
         case 'home':
-          // window.fbq('track', 'ViewContent', { content_name: 'quiz_start' });
+          window.fbq('track', 'ViewContent', { content_name: 'quiz_start' });
           break;
         case 'resultado':
-          // window.fbq('track', 'ViewContent', { content_name: 'quiz_result' });
+          window.fbq('track', 'ViewContent', { content_name: 'quiz_result' });
           break;
         case 'venda':
-          // window.fbq('track', 'ViewContent', { content_name: 'sales_page' });
+          window.fbq('track', 'ViewContent', { content_name: 'sales_page' });
           break;
       }
       
@@ -188,10 +186,10 @@ function setupNavigationMonitoring() {
   try {
     // Monitorar cliques em links para páginas do funil
     document.addEventListener('click', (event) => {
-      const target = event.target as Element;
+      const target = event.target;
       
       // Verificar se o clique foi em um link ou em um elemento dentro de um link
-      const linkElement = target.tagName === 'A' ? target as HTMLAnchorElement : target.closest('a');
+      const linkElement = target.tagName === 'A' ? target : target.closest('a');
       
       if (linkElement && linkElement.href) {
         const href = linkElement.getAttribute('href');
@@ -200,13 +198,13 @@ function setupNavigationMonitoring() {
         if (href === '/' || href === '/resultado' || href === '/quiz-descubra-seu-estilo') {
           console.log(`🔄 Navegação detectada para: ${href}`);
           
-          // Facebook Pixel - REMOVIDO: ClickButton não é um evento principal
-          // if (typeof window.fbq === 'function') {
-          //   window.fbq('track', 'ClickButton', { 
-          //     button_text: linkElement.textContent.trim(),
-          //     destination: href
-          //   });
-          // }
+          // Registrar clique em link do funil
+          if (typeof window.fbq === 'function') {
+            window.fbq('track', 'ClickButton', { 
+              button_text: linkElement.textContent.trim(),
+              destination: href
+            });
+          }
         }
       }
     });

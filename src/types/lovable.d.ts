@@ -1,4 +1,3 @@
-
 declare module '@lovable/react' {
   import React from 'react';
 

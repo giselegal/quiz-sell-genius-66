@@ -90,20 +90,10 @@ export const getFallbackStyle = (styleCategory: string): React.CSSProperties => 
 // Add the getDefaultStyle function needed by EditorPage
 export const getDefaultStyle = (): StyleResult => {
   return {
-    category: 'Natural' as StyleCategory,
+    category: 'Natural',
+    name: 'Natural',
+    description: 'Seu estilo é caracterizado pela simplicidade e conforto.',
     score: 100,
     percentage: 100
-  };
-};
-
-export const createStyleResult = (category: string, score: number): StyleResult => {
-  // Validate category is one of the allowed values
-  const validCategories: StyleCategory[] = ['Natural', 'Clássico', 'Contemporâneo', 'Elegante', 'Romântico', 'Sexy', 'Dramático', 'Criativo'];
-  const validatedCategory = validCategories.includes(category as StyleCategory) ? category as StyleCategory : 'Natural';
-  
-  return {
-    category: validatedCategory,
-    score,
-    percentage: Math.round((score / 10) * 100)
   };
 };

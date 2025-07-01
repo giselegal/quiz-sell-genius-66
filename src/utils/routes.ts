@@ -1,40 +1,64 @@
 
 export const ROUTES = {
-  // Rotas públicas principais
+  // Rotas públicas
   HOME: '/',
+  QUIZ: '/',
   RESULTADO: '/resultado',
-  DESCUBRA_SEU_ESTILO: '/descubra-seu-estilo',
+  QUIZ_OFERTA: '/quiz-descubra-seu-estilo',
   
   // Rotas administrativas
   ADMIN: {
     ROOT: '/admin',
     DASHBOARD: '/admin',
-    QUIZ: '/admin/quiz',
-    AB_TESTS: '/admin/ab-tests',
-    SETTINGS: '/admin/settings',
-    CRIATIVOS: '/admin/criativos',
+    LEADS: '/admin/leads',
+    AB_TESTING: '/admin/ab-testing',
+    UTM: '/admin/utm',
+    EDITOR: '/admin/editor',
+    EDITOR_ID: (id: string) => `/admin/editor/${id}`,
+    CREATIVE_ANALYTICS: '/admin/creative-analytics',
     ANALYTICS: '/admin/analytics',
-    EDITOR: '/admin/editor'
+    SETTINGS: '/admin/settings',
+    AB_TEST: '/admin/ab-test',
+    OFFER_EDITOR: '/admin/offer-editor',
+    PROTOTYPE: '/admin/prototype',
+    INTEGRATIONS: {
+      HOTMART: '/admin/integrations/hotmart'
+    },
+    CAPACITY: '/admin/capacity',
+    COMPETITIVE_ADVANTAGE: '/admin/competitive-advantage'
   }
 }
 
 export function isValidRoute(path: string): boolean {
   const allRoutes = [
     ROUTES.HOME,
+    ROUTES.QUIZ,
     ROUTES.RESULTADO,
-    ROUTES.DESCUBRA_SEU_ESTILO,
+    ROUTES.QUIZ_OFERTA,
     ROUTES.ADMIN.ROOT,
     ROUTES.ADMIN.DASHBOARD,
-    ROUTES.ADMIN.QUIZ,
-    ROUTES.ADMIN.AB_TESTS,
-    ROUTES.ADMIN.SETTINGS,
-    ROUTES.ADMIN.CRIATIVOS,
+    ROUTES.ADMIN.LEADS,
+    ROUTES.ADMIN.AB_TESTING,
+    ROUTES.ADMIN.UTM,
+    ROUTES.ADMIN.EDITOR,
+    ROUTES.ADMIN.CREATIVE_ANALYTICS,
     ROUTES.ADMIN.ANALYTICS,
-    ROUTES.ADMIN.EDITOR
+    ROUTES.ADMIN.SETTINGS,
+    ROUTES.ADMIN.AB_TEST,
+    ROUTES.ADMIN.OFFER_EDITOR,
+    ROUTES.ADMIN.PROTOTYPE,
+    ROUTES.ADMIN.INTEGRATIONS.HOTMART,
+    ROUTES.ADMIN.CAPACITY,
+    ROUTES.ADMIN.COMPETITIVE_ADVANTAGE
   ];
   
   // Verificar rotas exatas
   if (allRoutes.includes(path)) {
+    return true;
+  }
+  
+  // Verificar rotas com parâmetros
+  if (path.startsWith('/admin/editor/') && path.length > '/admin/editor/'.length) {
     return true;
   }
   

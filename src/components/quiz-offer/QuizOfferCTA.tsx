@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,9 +19,9 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   
   const handleCTAClick = () => {
-    trackButtonClick('main-cta', 'Comprar Quiz Completo', 'cta-section');
+    trackButtonClick('main-cta', 'Comprar Quiz Completo', 'cta-section', 'purchase');
     // Registrar início de checkout
-    trackSaleConversion('quiz@example.com', 39.0);
+    trackSaleConversion(39.0, 'Quiz de Estilo Completo');
     // Redirecionar para checkout
     window.location.href = getCtaUrl();
   };
