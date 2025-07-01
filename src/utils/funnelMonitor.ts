@@ -146,16 +146,17 @@ function registerFunnelProgress(currentRoute) {
   try {
     // Se o Facebook Pixel estiver disponível, registrar evento
     if (typeof window.fbq === 'function') {
-      // Enviar evento específico baseado na rota
+      // Facebook Pixel - REMOVIDO: ViewContent não é um evento principal
+      // Mantemos apenas QuizStart, ResultView e Purchase/Lead
       switch (currentRoute) {
         case 'home':
-          window.fbq('track', 'ViewContent', { content_name: 'quiz_start' });
+          // window.fbq('track', 'ViewContent', { content_name: 'quiz_start' });
           break;
         case 'resultado':
-          window.fbq('track', 'ViewContent', { content_name: 'quiz_result' });
+          // window.fbq('track', 'ViewContent', { content_name: 'quiz_result' });
           break;
         case 'venda':
-          window.fbq('track', 'ViewContent', { content_name: 'sales_page' });
+          // window.fbq('track', 'ViewContent', { content_name: 'sales_page' });
           break;
       }
       
@@ -198,13 +199,13 @@ function setupNavigationMonitoring() {
         if (href === '/' || href === '/resultado' || href === '/quiz-descubra-seu-estilo') {
           console.log(`🔄 Navegação detectada para: ${href}`);
           
-          // Registrar clique em link do funil
-          if (typeof window.fbq === 'function') {
-            window.fbq('track', 'ClickButton', { 
-              button_text: linkElement.textContent.trim(),
-              destination: href
-            });
-          }
+          // Facebook Pixel - REMOVIDO: ClickButton não é um evento principal
+          // if (typeof window.fbq === 'function') {
+          //   window.fbq('track', 'ClickButton', { 
+          //     button_text: linkElement.textContent.trim(),
+          //     destination: href
+          //   });
+          // }
         }
       }
     });

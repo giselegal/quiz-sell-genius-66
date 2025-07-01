@@ -79,9 +79,14 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const { hasPremiumFeatures, hasFeature, user } = useAuth();
+  const { user } = useAuth();
 
-  const availableComponents = getAvailableComponents(user?.features || [], hasPremiumFeatures);
+  // Mock auth features for now
+  const hasPremiumFeatures = user?.email?.includes('premium') || false;
+  const userFeatures = ['basic_components'];
+  const userPlan = 'FREE';
+  
+  const availableComponents = getAvailableComponents(userFeatures, hasPremiumFeatures);
   
   const { available, locked } = components.reduce((acc, component) => {
     const isAvailable = availableComponents.find(c => c.id === component.id);
@@ -128,7 +133,7 @@ export const ComponentToolbar: React.FC<ComponentToolbarProps> = ({
         <div className="mb-4 p-3 bg-[#F5F2E9] rounded-lg">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-[#432818]">
-              Plano: {user?.plan || 'FREE'}
+              Plano: {userPlan}
             </span>
             <Badge 
               variant="outline"

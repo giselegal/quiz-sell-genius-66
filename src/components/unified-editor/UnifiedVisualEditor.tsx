@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { StyleResult } from '@/types/quiz';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -110,7 +111,10 @@ export const UnifiedVisualEditor: React.FC<UnifiedVisualEditorProps> = ({
         
         <TabsContent value="quiz" className="flex-1 h-[calc(100%-40px)] overflow-hidden">
           <TooltipProvider>
-            <QuizEditorPanel isPreviewing={isPreviewing} />
+            <QuizEditorPanel 
+              isVisible={activeTab === 'quiz'} 
+              isPreviewing={isPreviewing} 
+            />
           </TooltipProvider>
         </TabsContent>
         

@@ -1,5 +1,90 @@
 {
-    "remoteHub.richNavigation.enabled": true,
-    "githubRepositories.indexing.cacheRepoLimit": 6,
-    "remoteHub.gitProtocol": "ssh"
+  "remoteHub.richNavigation.enabled": true,
+  "githubRepositories.indexing.cacheRepoLimit": 6,
+  "remoteHub.gitProtocol": "ssh",
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": false,
+    "plaintext": false,
+    "markdown": true,
+    "javascript": true,
+    "typescript": true,
+    "typescriptreact": true,
+    "javascriptreact": true,
+    "jsx": true,
+    "tsx": true
+  },
+  "github.copilot.advanced": {
+    "length": 500,
+    "temperature": 0.1
+  },
+  "github.copilot.chat.enabled": true,
+  "editor.inlineSuggest.enabled": true,
+  "editor.suggestOnTriggerCharacters": true,
+  "typescript.suggest.autoImports": true,
+  "javascript.suggest.autoImports": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "tailwindCSS.includeLanguages": {
+    "typescript": "typescript",
+    "typescriptreact": "typescriptreact"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+  "tabnine.experimentalAutoImports": true,
+  "tabnine.disable_line_regex": [],
+  "tabnine.disable_file_regex": [],
+  "tabnine.local_enabled": true,
+  "tabnine.cloud_enabled": true,
+  "tabnine.semantic_status": true,
+  "tabnine.chat_enabled": true,
+  "tabnine.semantic_mode": "semantic",
+  "codeium.enableConfig": {
+    "*": true,
+    "typescript": true,
+    "javascript": true,
+    "typescriptreact": true,
+    "javascriptreact": true,
+    "jsx": true,
+    "tsx": true,
+    "python": true,
+    "html": true,
+    "css": true,
+    "scss": true,
+    "json": true,
+    "markdown": true
+  },
+  "codeium.enableSearch": true,
+  "codeium.enableCodeLens": true,
+  "codeium.enableInlineChat": true,
+  "codeium.aggressiveShutdown": false,
+  "editor.tabCompletion": "on",
+  "editor.wordBasedSuggestions": "matchingDocuments",
+  "editor.semanticHighlighting.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "files.associations": {
+    "*.tsx": "typescriptreact",
+    "*.jsx": "javascriptreact"
+  },
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "javascript.preferences.includePackageJsonAutoImports": "auto"
 }

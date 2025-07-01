@@ -1,14 +1,16 @@
-import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { QuizProvider } from './context/QuizContext';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { Toaster } from '@/components/ui/toaster';
-import { captureUTMParameters } from './utils/analytics';
-import { loadFacebookPixel } from './utils/facebookPixel';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import CriticalCSSLoader from './components/CriticalCSSLoader';
-import { initialCriticalCSS, heroCriticalCSS } from './utils/critical-css';
+import React, { Suspense, lazy, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { AdminAuthProvider } from "./context/AdminAuthContext";
+import { QuizProvider } from "./context/QuizContext";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+import { captureUTMParameters } from "./utils/analytics";
+import { loadFacebookPixelDynamic } from "./utils/facebookPixelDynamic";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import CriticalCSSLoader from "./components/CriticalCSSLoader";
+import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
+import { AdminRoute } from "./components/admin/AdminRoute";
 
 // Componente de loading para Suspense
 const LoadingFallback = () => (
@@ -20,79 +22,73 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Lazy loading das páginas usando a pasta pages/
-const QuizPage = lazy(() => import('./components/QuizPage'));
-const ResultPage = lazy(() => import('./pages/ResultPage'));
-const QuizOfferPage = lazy(() => import('./pages/QuizOfferPage'));
-const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
-const CreativeAnalyticsPage = lazy(() => import('./pages/CreativeAnalyticsPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
-const AccessLoaderPage = lazy(() => import('./pages/AccessLoaderPage'));
-
-// Avalia se o dispositivo tem performance limitada
-const isLowPerformanceDevice = () => {
-  const memory = (navigator as any).deviceMemory;
-  if (memory && memory < 4) return true;
-  
-  const cpuCores = navigator.hardwareConcurrency;
-  if (cpuCores && cpuCores < 4) return true;
-  
-  return false;
-};
-
-// Função para prefetch de componentes
-const prefetchComponent = (componentLoader: () => Promise<any>) => {
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => {
-      componentLoader();
-    });
-  } else {
-    setTimeout(() => {
-      componentLoader();
-    }, 2000);
-  }
-};
+// Lazy loading das páginas essenciais
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const QuizPage = lazy(() => import("./components/QuizPage"));
+const ResultPage = lazy(() => import("./pages/ResultPage"));
+const QuizDescubraSeuEstilo = lazy(
+  () => import("./pages/quiz-descubra-seu-estilo")
+);
+const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
-  const lowPerformance = isLowPerformanceDevice();
-
   // Inicializar analytics na montagem do componente
   useEffect(() => {
     try {
-      loadFacebookPixel();
+      loadFacebookPixelDynamic();
       captureUTMParameters();
-      
-      // Prefetch de páginas mais prováveis de serem acessadas
-      if (!lowPerformance) {
-        prefetchComponent(() => import('./pages/ResultPage'));
-      }
-      
-      console.log(`App initialized with performance optimization${lowPerformance ? ' (low-performance mode)' : ''}`);
+
+      console.log("App initialized with essential routes only");
     } catch (error) {
-      console.error('Erro ao inicializar aplicativo:', error);
+      console.error("Erro ao inicializar aplicativo:", error);
     }
-  }, [lowPerformance]);
+  }, []);
 
   return (
     <AuthProvider>
       <QuizProvider>
         <TooltipProvider>
           <Router>
-            <CriticalCSSLoader cssContent={initialCriticalCSS} id="initial-critical" removeOnLoad={true} />
-            <CriticalCSSLoader cssContent={heroCriticalCSS} id="hero-critical" removeOnLoad={true} />
-            
+            <CriticalCSSLoader
+              cssContent={initialCriticalCSS}
+              id="initial-critical"
+              removeOnLoad={true}
+            />
+            <CriticalCSSLoader
+              cssContent={heroCriticalCSS}
+              id="hero-critical"
+              removeOnLoad={true}
+            />
+
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
-                {/* Rotas públicas */}
-                <Route path="/" element={<QuizPage />} />
+                {/* Página inicial com teste A/B */}
+                <Route path="/" element={<LandingPage />} />
+                {/* Rota do quiz específica */}
+                <Route path="/quiz" element={<QuizPage />} />
+                {/* Rotas do teste A/B */}
                 <Route path="/resultado" element={<ResultPage />} />
-                <Route path="/quiz-descubra-seu-estilo" element={<QuizOfferPage />} />
-                {/* Dashboard SPA */}
-                <Route path="/dashboard/*" element={<DashboardPage />} />
-                {/* Redirecionamento para não quebrar links antigos */}
-                <Route path="/admin/*" element={<Navigate to="/dashboard" replace />} />
-                {/* ANALYTICS DE CRIATIVOS - Página específica */}
-                <Route path="/admin/creative-analytics" element={<CreativeAnalyticsPage />} />
+                <Route
+                  path="/quiz-descubra-seu-estilo"
+                  element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Manter rota antiga para compatibilidade */}
+                <Route
+                  path="/descubra-seu-estilo"
+                  element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Admin - protegido com AdminAuthProvider */}
+                <Route
+                  path="/admin/*"
+                  element={
+                    <AdminAuthProvider>
+                      <AdminRoute>
+                        <DashboardPage />
+                      </AdminRoute>
+                    </AdminAuthProvider>
+                  }
+                />
                 {/* 404 */}
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>

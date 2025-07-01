@@ -1,140 +1,198 @@
-import React, { useEffect, useState, Suspense, lazy, useCallback } from 'react';
-import { useQuiz } from '@/hooks/useQuiz';
-import { useGlobalStyles } from '@/hooks/useGlobalStyles';
-import { Header } from '@/components/result/Header';
-import { styleConfig } from '@/config/styleConfig';
-import { Progress } from '@/components/ui/progress';
-import { Card } from '@/components/ui/card';
-import { ShoppingCart, CheckCircle, ArrowDown, Clock, ChevronLeft, ChevronRight, Shield, Award, Hourglass, Star, Gift, Target, Zap, TrendingUp } from 'lucide-react';
-import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
-import SecondaryStylesSection from '@/components/quiz-result/SecondaryStylesSection';
-import ErrorState from '@/components/result/ErrorState';
-import { Button } from '@/components/ui/button';
-import { useLoadingState } from '@/hooks/useLoadingState';
-import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
-import ResultSkeleton from '@/components/result/ResultSkeleton';
-import { trackButtonClick } from '@/utils/analytics';
-import BuildInfo from '@/components/BuildInfo';
-import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
-import GuaranteeSeal from '@/components/result/GuaranteeSeal';
-import { useAuth } from '@/context/AuthContext';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import ProgressiveImage from '@/components/ui/progressive-image';
-import ResourcePreloader from '@/components/result/ResourcePreloader';
-import PerformanceMonitor from '@/components/result/PerformanceMonitor';
+
+import React, { useEffect, useState, Suspense, lazy, useCallback } from "react";
+import { useQuiz } from "@/hooks/useQuiz";
+import { useGlobalStyles } from "@/hooks/useGlobalStyles";
+import { Header } from "@/components/result/Header";
+import { styleConfig } from "@/data/styleConfig";
+import { Progress } from "@/components/ui/progress";
+import { Card } from "@/components/ui/card";
+import {
+  ShoppingCart,
+  CheckCircle,
+  ArrowDown,
+  Clock,
+  ChevronLeft,
+  ChevronRight,
+  Shield,
+  Award,
+  Hourglass,
+  Star,
+  Gift,
+  Target,
+  Zap,
+  TrendingUp,
+} from "lucide-react";
+import { AnimatedWrapper } from "@/components/animated-wrapper";
+import SecondaryStylesSection from "@/components/quiz-result/SecondaryStylesSection";
+import ErrorState from "@/components/result/ErrorState";
+import { Button } from "@/components/ui/button";
+import { useLoadingState } from "@/hooks/useLoadingState";
+import { useIsMobile } from "@/hooks/use-mobile";
+import ResultSkeleton from "@/components/result/ResultSkeleton";
+import { trackButtonClick } from "@/utils/analytics";
+import BuildInfo from "@/components/BuildInfo";
+import SecurePurchaseElement from "@/components/result/SecurePurchaseElement";
+import { useAuth } from "@/context/AuthContext";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 // Seções carregadas via lazy
-const BeforeAfterTransformation = lazy(() => import('@/components/result/BeforeAfterTransformation'));
-const MotivationSection = lazy(() => import('@/components/result/MotivationSection'));
-const BonusSection = lazy(() => import('@/components/result/BonusSection'));
-const Testimonials = lazy(() => import('@/components/quiz-result/sales/Testimonials'));
-const GuaranteeSection = lazy(() => import('@/components/result/GuaranteeSection'));
-const MentorSection = lazy(() => import('@/components/result/MentorSection'));
+const BeforeAfterTransformation = lazy(
+  () => import("@/components/result/BeforeAfterTransformation")
+);
+const MotivationSection = lazy(
+  () => import("@/components/result/MotivationSection")
+);
+const BonusSection = lazy(() => import("@/components/BonusSection"));
+const Testimonials = lazy(
+  () => import("@/components/Testimonials")
+);
+const GuaranteeSection = lazy(
+  () => import("@/components/result/GuaranteeSection")
+);
+const MentorSection = lazy(() => import("@/components/result/MentorSection"));
 
-// Design tokens - SISTEMA PADRONIZADO
+// Design tokens - SISTEMA APRIMORADO
 const tokens = {
   colors: {
-    primary: '#B89B7A',
-    primaryDark: '#A1835D',
-    primaryLight: '#D4B79F',
-    secondary: '#aa6b5d',
-    secondaryDark: '#8F5A4D',
-    secondaryLight: '#C28A7D',
-    background: '#fffaf7',
-    backgroundAlt: '#f9f4ef',
-    text: '#432818',
-    textLight: '#8F7A6A', // Usado para subtítulos grandes ou texto menos crítico
-    textMuted: '#6B5B4E', // Nova cor para melhor contraste em textos secundários menores
-    success: '#4CAF50',
-    successDark: '#45a049',
-    border: 'rgba(184, 155, 122, 0.2)',
-    borderLight: 'rgba(184, 155, 122, 0.1)',
+    primary: "#B89B7A",
+    primaryDark: "#A1835D",
+    primaryLight: "#D4B79F",
+    secondary: "#aa6b5d",
+    secondaryDark: "#8F5A4D",
+    secondaryLight: "#C28A7D",
+    background: "#fffaf7",
+    backgroundAlt: "#f9f4ef",
+    backgroundCard: "#ffffff",
+    text: "#2C1810", // Mais escuro para melhor contraste
+    textSecondary: "#5D4A3A", // Melhor hierarquia
+    textMuted: "#8F7A6A",
+    textLight: "#B5A394",
+    success: "#4CAF50",
+    successDark: "#45a049",
+    warning: "#FF6B35",
+    border: "rgba(184, 155, 122, 0.15)",
+    borderLight: "rgba(184, 155, 122, 0.08)",
+    overlay: "rgba(44, 24, 16, 0.02)",
   },
-  // SISTEMA DE SPACING PADRONIZADO (4px base)
+  // SISTEMA DE SPACING REFINADO E PADRONIZADO
   spacing: {
-    1: '0.25rem',  // 4px
-    2: '0.5rem',   // 8px
-    3: '0.75rem',  // 12px
-    4: '1rem',     // 16px
-    6: '1.5rem',   // 24px
-    8: '2rem',     // 32px
-    12: '3rem',    // 48px
-    16: '4rem',    // 64px
-    20: '5rem',    // 80px
+    xs: "0.25rem", // 4px
+    sm: "0.5rem", // 8px
+    md: "0.75rem", // 12px
+    lg: "1rem", // 16px
+    xl: "1.5rem", // 24px
+    "2xl": "2rem", // 32px
+    "3xl": "3rem", // 48px
+    "4xl": "4rem", // 64px
+    "5xl": "6rem", // 96px
+    "6xl": "7rem", // 112px
   },
-  // SHADOWS UNIFICADAS COM MARCA
+  // SHADOWS MAIS SUTIS E ELEGANTES
   shadows: {
-    sm: '0 2px 4px rgba(184, 155, 122, 0.08)',
-    md: '0 4px 8px rgba(184, 155, 122, 0.12)',
-    lg: '0 8px 16px rgba(184, 155, 122, 0.16)',
-    xl: '0 12px 24px rgba(184, 155, 122, 0.20)',
-    cta: '0 8px 32px rgba(184, 155, 122, 0.4)',
+    xs: "0 1px 2px rgba(184, 155, 122, 0.05)",
+    sm: "0 2px 4px rgba(184, 155, 122, 0.08)",
+    md: "0 4px 12px rgba(184, 155, 122, 0.12)",
+    lg: "0 8px 24px rgba(184, 155, 122, 0.15)",
+    xl: "0 16px 40px rgba(184, 155, 122, 0.18)",
+    cta: "0 8px 32px rgba(76, 175, 80, 0.25)",
+    inner: "inset 0 1px 0 rgba(255, 255, 255, 0.1)",
   },
-  // BORDER RADIUS PADRONIZADO
+  // BORDER RADIUS HARMONIOSO
   radius: {
-    sm: '0.5rem',   // 8px
-    md: '0.75rem',  // 12px
-    lg: '1rem',     // 16px
-    xl: '1.5rem',   // 24px
+    xs: "0.25rem", // 4px
+    sm: "0.5rem", // 8px
+    md: "0.75rem", // 12px
+    lg: "1rem", // 16px
+    xl: "1.25rem", // 20px
+    "2xl": "1.5rem", // 24px
+    full: "9999px",
   },
-  // BREAKPOINTS CONSISTENTES
-  breakpoints: {
-    sm: '640px',
-    md: '768px',
-    lg: '1024px',
-    xl: '1280px',
-  }
+  // TIPOGRAFIA MELHORADA
+  typography: {
+    fontSizes: {
+      xs: "0.75rem", // 12px
+      sm: "0.875rem", // 14px
+      base: "1rem", // 16px
+      lg: "1.125rem", // 18px
+      xl: "1.25rem", // 20px
+      "2xl": "1.5rem", // 24px
+      "3xl": "1.875rem", // 30px
+      "4xl": "2.25rem", // 36px
+      "5xl": "3rem", // 48px
+    },
+    lineHeights: {
+      tight: "1.25",
+      normal: "1.5",
+      relaxed: "1.625",
+      loose: "2",
+    },
+  },
 };
 
-// Memoizar componente de título
+// Componente de título melhorado - ESPAÇAMENTO PADRONIZADO
 const SectionTitle = React.memo<{
   children: React.ReactNode;
   subtitle?: string;
-  size?: 'lg' | 'xl';
+  size?: "md" | "lg" | "xl";
   className?: string;
-  variant?: 'primary' | 'secondary' | 'simple';
-}>(({ children, subtitle, size = 'xl', className = '', variant = 'simple' }) => (
-  <AnimatedWrapper 
-    className={`text-center mb-12 ${className}`}
-    animation="fade"
-    show={true}
-    duration={600}
-  >
-    {/* Decoração superior - APENAS para títulos principais */}
-    {variant === 'primary' && (
-      <div className="inline-flex items-center gap-3 mb-4">
-        <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-        <div className="w-2 h-2 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full shadow-sm"></div>
-        <div className="w-8 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-      </div>
-    )}
-    
-    {/* Título principal - estilos diferenciados */}
-    <h2 className={`font-playfair font-bold leading-tight ${
-      variant === 'primary' 
-        ? 'text-[#432818] mb-4 bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent'
-        : variant === 'secondary'
-        ? 'text-[#432818] mb-4'
-        : 'text-[#432818] mb-4'
-    } ${
-      size === 'xl' ? 'text-3xl md:text-4xl lg:text-5xl' : 'text-2xl md:text-3xl lg:text-4xl'
-    }`}>
-      {children}
-    </h2>
-    
-    {/* Subtítulo opcional */}
-    {subtitle && (
-      <p className="text-lg md:text-xl text-[#8F7A6A] leading-relaxed max-w-3xl mx-auto mb-6">
-        {subtitle}
-      </p>
-    )}
-    
-    {/* Linha decorativa inferior - APENAS para título principal */}
-    {variant === 'primary' && (
-      <div className="w-20 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto shadow-sm"></div>
-    )}
-  </AnimatedWrapper>
-));
+  variant?: "primary" | "secondary" | "simple";
+  centered?: boolean;
+}>(
+  ({
+    children,
+    subtitle,
+    size = "xl",
+    className = "",
+    variant = "simple",
+    centered = true,
+  }) => (
+    <AnimatedWrapper
+      className={`${centered ? "text-center" : ""} mb-12 lg:mb-16 ${className}`}
+      animation="fade"
+      show={true}
+      duration={600}
+    >
+      {/* Decoração superior refinada */}
+      {variant === "primary" && (
+        <div className="inline-flex items-center gap-3 mb-8">
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+        </div>
+      )}
+
+      {/* Título com melhor hierarquia */}
+      <h2
+        className={`font-playfair font-bold leading-tight tracking-tight ${
+          variant === "primary"
+            ? "bg-gradient-to-r from-[#2C1810] via-[#aa6b5d] to-[#2C1810] bg-clip-text text-transparent mb-8"
+            : "text-[#2C1810] mb-6"
+        } ${
+          size === "xl"
+            ? "text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
+            : size === "lg"
+            ? "text-xl md:text-2xl lg:text-3xl xl:text-4xl"
+            : "text-lg md:text-xl lg:text-2xl xl:text-3xl"
+        }`}
+      >
+        {children}
+      </h2>
+
+      {/* Subtítulo melhorado */}
+      {subtitle && (
+        <div className="max-w-4xl mx-auto">
+          <p className="text-base md:text-lg lg:text-xl text-[#5D4A3A] leading-relaxed font-medium">
+            {subtitle}
+          </p>
+        </div>
+      )}
+
+      {/* Linha decorativa */}
+      {variant === "primary" && (
+        <div className="w-24 h-1 bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] rounded-full mx-auto mt-8 shadow-sm"></div>
+      )}
+    </AnimatedWrapper>
+  )
+);
 
 const ResultPage: React.FC = () => {
   const { primaryStyle, secondaryStyles } = useQuiz();
@@ -142,34 +200,29 @@ const ResultPage: React.FC = () => {
   const { user } = useAuth();
   const [imagesLoaded, setImagesLoaded] = useState({
     style: false,
-    guide: false
+    guide: false,
   });
-  const isLowPerformance = useIsLowPerformanceDevice();
+  const isLowPerformance = useIsMobile();
   const { isLoading, completeLoading } = useLoadingState({
     minDuration: isLowPerformance ? 100 : 300,
-    disableTransitions: isLowPerformance
+    disableTransitions: isLowPerformance,
   });
 
-  // Button hover state
+  // Estados de interação melhorados
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-  
-  // Scroll tracking for sticky header and bottom bar
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showBottomBar, setShowBottomBar] = useState(false);
-  
-  // Active section tracking
-  const [activeSection, setActiveSection] = useState('primary-style');
-  
-  // Temporizador de contagem regressiva
+  const [activeSection, setActiveSection] = useState("primary-style");
+
+  // Timer otimizado
   const [timer, setTimer] = useState({
     hours: 2,
     minutes: 59,
-    seconds: 59
+    seconds: 59,
   });
-  
+
   useEffect(() => {
     const countdownInterval = setInterval(() => {
-      setTimer(prevTimer => {
+      setTimer((prevTimer) => {
         if (prevTimer.seconds > 0) {
           return { ...prevTimer, seconds: prevTimer.seconds - 1 };
         } else if (prevTimer.minutes > 0) {
@@ -177,27 +230,27 @@ const ResultPage: React.FC = () => {
         } else if (prevTimer.hours > 0) {
           return { hours: prevTimer.hours - 1, minutes: 59, seconds: 59 };
         } else {
-          // Reset timer quando chegar a zero (para manter a oferta "limitada")
           return { hours: 2, minutes: 59, seconds: 59 };
         }
       });
     }, 1000);
-    
+
     return () => clearInterval(countdownInterval);
   }, []);
-  
+
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
-    
-    const hasPreloadedResults = localStorage.getItem('preloadedResults') === 'true';
-    
+
+    const hasPreloadedResults =
+      localStorage.getItem("preloadedResults") === "true";
+
     if (hasPreloadedResults) {
       setImagesLoaded({ style: true, guide: true });
       completeLoading();
       return;
-    } 
-    
+    }
+
     const safetyTimeout = setTimeout(() => {
       setImagesLoaded({ style: true, guide: true });
       completeLoading();
@@ -205,318 +258,411 @@ const ResultPage: React.FC = () => {
 
     return () => clearTimeout(safetyTimeout);
   }, [primaryStyle, globalStyles.logo, completeLoading]);
-  
+
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
-  
-  // Scroll tracking effect
+
+  // Scroll tracking melhorado
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-      
-      // Show bottom bar only when near the end of the page
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const scrolledToBottom = scrollTop + windowHeight >= documentHeight - 800; // Show 800px before end
-      
-      setShowBottomBar(scrolledToBottom);
-      
-      // Track active section
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 120);
+
+      // Tracking de seção ativa
       const sections = [
-        'primary-style', 'transformations', 'motivation', 'bonuses',
-        'testimonials', 'guarantee', 'mentor', 'cta'
+        "primary-style",
+        "transformations",
+        "motivation",
+        "bonuses",
+        "testimonials",
+        "guarantee",
+        "mentor",
+        "cta",
       ];
-      
+
       for (let i = sections.length - 1; i >= 0; i--) {
         const element = document.getElementById(sections[i]);
-        if (element?.getBoundingClientRect().top <= 200) {
+        if (element?.getBoundingClientRect().top <= 250) {
           setActiveSection(sections[i]);
           break;
         }
       }
     };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  
+
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
-  
+
   const { category } = primaryStyle;
   const { image, guideImage, description } = styleConfig[category];
-  
+
   const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Prevenir comportamento padrão e propagação
     e.preventDefault();
     e.stopPropagation();
-    
-    // Prevenir múltiplos cliques
-    if (window.ctaClickProcessing) return;
-    window.ctaClickProcessing = true;
-    
-    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
-    
-    // Para desktop, usar window.open para garantir funcionamento
-    if (window.innerWidth >= 768) {
-      window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank');
-    } else {
-      // Para mobile, usar location.href
-      window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+
+    interface WindowWithCTAProcessing extends Window {
+      ctaClickProcessing?: boolean;
     }
-    
-    // Limpar flag após delay
+
+    const windowTyped = window as WindowWithCTAProcessing;
+
+    if (windowTyped.ctaClickProcessing) return;
+    windowTyped.ctaClickProcessing = true;
+
+    trackButtonClick("checkout_button", "Iniciar Checkout", "results_page");
+
+    if (window.innerWidth >= 768) {
+      window.open(
+        "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeA",
+        "_blank"
+      );
+    } else {
+      window.location.href =
+        "https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912&utm_source=quiz&utm_medium=abtest&utm_campaign=testeA";
+    }
+
     setTimeout(() => {
-      window.ctaClickProcessing = false;
+      windowTyped.ctaClickProcessing = false;
     }, 1000);
   };
-  
+
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
       window.scrollTo({
-        top: section.offsetTop - 80,
-        behavior: 'smooth'
+        top: section.offsetTop - 100,
+        behavior: "smooth",
       });
     }
   };
-  
+
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
-      backgroundColor: globalStyles.backgroundColor || tokens.colors.background,
-      color: globalStyles.textColor || tokens.colors.text,
-      fontFamily: globalStyles.fontFamily || 'inherit'
-    }}>
-      {/* Custom scrollbar styles */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
+    <div
+      className="min-h-screen relative overflow-hidden"
+      style={{
+        backgroundColor: tokens.colors.background,
+        color: tokens.colors.text,
+        fontFamily: globalStyles.fontFamily || "Inter, system-ui, sans-serif",
+      }}
+    >
+      {/* Scrollbar personalizada */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
           ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
           }
           ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: rgba(184, 155, 122, 0.1);
           }
           ::-webkit-scrollbar-thumb {
             background: linear-gradient(to bottom, #B89B7A, #aa6b5d);
-            border-radius: 4px;
+            border-radius: 3px;
           }
           ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(to bottom, #aa6b5d, #B89B7A);
           }
-        `
-      }} />
 
-      {/* Preloaders and monitors */}
-      <ResourcePreloader />
-      <PerformanceMonitor />
-      
-      {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-br from-[#B89B7A]/10 to-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-tr from-[#aa6b5d]/10 to-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-      <div className="absolute top-1/3 left-0 w-1/5 h-1/5 bg-gradient-to-r from-[#B89B7A]/5 to-[#aa6b5d]/5 rounded-full blur-3xl -translate-x-1/2"></div>
-      
-      {/* Header - Super simplificado */}
-      <header className="py-4 px-6 sticky top-0 z-50 bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto max-w-4xl flex justify-center">
-          <img
-            src={globalStyles.logo}
-            alt={globalStyles.logoAlt || "Logo"}
-            style={{ height: globalStyles.logoHeight || '60px' }}
-            className="h-auto object-contain"
-          />
+          /* Smooth scroll behavior */
+          html {
+            scroll-behavior: smooth;
+          }
+
+          /* Focus states melhorados */
+          button:focus-visible,
+          a:focus-visible {
+            outline: 2px solid #B89B7A;
+            outline-offset: 2px;
+          }
+        `,
+        }}
+      />
+
+      {/* Background decorativo refinado */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-[#B89B7A]/8 to-transparent rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4"></div>
+        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-[#aa6b5d]/6 to-transparent rounded-full blur-3xl transform -translate-x-1/4 translate-y-1/4"></div>
+        <div className="absolute top-1/2 left-1/4 w-1/4 h-1/4 bg-gradient-to-r from-[#B89B7A]/4 to-transparent rounded-full blur-2xl"></div>
+      </div>
+
+      {/* Header minimalista e elegante */}
+      <header
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-[#B89B7A]/10"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="container mx-auto max-w-6xl px-4 py-4 lg:py-6">
+          <div className="flex justify-center">
+            <img
+              src={globalStyles.logo}
+              alt={globalStyles.logoAlt || "Logo"}
+              style={{ height: globalStyles.logoHeight || "50px" }}
+              className="h-auto object-contain transition-all duration-300 hover:scale-105"
+            />
+          </div>
         </div>
       </header>
 
-      {/* Navigation dots (only visible on scroll) */}
-      <div className={`fixed right-4 top-1/2 transform -translate-y-1/2 z-50 transition-opacity duration-500 ${isScrolled ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="flex flex-col gap-2">
+      {/* Navigation dots refinada */}
+      <div
+        className={`fixed right-6 top-1/2 transform -translate-y-1/2 z-40 transition-all duration-500 ${
+          isScrolled ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+        }`}
+      >
+        <div className="flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-lg border border-[#B89B7A]/20">
           {[
-            { id: 'primary-style', label: 'Seu Estilo' },
-            { id: 'transformations', label: 'Transformações' },
-            { id: 'motivation', label: 'Motivação' },
-            { id: 'bonuses', label: 'Bônus' },
-            { id: 'testimonials', label: 'Depoimentos' },
-            { id: 'guarantee', label: 'Garantia' },
-            { id: 'cta', label: 'Adquirir' }
-          ].map(section => (
+            { id: "primary-style", label: "Seu Estilo" },
+            { id: "transformations", label: "Transformações" },
+            { id: "motivation", label: "Motivação" },
+            { id: "bonuses", label: "Bônus" },
+            { id: "testimonials", label: "Depoimentos" },
+            { id: "guarantee", label: "Garantia" },
+            { id: "cta", label: "Adquirir" },
+          ].map((section) => (
             <button
               key={section.id}
               onClick={() => scrollToSection(section.id)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${activeSection === section.id ? 'bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] scale-125 shadow-sm' : 'bg-gray-300 hover:bg-gray-400'}`}
+              className={`group relative w-2 h-2 rounded-full transition-all duration-300 ${
+                activeSection === section.id
+                  ? "bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] scale-125 shadow-md"
+                  : "bg-[#B5A394] hover:bg-[#B89B7A] hover:scale-110"
+              }`}
               aria-label={`Ir para seção ${section.label}`}
-              title={section.label}
-            />
+            >
+              {/* Tooltip */}
+              <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                <div className="bg-[#2C1810] text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                  {section.label}
+                </div>
+              </div>
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Sticky CTA - HIERARQUIA CORRIGIDA */}
-      <div className={`fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-[#B89B7A]/20 py-3 px-4 z-40 transition-transform duration-500 ${showBottomBar ? 'translate-y-0' : 'translate-y-full'}`}>
-        <div className="container mx-auto max-w-4xl flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
-          <div className="text-center sm:text-left">
-            <p className="text-sm font-medium text-[#432818]">Guia de Estilo e Imagem + Bônus</p>
-            <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
-              {/* HIERARQUIA CORRIGIDA - PARCELAS EM DESTAQUE */}
-              <span className="text-2xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent whitespace-nowrap">5x R$ 8,83</span>
-              <span className="text-xs font-normal text-[#8F7A6A] whitespace-nowrap">ou R$ 39,90 à vista</span>
-            </div>
-          </div>
-          <Button 
-            onClick={handleCTAClick} 
-            className="text-white text-xs sm:text-sm leading-none py-3 px-6 rounded-md shadow-md transition-all duration-300 w-full sm:w-auto cursor-pointer mt-8 sm:mt-10"
-            style={{
-              background: 'linear-gradient(90deg, #4CAF50 0%, #43a047 100%)', // verde estratégico
-              boxShadow: '0 4px 14px rgba(76, 175, 80, 0.25)',
-              transform: isButtonHovered ? 'translateY(-2px)' : 'translateY(0)',
-            }}
-            onMouseEnter={() => setIsButtonHovered(true)} 
-            onMouseLeave={() => setIsButtonHovered(false)}
-            type="button"
+      {/* CONTAINER PRINCIPAL - ESPAÇAMENTO PADRONIZADO */}
+      <main className="container mx-auto px-4 lg:px-6 py-8 lg:py-12 max-w-6xl relative z-10">
+        {/* Primary Style Card - ESPAÇAMENTO OTIMIZADO */}
+        <section id="primary-style" className="scroll-mt-24 mb-24 lg:mb-28">
+          <Card
+            className="relative overflow-hidden bg-gradient-to-br from-white to-[#fff7f3] border border-[#B89B7A]/15 rounded-2xl p-6 lg:p-10"
+            style={{ boxShadow: tokens.shadows.xl }}
           >
-            <span className="flex items-center justify-center gap-2">
-              <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-              Adquirir Agora
-            </span>
-          </Button>
-        </div>
-      </div>
+            {/* Decoração de cantos elegante */}
+            <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#B89B7A]/20 rounded-tl-2xl"></div>
+            <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-[#B89B7A]/20 rounded-br-2xl"></div>
 
-      {/* CONTAINER PRINCIPAL - SPACING OTIMIZADO */}
-      <div className="container mx-auto px-6 lg:px-8 py-8 max-w-4xl relative z-10">
-        {/* Primary Style Card - VISUAL CONSISTENCY */}
-        <section id="primary-style" className="scroll-mt-20">
-          <Card className="p-6 lg:p-8 mb-12 bg-white border border-[#B89B7A]/20 rounded-xl overflow-hidden relative" 
-                style={{ boxShadow: tokens.shadows.lg }}>
-            {/* DECORATIVE CORNERS - RESPONSIVOS */}
-            <div className="absolute top-0 left-0 w-12 lg:w-16 h-12 lg:h-16 border-t-2 border-l-2 border-[#B89B7A]/30 rounded-tl-xl"></div>
-            <div className="absolute bottom-0 right-0 w-12 lg:w-16 h-12 lg:h-16 border-b-2 border-r-2 border-[#B89B7A]/30 rounded-br-xl"></div>
-            
-            <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
-              {/* HEADER SECTION */}
-              <div className="text-center mb-8">
+            <AnimatedWrapper
+              animation="fade"
+              show={true}
+              duration={600}
+              delay={200}
+            >
+              {/* Header personalizado - ESPAÇAMENTO PADRONIZADO */}
+              <div className="text-center mb-12 lg:mb-16">
                 {user?.userName && (
-                  <AnimatedWrapper className="mb-6" animation="scale" show={true} duration={500} delay={200}>
-                    <span className="text-xl lg:text-2xl text-[#aa6b5d] font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
-                      Parabéns, {user.userName}!
-                    </span>
-                    <div className="w-12 h-px bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] mx-auto mt-2"></div>
+                  <AnimatedWrapper
+                    className="mb-8"
+                    animation="scale"
+                    show={true}
+                    duration={500}
+                    delay={100}
+                  >
+                    <div className="inline-flex items-center gap-3 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] px-6 py-3 rounded-full border border-[#B89B7A]/20">
+                      <span className="text-lg lg:text-xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                        Parabéns, {user.userName}!
+                      </span>
+                    </div>
                   </AnimatedWrapper>
                 )}
-                
-                {/* TÍTULO OTIMIZADO */}
-                <h1 className="text-xl lg:text-3xl font-playfair text-[#432818] mb-6 leading-tight">
+
+                {/* Título principal melhorado */}
+                <h1 className="text-2xl lg:text-4xl xl:text-5xl font-playfair text-[#2C1810] mb-8 leading-tight">
                   Descobrimos Seu Estilo Predominante:
                   <br />
-                  <span className="text-2xl lg:text-4xl font-bold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                  <span className="text-3xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-[#B89B7A] via-[#aa6b5d] to-[#B89B7A] bg-clip-text text-transparent mt-2 block">
                     {category}
                   </span>
                 </h1>
-                
-                {/* PROGRESS BAR - RESPONSIVO */}
-                <div className="max-w-md mx-auto mb-6">
-                  <div className="flex items-center justify-end text-sm text-[#8F7A6A] mb-2">
-                    <span className="font-medium">{primaryStyle.percentage}%</span>
+
+                {/* Progress bar elegante - ESPAÇAMENTO PADRONIZADO */}
+                <div className="max-w-lg mx-auto mb-8">
+                  <div className="flex items-center justify-between text-sm font-medium text-[#5D4A3A] mb-3">
+                    <span>Compatibilidade</span>
+                    <span className="text-lg font-bold text-[#B89B7A]">
+                      {primaryStyle.percentage}%
+                    </span>
                   </div>
-                  <Progress 
-                    value={primaryStyle.percentage} 
-                    className="h-2 bg-[#F5F2EC] rounded-full overflow-hidden" 
-                    indicatorClassName="bg-gradient-to-r from-[#B89B7A] via-[#D4B79F] to-[#A1835D] transition-all duration-700 ease-in-out"
-                    style={{ boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1)' }}
-                  />
+                  <div className="relative">
+                    <Progress
+                      value={primaryStyle.percentage}
+                      className="h-3 bg-gradient-to-r from-[#f5f2ec] to-[#f0ebe3] rounded-full overflow-hidden border border-[#B89B7A]/10"
+                      indicatorClassName="bg-gradient-to-r from-[#B89B7A] via-[#D4B79F] to-[#aa6b5d] transition-all duration-1000 ease-out rounded-full"
+                      style={{ boxShadow: tokens.shadows.inner }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-full"></div>
+                  </div>
                 </div>
               </div>
 
-              {/* MAIN CONTENT GRID - OTIMIZADO */}
-              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                <div className="space-y-6 order-2 lg:order-1">
-                  <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={400}>
-                    <div className="space-y-4">
-                      <p className="text-[#432818] leading-relaxed text-base lg:text-lg font-medium">
-                        <strong>Agora você tem clareza total</strong> sobre quem você é e como expressar sua personalidade através do seu estilo!
-                      </p>
-                      
-                      {/* STYLE DESCRIPTION - MELHORADA */}
-                      <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-4 border border-[#B89B7A]/10"
-                           style={{ boxShadow: tokens.shadows.sm }}>
-                        <p className="text-[#432818] text-sm lg:text-base leading-relaxed">
-                          <strong>Seu estilo {category}</strong> revela uma mulher que {
-                            category === 'Natural' ? 'valoriza autenticidade e conforto, sem abrir mão da elegância natural' :
-                            category === 'Clássico' ? 'aprecia sofisticação atemporal e peças que nunca saem de moda' :
-                            category === 'Contemporâneo' ? 'está sempre em sintonia com as tendências, mas de forma equilibrada' :
-                            category === 'Elegante' ? 'irradia refinamento e classe em cada detalhe do seu visual' :
-                            category === 'Romântico' ? 'expressa delicadeza e feminilidade através de looks encantadores' :
-                            category === 'Sexy' ? 'tem confiança para valorizar sua sensualidade de forma elegante' :
-                            category === 'Dramático' ? 'não tem medo de fazer declarações ousadas com seu estilo' :
-                            'expressa criatividade e originalidade em cada combinação de roupas'
-                          }.
+              {/* Grid principal otimizado - ESPAÇAMENTO PADRONIZADO */}
+              <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+                {/* Conteúdo textual */}
+                <div className="space-y-8 order-2 lg:order-1">
+                  <AnimatedWrapper
+                    animation={isLowPerformance ? "none" : "fade"}
+                    show={true}
+                    duration={400}
+                    delay={300}
+                  >
+                    <div className="space-y-6">
+                      {/* Mensagem principal */}
+                      <div
+                        className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-xl p-6 border border-[#B89B7A]/10"
+                        style={{ boxShadow: tokens.shadows.sm }}
+                      >
+                        <p className="text-[#2C1810] leading-relaxed text-lg font-medium mb-6">
+                          <strong className="text-[#aa6b5d]">
+                            Agora você tem clareza total
+                          </strong>{" "}
+                          sobre quem você é e como expressar sua personalidade
+                          através do seu estilo!
+                        </p>
+
+                        {/* Descrição do estilo */}
+                        <div className="bg-white/60 rounded-lg p-4 border border-[#B89B7A]/5">
+                          <p className="text-[#2C1810] text-base leading-relaxed">
+                            <strong className="text-[#aa6b5d]">
+                              Seu estilo {category}
+                            </strong>{" "}
+                            revela uma mulher que{" "}
+                            {category === "Natural"
+                              ? "valoriza autenticidade e conforto, sem abrir mão da elegância natural"
+                              : category === "Clássico"
+                              ? "aprecia sofisticação atemporal e peças que nunca saem de moda"
+                              : category === "Contemporâneo"
+                              ? "está sempre em sintonia com as tendências, mas de forma equilibrada"
+                              : category === "Elegante"
+                              ? "irradia refinamento e classe em cada detalhe do seu visual"
+                              : category === "Romântico"
+                              ? "expressa delicadeza e feminilidade através de looks encantadores"
+                              : category === "Sexy"
+                              ? "tem confiança para valorizar sua sensualidade de forma elegante"
+                              : category === "Dramático"
+                              ? "não tem medo de fazer declarações ousadas com seu estilo"
+                              : "expressa criatividade e originalidade em cada combinação de roupas"}
+                            .
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Call to action sutil */}
+                      <div className="text-center p-4 bg-gradient-to-r from-[#B89B7A]/5 to-[#aa6b5d]/5 rounded-lg border border-[#B89B7A]/10">
+                        <p className="text-base font-semibold text-[#2C1810] mb-2">
+                          <strong>
+                            Chega de ficar perdida no guarda-roupa!
+                          </strong>
+                        </p>
+                        <p className="text-sm text-[#5D4A3A]">
+                          Descubra como aplicar seu estilo no dia a dia
                         </p>
                       </div>
-                      
-                      <p className="text-sm lg:text-base" style={{ color: tokens.colors.textMuted }}>
-                        <strong>Chega de ficar perdida no guarda-roupa ou comprar peças que não combinam com você!</strong>
-                      </p>
                     </div>
                   </AnimatedWrapper>
 
-                  {/* SECONDARY STYLES - OTIMIZADO */}
-                  <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={600}>
-                    <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-lg p-5 border border-[#B89B7A]/10"
-                         style={{ boxShadow: tokens.shadows.sm }}>
-                      <h3 className="text-lg font-medium text-[#aa6b5d] mb-3">Estilos que Também Influenciam Você</h3>
-                      <SecondaryStylesSection secondaryStyles={secondaryStyles} />
+                  {/* Estilos secundários melhorados */}
+                  <AnimatedWrapper
+                    animation={isLowPerformance ? "none" : "fade"}
+                    show={true}
+                    duration={400}
+                    delay={500}
+                  >
+                    <div
+                      className="bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-6 border border-[#B89B7A]/15"
+                      style={{ boxShadow: tokens.shadows.md }}
+                    >
+                      <h3 className="text-xl font-semibold text-[#aa6b5d] mb-6 flex items-center gap-2">
+                        Estilos que Também Influenciam Você
+                      </h3>
+                      <SecondaryStylesSection
+                        secondaryStyles={secondaryStyles}
+                      />
                     </div>
                   </AnimatedWrapper>
                 </div>
 
-                {/* IMAGE SECTION - OTIMIZADA */}
-                <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500} className="order-1 lg:order-2">
-                  <div className="w-full max-w-xs lg:max-w-sm mx-auto relative"> 
-                    <ProgressiveImage 
-                      src={`${image}?q=85&f=auto&w=400`} 
-                      alt={`Estilo ${category}`} 
-                      width={400} 
-                      height={500} 
-                      className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-105" 
-                      style={{ boxShadow: tokens.shadows.md }}
-                      loading="eager" 
-                      fetchPriority="high" 
-                      onLoad={() => setImagesLoaded(prev => ({ ...prev, style: true }))}
-                    />
-                    
-                    {/* DECORATIVE CORNERS - RESPONSIVOS */}
-                    <div className="absolute -top-2 -right-2 w-8 lg:w-10 h-8 lg:h-10 border-t-2 border-r-2 border-[#B89B7A] rounded-tr-lg"></div>
-                    <div className="absolute -bottom-2 -left-2 w-8 lg:w-10 h-8 lg:h-10 border-b-2 border-l-2 border-[#B89B7A] rounded-bl-lg"></div>
-                    
-                    {/* STYLE BADGE - CONSISTENTE */}
-                    <div className="absolute -top-3 -left-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-xs lg:text-sm font-medium transform -rotate-12"
-                         style={{ boxShadow: tokens.shadows.sm }}>
-                      {category}
+                {/* Imagem principal */}
+                <AnimatedWrapper
+                  animation={isLowPerformance ? "none" : "scale"}
+                  show={true}
+                  duration={500}
+                  delay={400}
+                  className="order-1 lg:order-2"
+                >
+                  <div className="relative max-w-md mx-auto">
+                    <div
+                      className="relative overflow-hidden rounded-2xl"
+                      style={{ boxShadow: tokens.shadows.lg }}
+                    >
+                      <OptimizedImage
+                        src={`${image}?q=90&f=auto&w=500`}
+                        alt={`Estilo ${category}`}
+                        width={500}
+                        height={600}
+                        className="w-full h-auto transition-all duration-500 hover:scale-105"
+                        priority={true}
+                        onLoad={() =>
+                          setImagesLoaded((prev) => ({ ...prev, style: true }))
+                        }
+                      />
+
+                      {/* Overlay gradiente */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none"></div>
                     </div>
+
+                    {/* Badge flutuante */}
+                    <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full text-sm font-bold transform rotate-12 shadow-lg">
+                      <span>{category}</span>
+                    </div>
+
+                    {/* Decoração de cantos */}
+                    <div className="absolute -bottom-4 -left-4 w-12 h-12 border-b-3 border-l-3 border-[#B89B7A] rounded-bl-xl opacity-60"></div>
                   </div>
                 </AnimatedWrapper>
               </div>
-              
-              {/* GUIDE IMAGE - OTIMIZADA */}
-              <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-                <div className="mt-12 max-w-2xl mx-auto relative">
-                  <h3 className="text-xl lg:text-2xl font-medium text-center text-[#aa6b5d] mb-6">
+
+              {/* Guia do estilo - ESPAÇAMENTO PADRONIZADO */}
+              <AnimatedWrapper
+                animation={isLowPerformance ? "none" : "fade"}
+                show={true}
+                duration={400}
+                delay={700}
+              >
+                <div className="mt-16 text-center">
+                  <h3 className="text-2xl lg:text-3xl font-playfair font-bold text-[#aa6b5d] mb-8">
                     Seu Guia de Estilo Personalizado
                   </h3>
-                  <ProgressiveImage 
-                    src={`${guideImage}?q=85&f=auto&w=800`} 
-                    alt={`Guia de Estilo ${category}`} 
-                    loading="lazy" 
-                    className="w-full h-auto rounded-lg transition-transform duration-300 hover:scale-102" 
-                    style={{ boxShadow: tokens.shadows.lg }}
-                    onLoad={() => setImagesLoaded(prev => ({ ...prev, guide: true }))} 
-                  />
-                  
-                  {/* BADGE CONSISTENTE */}
-                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1 rounded-full text-xs font-medium transform rotate-12"
-                       style={{ boxShadow: tokens.shadows.sm }}>
-                    Exclusivo
+                  <div className="relative max-w-3xl mx-auto">
+                    <OptimizedImage
+                      src={`${guideImage}?q=90&f=auto&w=900`}
+                      alt={`Guia de Estilo ${category}`}
+                      className="w-full h-auto rounded-xl transition-all duration-500 hover:scale-102"
+                      style={{ boxShadow: tokens.shadows.xl }}
+                      onLoad={() =>
+                        setImagesLoaded((prev) => ({ ...prev, guide: true }))
+                      }
+                    />
+
+                    {/* Badge exclusivo */}
+                    <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-3 py-1.5 rounded-full text-xs font-bold transform rotate-12 shadow-md">
+                      EXCLUSIVO
+                    </div>
                   </div>
                 </div>
               </AnimatedWrapper>
@@ -524,325 +670,467 @@ const ResultPage: React.FC = () => {
           </Card>
         </section>
 
-        {/* Before/After Transformation Section */}
-        <section id="transformations" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
-            variant="simple"
+        {/* Seções lazy-loaded com ESPAÇAMENTO PADRONIZADO */}
+        <section id="transformations" className="scroll-mt-24 mb-24 lg:mb-28">
+          <SectionTitle
+            variant="primary"
+            size="xl"
             subtitle="Veja como mulheres descobriram sua melhor versão seguindo as mesmas estratégias que você vai receber"
           >
             Resultados que Falam por Si
           </SectionTitle>
-          <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
-              <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando transformações...</p>
-            </div>
-          }>
-            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+          <Suspense
+            fallback={
+              <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mb-4"></div>
+                <p className="text-[#8F7A6A] font-medium">
+                  Carregando transformações...
+                </p>
+              </div>
+            }
+          >
+            <AnimatedWrapper
+              animation={isLowPerformance ? "none" : "fade"}
+              show={true}
+              duration={400}
+            >
               <BeforeAfterTransformation />
             </AnimatedWrapper>
           </Suspense>
         </section>
 
-        {/* Motivation Section */}
-        <section id="motivation" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
+        <section id="motivation" className="scroll-mt-24 mb-24 lg:mb-28">
+          <SectionTitle
             variant="secondary"
-            subtitle={`Conhecer seu estilo pessoal é muito mais do que seguir tendências passageiras — é uma ferramenta poderosa de comunicação não-verbal e autoconfiança.
-`}
+            size="xl"
+            subtitle="Conhecer seu estilo pessoal é muito mais do que seguir tendências passageiras — é uma ferramenta poderosa de comunicação não-verbal e autoconfiança."
           >
-            Por que Aplicar o seu Esstilo é tão importante?
+            Por que Aplicar seu Estilo é tão Importante?
           </SectionTitle>
-          <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
-              <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando conteúdo...</p>
-            </div>
-          }>
-            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+          <Suspense
+            fallback={
+              <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mb-4"></div>
+                <p className="text-[#8F7A6A] font-medium">
+                  Carregando conteúdo...
+                </p>
+              </div>
+            }
+          >
+            <AnimatedWrapper
+              animation={isLowPerformance ? "none" : "fade"}
+              show={true}
+              duration={400}
+            >
               <MotivationSection />
             </AnimatedWrapper>
           </Suspense>
         </section>
-        
-        {/* Bonus Section */}
-        <section id="bonuses" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
-              <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando bônus...</p>
-            </div>
-          }>
-            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+
+        <section id="bonuses" className="scroll-mt-24 mb-24 lg:mb-28">
+          <Suspense
+            fallback={
+              <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mb-4"></div>
+                <p className="text-[#8F7A6A] font-medium">
+                  Carregando bônus...
+                </p>
+              </div>
+            }
+          >
+            <AnimatedWrapper
+              animation={isLowPerformance ? "none" : "fade"}
+              show={true}
+              duration={400}
+            >
               <BonusSection />
             </AnimatedWrapper>
           </Suspense>
         </section>
-        {/* Testimonials Section */}
-        <section id="testimonials" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
-              <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando depoimentos...</p>
-            </div>
-          }>
-            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+
+        <section id="testimonials" className="scroll-mt-24 mb-24 lg:mb-28">
+          <Suspense
+            fallback={
+              <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mb-4"></div>
+                <p className="text-[#8F7A6A] font-medium">
+                  Carregando depoimentos...
+                </p>
+              </div>
+            }
+          >
+            <AnimatedWrapper
+              animation={isLowPerformance ? "none" : "fade"}
+              show={true}
+              duration={400}
+            >
               <Testimonials />
             </AnimatedWrapper>
           </Suspense>
         </section>
-        
-        {/* Guarantee Section */}
-        <section id="guarantee" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
-              <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando garantia...</p>
-            </div>
-          }>
-            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+
+        <section id="guarantee" className="scroll-mt-24 mb-24 lg:mb-28">
+          <Suspense
+            fallback={
+              <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mb-4"></div>
+                <p className="text-[#8F7A6A] font-medium">
+                  Carregando garantia...
+                </p>
+              </div>
+            }
+          >
+            <AnimatedWrapper
+              animation={isLowPerformance ? "none" : "fade"}
+              show={true}
+              duration={400}
+            >
               <GuaranteeSection />
             </AnimatedWrapper>
           </Suspense>
         </section>
-        
-        {/* Mentor Section */}
-        <section id="mentor" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20">
-          <SectionTitle 
+
+        <section id="mentor" className="scroll-mt-24 mb-24 lg:mb-28">
+          <SectionTitle
             variant="simple"
-            subtitle="Especialista que já guiou +de 3.000 mulheres na descoberta do seu estilo autêntico"
+            size="xl"
+            subtitle="Especialista que já guiou mais de 3.000 mulheres na descoberta do seu estilo autêntico"
           >
             Conheça Sua Mentora
           </SectionTitle>
-          <Suspense fallback={
-            <div className="py-10 flex flex-col items-center justify-center">
-              <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-[#8F7A6A]">Carregando informações da mentora...</p>
-            </div>
-          }>
-            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400}>
+          <Suspense
+            fallback={
+              <div className="py-16 flex flex-col items-center justify-center bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] rounded-2xl">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89B7A] mb-4"></div>
+                <p className="text-[#8F7A6A] font-medium">
+                  Carregando informações da mentora...
+                </p>
+              </div>
+            }
+          >
+            <AnimatedWrapper
+              animation={isLowPerformance ? "none" : "fade"}
+              show={true}
+              duration={400}
+            >
               <MentorSection />
             </AnimatedWrapper>
           </Suspense>
         </section>
 
-        {/* SEÇÃO DE TRANSIÇÃO MELHORADA */}
-        <div className="mb-12 md:mb-16">
-          <div className="text-center py-12 md:py-16 relative">
-            {/* Background decorativo */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#fff7f3]/50 to-[#f9f4ef]/50 rounded-2xl"></div>
+        {/* Seção de transição elegante - ESPAÇAMENTO PADRONIZADO */}
+        <div className="mb-24 lg:mb-28">
+          <div className="relative text-center py-16 lg:py-20">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/60 via-[#f9f4ef]/40 to-[#fff7f3]/60 rounded-3xl"></div>
             <div className="relative z-10">
-              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-6 md:mb-8"></div>
-              <h3 className="text-2xl md:text-3xl font-playfair font-bold text-[#432818] mb-4">
-                Chegou o momento de Agir
+              <div className="w-40 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-8"></div>
+              <h3 className="text-3xl lg:text-4xl font-playfair font-bold text-[#2C1810] mb-6">
+                Chegou o Momento de Agir
               </h3>
-              <p className="text-lg font-medium max-w-md mx-auto" style={{ color: tokens.colors.textMuted }}>
-                Não deixe para depois a transformação que você pode começar agora!
+              <p className="text-xl font-medium max-w-2xl mx-auto text-[#5D4A3A] leading-relaxed">
+                Não deixe para depois a transformação que você pode começar
+                agora!
               </p>
-              <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-6 md:mt-8"></div>
+              <div className="w-40 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mt-8"></div>
             </div>
           </div>
         </div>
-        
-        {/* Final CTA Section - OTIMIZADA */}
-        <section id="cta" className="scroll-mt-20 mb-12 md:mb-16 lg:mb-20 bg-white rounded-xl p-6 lg:p-12 border border-[#B89B7A]/20 text-center relative overflow-hidden"
-                 style={{ boxShadow: tokens.shadows.xl }}>
-          <div className="absolute inset-0 bg-gradient-to-br from-[#fff7f3]/30 to-[#f9f4ef]/30 pointer-events-none"></div>
-          
-          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={600} delay={300}>
-            {/* CTA HEADER - OTIMIZADO */}
-            <div className="relative z-10 mb-12">
-              <div className="inline-flex items-center gap-4 mb-6">
-                <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-                <div className="w-4 h-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full animate-pulse"
-                     style={{ boxShadow: tokens.shadows.sm }}></div>
-                <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
-              </div>
-              
-              <h2 className="text-4xl lg:text-6xl font-playfair font-bold text-[#432818] mb-6 leading-tight">
-                <span className="bg-gradient-to-r from-[#432818] via-[#aa6b5d] to-[#432818] bg-clip-text text-transparent">
-                  Desperte Sua Confiança
-                </span>
-                <br />
-                <span className="text-[#aa6b5d]">Com Seu Estilo Único!</span>
-              </h2>
-              
-              <p className="text-xl mb-8" style={{ color: tokens.colors.textMuted }}>
-                Guia {category} Personalizado + Bônus exclusivos
-              </p>
-            </div>
-            
-            {/* PRODUCTS PREVIEW - GRID OTIMIZADO E RESPONSIVO MELHORADO */}
-            <div className="mb-12 relative z-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto mb-10">
-                {[
-                  {
-                    src: (() => {
-                      const guideImages = {
-                        'Natural': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071344/GUIA_NATURAL_fzp6fc.webp',
-                        'Clássico': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp',
-                        'Contemporâneo': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp',
-                        'Elegante': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071342/GUIA_ELEGANTE_asez1q.webp',
-                        'Romântico': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp',
-                        'Sexy': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071349/GUIA_SEXY_t5x2ov.webp',
-                        'Dramático': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp',
-                        'Criativo': 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1745071342/GUIA_CRIATIVO_ntbzph.webp'
-                      };
-                      return guideImages[category] || guideImages['Natural'];
-                    })(),
-                    title: `Manual de Estilo ${category}`,
-                    subtitle: 'Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única, transformando seu guarda-roupa em uma poderosa ferramenta de comunicação visual e autoexpressão.',
-                    badge: 'GUIA COMPLETO',
-                    priority: true
-                  },
-                  {
-                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1744911677/Cópia_de_MOCKUPS_15_-_Copia_grstwl.png',
-                    title: 'Guia das Peças Estratégicas',
-                    subtitle: 'Peças-chave cuidadosamente selecionadas que maximizam combinações, economizam dinheiro e garantem versatilidade em qualquer situação do seu dia a dia.',
-                    badge: 'BÔNUS EXCLUSIVO',
-                    priority: false
-                  },
-                  {
-                    src: 'https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_85,w_600/v1744911666/Cópia_de_Template_Dossiê_Completo_2024_15_-_Copia_ssrhu3.png',
-                    title: 'Manual de Visagismo',
-                    subtitle: 'Descubra os cortes de cabelo, acessórios ideais para seu tipo facial, realçando sua beleza natural com dicas profissionais de visagismo aplicado.',
-                    badge: 'BÔNUS PREMIUM',
-                    priority: false
-                  }
-                ].map((product, index) => (
-                  <div key={index} className={`bg-gradient-to-br from-white to-[#fff7f3] rounded-xl p-5 lg:p-6 border border-[#B89B7A]/15 transition-all duration-300 hover:scale-105 hover:shadow-lg relative ${index === 2 ? 'md:col-span-2 xl:col-span-1' : ''}`}
-                       style={{ boxShadow: tokens.shadows.md }}>
-                    
-                    {/* BADGE DO PRODUTO - MELHOR CONTRASTE */}
-                    <div className="absolute -top-3 -right-3 z-10">
-                      <span className={`text-xs font-bold px-3 py-1.5 rounded-full text-white shadow-md ${index === 0 ? 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]' : 'bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]'}`}>
-                        {product.badge}
-                      </span>
-                    </div>
 
-                    {/* IMAGEM DO PRODUTO - PROPORÇÕES CORRIGIDAS */}
-                    <div className="w-full bg-white rounded-lg mb-5 flex items-center justify-center relative overflow-hidden"
-                         style={{ 
-                           boxShadow: tokens.shadows.sm,
-                           height: 'auto',
-                           aspectRatio: index === 0 ? '4.6/5' : index === 1 ? '6/3.5' : index === 2 ? '3/4.5' : '3/4'
-                         }}
-                    >
-                      <ProgressiveImage 
-                        src={`${product.src}?q=85&f=auto&w=800`}
-                        alt={product.title}
-                        className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105"
-                        loading={product.priority ? "eager" : "lazy"}
-                        fetchPriority={product.priority ? "high" : "low"}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain'
-                        }}
-                      />
-                      
-                      {/* OVERLAY DE HOVER */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#B89B7A]/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg pointer-events-none"></div>
-                    </div>
+        {/* CTA Final completamente redesenhada - ESPAÇAMENTO PADRONIZADO */}
+        <section id="cta" className="scroll-mt-24 mb-24 lg:mb-28">
+          <div
+            className="relative overflow-hidden bg-gradient-to-br from-white via-[#fff7f3] to-[#f9f4ef] rounded-3xl p-8 lg:p-16 border border-[#B89B7A]/20 text-center"
+            style={{ boxShadow: tokens.shadows.xl }}
+          >
+            {/* Background decorativo */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#B89B7A]/5 via-transparent to-[#aa6b5d]/5 pointer-events-none"></div>
 
-                    {/* INFORMAÇÕES DO PRODUTO - ESPAÇAMENTO MELHORADO */}
-                    <div className="text-left min-h-[140px] flex flex-col">
-                      <h4 className="font-bold text-[#432818] text-base lg:text-lg mb-3 leading-tight line-height-1.2">
-                        {product.title}
-                      </h4>
-                      <p className="text-sm lg:text-base flex-1 leading-relaxed line-height-1.4" style={{ color: tokens.colors.textMuted }}>
-                        {product.subtitle}
-                      </p>
-                    </div>
-                    {/* VALOR INDIVIDUAL DO PRODUTO - NOVO BLOCO */}
-                    <div className="mt-4 pt-4 border-t border-[#B89B7A]/15">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium" style={{ color: tokens.colors.textMuted }}>
-                          {index === 0 ? 'Guia Completo' : index === 1 ? 'Guia Bônus' : 'Manual Premium'}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          {/* Valor original tachado de cada produto */}
-                          <span className="text-xs sm:text-sm font-bold text-[#B89B7A] line-through">
-                            {index === 0 ? 'R$ 77,00' : index === 1 ? 'R$ 59,00' : 'R$ 39,00'}
+            <AnimatedWrapper
+              animation={isLowPerformance ? "none" : "fade"}
+              show={true}
+              duration={600}
+              delay={200}
+            >
+              <div className="relative z-10">
+                {/* Header da CTA - ESPAÇAMENTO PADRONIZADO */}
+                <div className="mb-16 lg:mb-20">
+                  <div className="inline-flex items-center gap-4 mb-8">
+                    <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                    <div className="w-6 h-6 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] rounded-full animate-pulse shadow-lg"></div>
+                    <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent"></div>
+                  </div>
+
+                  <h2 className="text-4xl lg:text-6xl xl:text-7xl font-playfair font-bold leading-tight mb-8">
+                    <span className="bg-gradient-to-r from-[#2C1810] via-[#aa6b5d] to-[#2C1810] bg-clip-text text-transparent block mb-4">
+                      Desperte Sua Confiança
+                    </span>
+                    <span className="text-[#aa6b5d] block">
+                      Com Seu Estilo Único!
+                    </span>
+                  </h2>
+
+                  <p className="text-xl lg:text-2xl text-[#5D4A3A] font-medium mb-6">
+                    Guia {category} Personalizado + Bônus Exclusivos
+                  </p>
+
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#B89B7A]/10 to-[#aa6b5d]/10 px-4 py-2 rounded-full border border-[#B89B7A]/20">
+                    <Clock className="w-4 h-4 text-[#aa6b5d]" />
+                    <span className="text-sm font-medium text-[#aa6b5d]">
+                      Oferta por tempo limitado
+                    </span>
+                  </div>
+                </div>
+
+                {/* Grid de produtos otimizado - ESPAÇAMENTO PADRONIZADO */}
+                <div className="mb-16">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
+                    {[
+                      {
+                        src: (() => {
+                          const guideImages = {
+                            Natural:
+                              "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071344/GUIA_NATURAL_fzp6fc.webp",
+                            Clássico:
+                              "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp",
+                            Contemporâneo:
+                              "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp",
+                            Elegante:
+                              "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071342/GUIA_ELEGANTE_asez1q.webp",
+                            Romântico:
+                              "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp",
+                            Sexy: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071349/GUIA_SEXY_t5x2ov.webp",
+                            Dramático:
+                              "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp",
+                            Criativo:
+                              "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1745071342/GUIA_CRIATIVO_ntbzph.webp",
+                          };
+                          return (
+                            guideImages[category] || guideImages["Natural"]
+                          );
+                        })(),
+                        title: `Manual de Estilo ${category}`,
+                        subtitle:
+                          "Descubra combinações infalíveis de cores, tecidos e acessórios que valorizam sua personalidade única.",
+                        badge: "GUIA PRINCIPAL",
+                        originalPrice: "R$ 77,00",
+                        priority: true,
+                      },
+                      {
+                        src: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1744911677/Cópia_de_MOCKUPS_15_-_Copia_grstwl.png",
+                        title: "Guia das Peças Estratégicas",
+                        subtitle:
+                          "Peças-chave que maximizam combinações e garantem versatilidade em qualquer situação.",
+                        badge: "BÔNUS EXCLUSIVO",
+                        originalPrice: "R$ 59,00",
+                        priority: false,
+                      },
+                      {
+                        src: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1744911666/Cópia_de_Template_Dossiê_Completo_2024_15_-_Copia_ssrhu3.png",
+                        title: "Manual de Visagismo",
+                        subtitle:
+                          "Descubra os cortes ideais para seu rosto e realce sua beleza natural.",
+                        badge: "BÔNUS PREMIUM",
+                        originalPrice: "R$ 39,00",
+                        priority: false,
+                      },
+                    ].map((product, index) => (
+                      <div
+                        key={index}
+                        className={`group bg-white rounded-2xl p-6 lg:p-8 border border-[#B89B7A]/15 transition-all duration-500 hover:scale-105 hover:shadow-2xl relative ${
+                          index === 2 ? "md:col-span-2 xl:col-span-1" : ""
+                        }`}
+                        style={{ boxShadow: tokens.shadows.lg }}
+                      >
+                        {/* Badge premium */}
+                        <div className="absolute -top-4 -right-4 z-10">
+                          <span
+                            className={`text-xs font-bold px-4 py-2 rounded-full text-white shadow-lg transform rotate-12 ${
+                              index === 0
+                                ? "bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]"
+                                : "bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]"
+                            }`}
+                          >
+                            {product.badge}
                           </span>
-                          {/* Valor promocional (opcional, se quiser mostrar) */}
-                          {/* <span className="text-xs sm:text-sm font-bold text-[#aa6b5d]">{index === 0 ? 'Incluído' : 'Incluído'}</span> */}
                         </div>
+
+                        {/* Imagem do produto */}
+                        <div
+                          className="relative mb-6 bg-gradient-to-br from-[#f9f4ef] to-[#fff7f3] rounded-xl p-4 overflow-hidden"
+                          style={{
+                            boxShadow: tokens.shadows.sm,
+                            aspectRatio:
+                              index === 0
+                                ? "4.6/5"
+                                : index === 1
+                                ? "6/3.5"
+                                : "3/4.5",
+                          }}
+                        >
+                          <OptimizedImage
+                            src={product.src}
+                            alt={product.title}
+                            className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110"
+                            priority={product.priority}
+                          />
+
+                          {/* Overlay de hover */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#B89B7A]/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-xl"></div>
+                        </div>
+
+                        {/* Conteúdo do produto - ESPAÇAMENTO PADRONIZADO */}
+                        <div className="text-left space-y-4">
+                          <h4 className="font-bold text-[#2C1810] text-lg lg:text-xl leading-tight">
+                            {product.title}
+                          </h4>
+                          <p className="text-sm lg:text-base text-[#5D4A3A] leading-relaxed">
+                            {product.subtitle}
+                          </p>
+
+                          {/* Preço original */}
+                          <div className="pt-4 border-t border-[#B89B7A]/10">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium text-[#8F7A6A]">
+                                Valor individual:
+                              </span>
+                              <span className="text-lg font-bold text-[#B89B7A] line-through">
+                                {product.originalPrice}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Resumo de valor redesenhado - ESPAÇAMENTO PADRONIZADO */}
+                <div className="max-w-lg mx-auto mb-12">
+                  <div
+                    className="relative bg-white rounded-2xl p-8 lg:p-10 border-4 border-double border-[#B89B7A]/30 overflow-hidden"
+                    style={{
+                      boxShadow:
+                        "0 20px 40px rgba(184,155,122,0.15), 0 0 0 1px rgba(255,255,255,0.8) inset",
+                      background:
+                        "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(249,244,239,0.95) 100%)",
+                    }}
+                  >
+                    {/* Background decorativo */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#B89B7A]/10 to-transparent rounded-full transform translate-x-16 -translate-y-16"></div>
+
+                    <div className="relative z-10 text-center space-y-6">
+                      <p className="text-lg lg:text-xl font-semibold text-[#5D4A3A]">
+                        De{" "}
+                        <span className="font-bold text-[#B89B7A] text-xl lg:text-2xl line-through">
+                          R$ 175,00
+                        </span>{" "}
+                        por apenas:
+                      </p>
+
+                      <div className="space-y-2">
+                        <p className="text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent">
+                          R$ 39,90
+                        </p>
+                        <p className="text-lg lg:text-xl font-bold text-[#4CAF50]">
+                          ou 5x de R$ 8,83
+                        </p>
+                      </div>
+
+                      <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#4CAF50]/10 to-[#43a047]/10 px-4 py-2 rounded-full border border-[#4CAF50]/20">
+                        <TrendingUp className="w-4 h-4 text-[#4CAF50]" />
+                        <span className="text-sm font-bold text-[#4CAF50]">
+                          Economia de R$ 135,10 (77% OFF)
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-center gap-2 text-[#8F7A6A] text-sm">
+                        <Hourglass className="w-4 h-4 animate-pulse" />
+                        <span>
+                          Esta oferta expira quando você sair desta página
+                        </span>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-            {/* RESUMO DO VALOR - REDESENHADO COMPLETAMENTE */}
-            <div className="max-w-sm mx-auto space-y-4 sm:space-y-6 bg-gradient-to-br from-[#fff7f3] to-[#f9f4ef] p-6 sm:p-8 rounded-xl border border-[#B89B7A]/20 mt-10 mb-10"
-                 style={{ boxShadow: tokens.shadows.sm }}>
-              <div className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-double border-[#B89B7A]/30 bg-white/80 backdrop-blur-md px-4 py-8 sm:px-10 sm:py-10 flex flex-col items-center gap-4 sm:gap-5"
-                style={{
-                  boxShadow: '0 8px 32px 0 rgba(184,155,122,0.18), 0 1.5px 0 0 #fff inset',
-                  background: 'linear-gradient(135deg,rgba(255,255,255,0.85) 60%,rgba(184,155,122,0.10) 100%)',
-                  border: '4px double #B89B7A',
-                  borderRadius: tokens.radius.xl,
-                  position: 'relative',
-                  zIndex: 2
-                }}
-              >
-                <p className="text-base sm:text-lg font-semibold text-[#8F7A6A] mb-2 sm:mb-2.5 tracking-wide">
-                  De <span className="font-bold text-[#B89B7A] text-lg sm:text-xl line-through">R$ 175,00</span> por apenas:
-                </p>
-                <p className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] bg-clip-text text-transparent drop-shadow-lg mt-1 sm:mt-2">
-                  R$ 39,90
-                </p>
-                <p className="text-[11px] sm:text-[11px] text-[#2d7d32] font-medium mt-2 sm:mt-2.5">
-                  Economia de R$ 135,10 (77% OFF)
-                </p>
-                <p className="flex items-center justify-center gap-2 text-[#8F7A6A] text-xs sm:text-sm mt-2 sm:mt-3">
-                  <span className="relative inline-block w-5 h-5 sm:w-6 sm:h-6">
-                    <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
-                      <defs>
-                        <linearGradient id="ampulhetaCorMarca" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="#B89B7A" />
-                          <stop offset="1" stopColor="#aa6b5d" />
-                        </linearGradient>
-                        <clipPath id="ampulhetaClip">
-                          <rect x="4" y="3" width="16" height="18" rx="4" />
-                        </clipPath>
-                      </defs>
-                      <path d="M7 3h10a1 1 0 0 1 1 1v2c0 2.5-2 4.5-4 5 2 0.5 4 2.5 4 5v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2c0-2.5 2-4.5 4-5-2-0.5-4-2.5-4-5V4a1 1 0 0 1 1-1z" stroke="url(#ampulhetaCorMarca)" strokeWidth="1.5" fill="none"/>
-                      <rect x="10.5" y="5.5" width="3" height="3.5" rx="1.2" fill="url(#ampulhetaCorMarca)" className="sand-top" clipPath="url(#ampulhetaClip)"/>
-                      <rect x="10.5" y="15" width="3" height="2.5" rx="1.2" fill="url(#ampulhetaCorMarca)" className="sand-bottom" clipPath="url(#ampulhetaClip)"/>
-                      <rect x="11.7" y="10" width="0.6" height="4" rx="0.3" fill="url(#ampulhetaCorMarca)" className="sand-flow"/>
-                    </svg>
-                    <style>{`
-                      @keyframes sandTop {
-                        0% { height: 3.5px; opacity: 1; }
-                        80% { height: 0.5px; opacity: 0.2; }
-                        100% { height: 0.5px; opacity: 0; }
-                      }
-                      @keyframes sandBottom {
-                        0% { height: 0.5px; opacity: 0; }
-                        20% { height: 0.5px; opacity: 0.2; }
-                        100% { height: 2.5px; opacity: 1; }
-                      }
-                      @keyframes sandFlow {
-                        0% { opacity: 1; }
-                        80% { opacity: 1; }
-                        100% { opacity: 0; }
-                      }
-                      .sand-top { animation: sandTop 2.5s linear infinite; transform-origin: top; }
-                      .sand-bottom { animation: sandBottom 2.5s linear infinite; transform-origin: bottom; }
-                      .sand-flow { animation: sandFlow 2.5s linear infinite; }
-                    `}</style>
-                  </span>
-                  Esta oferta expira quando você sair desta página
-                </p>
-              </div>
-            </div>
-          </AnimatedWrapper>
-        </section>
-      </div>
+                </div>
 
-      {/* Build info - apenas para desenvolvimento */}
+                {/* CTA Button principal com texto responsivo */}
+                <div className="text-center">
+                  <Button
+                    onClick={handleCTAClick}
+                    className="group relative text-white font-bold py-6 px-8 sm:px-12 lg:px-16 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #4CAF50 0%, #43a047 50%, #388e3c 100%)",
+                      boxShadow:
+                        "0 20px 40px rgba(76, 175, 80, 0.3), 0 0 0 1px rgba(255,255,255,0.2) inset",
+                    }}
+                    type="button"
+                  >
+                    <span
+                      className="flex items-center justify-center gap-2 sm:gap-3"
+                      style={{
+                        fontSize: "clamp(0.875rem, 2.5vw, 1.25rem)", // Ajuste responsivo: 14px min, 20px max
+                      }}
+                    >
+                      <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 transition-transform duration-300 group-hover:scale-110 flex-shrink-0" />
+                      <span className="leading-tight">
+                        Quero Transformar Meu Estilo Agora
+                      </span>
+                      <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce flex-shrink-0" />
+                    </span>
+
+                    {/* Efeito de brilho */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-2xl"></div>
+                  </Button>
+
+                  {/* Garantias de segurança - ESPAÇAMENTO PADRONIZADO */}
+                  <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-[#8F7A6A]">
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-[#B89B7A]" />
+                      <span>Pagamento 100% Seguro</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-[#B89B7A]" />
+                      <span>Acesso Imediato</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Award className="w-4 h-4 text-[#B89B7A]" />
+                      <span>Garantia de 7 Dias</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AnimatedWrapper>
+          </div>
+        </section>
+      </main>
+
+      {/* Rodapé simples e elegante - ESPAÇAMENTO PADRONIZADO */}
+      <footer className="mt-28 border-t border-[#B89B7A]/15 bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef]">
+        <div className="container mx-auto px-4 lg:px-6 py-12 lg:py-16 max-w-6xl">
+          <div className="text-center space-y-6">
+            {/* Links de política */}
+            <div className="mb-8">
+              <a
+                href="/politica-privacidade"
+                className="text-[#5D4A3A] hover:text-[#B89B7A] transition-colors duration-300 font-medium text-sm lg:text-base underline decoration-[#B89B7A]/30 hover:decoration-[#B89B7A] underline-offset-4"
+              >
+                Política de Privacidade
+              </a>
+            </div>
+
+            {/* Linha decorativa */}
+            <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#B89B7A] to-transparent mx-auto mb-8"></div>
+
+            {/* Copyright */}
+            <p className="text-[#8F7A6A] text-sm lg:text-base font-medium">
+              © 2025 Gisele Galvão. Todos os direitos reservados.
+            </p>
+          </div>
+        </div>
+      </footer>
+
+      {/* Build info oculto */}
       <div className="hidden">
         <BuildInfo />
       </div>
