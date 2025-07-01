@@ -14,6 +14,16 @@ const QuizPage: React.FC = () => {
   const [user, setUser] = useState<{ userName: string } | null>(null);
   const [showingStrategicQuestions, setShowingStrategicQuestions] = useState(false);
   const [currentStrategicQuestionIndex, setCurrentStrategicQuestionIndex] = useState(0);
+  
+  // Estado separado para questões estratégicas, sem referência circular
+  const [strategicAnswersState, setStrategicAnswersState] = useState<Record<string, string[]>>(() => {
+    try {
+      const saved = localStorage.getItem('strategicAnswers');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
 
   const {
     currentQuestion,
@@ -52,6 +62,18 @@ const QuizPage: React.FC = () => {
     
     if (showingStrategicQuestions) {
       console.log('[DEBUG] Handling strategic answer:', response);
+      
+      // Atualizar estado local das questões estratégicas
+      const newStrategicAnswers = {
+        ...strategicAnswersState,
+        [response.questionId]: response.selectedOptions
+      };
+      setStrategicAnswersState(newStrategicAnswers);
+      
+      // Salvar no localStorage
+      localStorage.setItem('strategicAnswers', JSON.stringify(newStrategicAnswers));
+      
+      // Também chamar o handler do useQuizLogic para manter consistência
       handleStrategicAnswer(response.questionId, response.selectedOptions);
     } else {
       console.log('[DEBUG] Handling normal answer:', response);
@@ -64,7 +86,7 @@ const QuizPage: React.FC = () => {
     console.log('[DEBUG] Current strategic question index:', currentStrategicQuestionIndex);
     
     if (showingStrategicQuestions) {
-      if (currentStrategicQuestionIndex < 6) {
+      if (currentStrategicQuestionIndex < strategicQuestions.length - 1) {
         console.log('[DEBUG] Moving to next strategic question');
         setCurrentStrategicQuestionIndex(prev => prev + 1);
       } else {
@@ -90,9 +112,12 @@ const QuizPage: React.FC = () => {
   const getCurrentAnswers = () => {
     if (showingStrategicQuestions) {
       const currentStrategicQuestion = strategicQuestions[currentStrategicQuestionIndex];
-      const answers = currentStrategicQuestion ? (strategicAnswers[currentStrategicQuestion.id] || []) : [];
-      console.log('[DEBUG] Strategic answers for question', currentStrategicQuestion?.id, ':', answers);
-      return answers;
+      if (currentStrategicQuestion) {
+        const answers = strategicAnswersState[currentStrategicQuestion.id] || [];
+        console.log('[DEBUG] Strategic answers for question', currentStrategicQuestion.id, ':', answers);
+        return answers;
+      }
+      return [];
     }
     console.log('[DEBUG] Normal answers:', currentAnswers);
     return currentAnswers;

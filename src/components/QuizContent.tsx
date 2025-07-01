@@ -38,7 +38,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   const requiredSelections = showingStrategicQuestions ? 1 : (currentQuestion?.multiSelect || 3);
   
   // Check if we have enough selections to proceed
-  const canProceed = currentAnswers?.length === requiredSelections;
+  const canProceed = currentAnswers?.length >= requiredSelections;
   
   // Determine if this is the last question
   const isLastQuestion = showingStrategicQuestions 
@@ -67,7 +67,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={{}} // Deixamos vazio pois o StrategicQuestions vai buscar do localStorage
+            answers={{}} // Passamos vazio pois StrategicQuestions gerencia internamente
             onAnswer={handleAnswerSubmit}
           />
         ) : (

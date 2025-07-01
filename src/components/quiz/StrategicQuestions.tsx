@@ -20,54 +20,12 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   const isMobile = useIsMobile();
   const [imageError, setImageError] = useState(false);
   
-  // Buscar respostas estratégicas do localStorage
-  const [strategicAnswers, setStrategicAnswers] = useState<Record<string, string[]>>(() => {
-    try {
-      const saved = localStorage.getItem('strategicAnswers');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-  
   const currentQuestion = strategicQuestions[currentQuestionIndex];
-  const currentAnswers = currentQuestion ? (strategicAnswers[currentQuestion.id] || []) : [];
-  
-  console.log('[DEBUG StrategicQuestions]', {
-    currentQuestionIndex,
-    currentQuestion: currentQuestion?.id,
-    currentAnswers,
-    strategicAnswers
-  });
+  const currentAnswers = currentQuestion ? (answers[currentQuestion.id] || []) : [];
   
   useEffect(() => {
     setImageError(false);
   }, [currentQuestion?.id]);
-
-  // Sincronizar com localStorage quando as respostas mudarem
-  useEffect(() => {
-    const handleStorageChange = () => {
-      try {
-        const saved = localStorage.getItem('strategicAnswers');
-        if (saved) {
-          setStrategicAnswers(JSON.parse(saved));
-        }
-      } catch {
-        console.error('Error reading strategic answers from localStorage');
-      }
-    };
-
-    // Listen for changes in localStorage
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Also check for updates periodically (in case of same-tab updates)
-    const interval = setInterval(handleStorageChange, 100);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      clearInterval(interval);
-    };
-  }, []);
 
   if (!currentQuestion) {
     return (
@@ -81,13 +39,6 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
     console.log('[DEBUG] Strategic option selected:', optionId, 'for question:', currentQuestion.id);
     
     // Para questões estratégicas, sempre substituir a seleção (máximo 1)
-    const newAnswers = { ...strategicAnswers, [currentQuestion.id]: [optionId] };
-    setStrategicAnswers(newAnswers);
-    
-    // Salvar no localStorage imediatamente
-    localStorage.setItem('strategicAnswers', JSON.stringify(newAnswers));
-    
-    // Notificar o componente pai
     onAnswer({ 
       questionId: currentQuestion.id,
       selectedOptions: [optionId] // Sempre um array com apenas uma opção
@@ -156,15 +107,6 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
           ></div>
         </div>
       </div>
-
-      {/* Debug info */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mt-4 p-2 bg-gray-100 text-xs text-gray-600 rounded">
-          <p>Debug - Question: {currentQuestion.id}</p>
-          <p>Debug - Current Answers: {JSON.stringify(currentAnswers)}</p>
-          <p>Debug - All Strategic Answers: {JSON.stringify(strategicAnswers)}</p>
-        </div>
-      )}
     </div>
   );
 };
