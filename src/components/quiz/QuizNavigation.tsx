@@ -44,11 +44,13 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
 
       // Auto-avanço instantâneo para questões normais
       if (shouldAutoAdvance()) {
-        console.log('Auto-avançando questão normal após 3 seleções');
+        console.log('[DEBUG Navigation] Auto-avançando questão normal após 3 seleções');
         const newTimer = setTimeout(() => {
           onNext();
         }, 100); // Tempo mínimo para feedback visual
         setAutoAdvanceTimer(newTimer);
+      } else if (currentQuestionType === 'strategic') {
+        console.log('[DEBUG Navigation] Questão estratégica pronta para avanço manual');
       }
 
       return () => {
@@ -60,7 +62,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
     } else {
       setShowActivationEffect(false);
     }
-  }, [canProceed, onNext, shouldAutoAdvance]);
+  }, [canProceed, onNext, shouldAutoAdvance, currentQuestionType]);
 
   const getHelperText = useCallback((): string => {
     if (!canProceed) {
@@ -73,10 +75,21 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
       return 'Avançando automaticamente...';
     }
     
+    if (currentQuestionType === 'strategic' && canProceed) {
+      return 'Clique em "Avançar" para continuar';
+    }
+    
     return '';
   }, [canProceed, currentQuestionType]);
 
   const nextButtonText = isLastQuestion ? 'Ver Resultado' : 'Avançar';
+
+  console.log('[DEBUG Navigation]', {
+    canProceed,
+    currentQuestionType,
+    selectedOptionsCount,
+    helperText: getHelperText()
+  });
 
   return (
     <div className="mt-8 w-full px-4 md:px-0">

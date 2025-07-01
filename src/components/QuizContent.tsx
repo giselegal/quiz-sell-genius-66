@@ -45,6 +45,14 @@ export const QuizContent: React.FC<QuizContentProps> = ({
     ? currentStrategicQuestionIndex >= 6 
     : currentQuestionIndex >= totalQuestions - 1;
 
+  console.log('[DEBUG QuizContent]', {
+    showingStrategicQuestions,
+    currentAnswers,
+    requiredSelections,
+    canProceed,
+    currentQuestion: currentQuestion?.id || 'undefined'
+  });
+
   return (
     <>
       <QuizHeader 
@@ -59,12 +67,7 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={showingStrategicQuestions ? currentAnswers.reduce((acc, optionId) => {
-              if (currentQuestion?.id) {
-                acc[currentQuestion.id] = [optionId];
-              }
-              return acc;
-            }, {}) : {}}
+            answers={{}} // Deixamos vazio pois o StrategicQuestions vai buscar do localStorage
             onAnswer={handleAnswerSubmit}
           />
         ) : (

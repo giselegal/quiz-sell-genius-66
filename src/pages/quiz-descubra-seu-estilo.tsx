@@ -6,6 +6,7 @@ import { QuizContent } from '@/components/QuizContent';
 import { useQuizLogic } from '@/hooks/useQuizLogic';
 import { UserResponse } from '@/types/quiz';
 import { storeUserForHotmart } from '@/utils/hotmartWebhook';
+import { strategicQuestions } from '@/data/strategicQuestions';
 
 const QuizPage: React.FC = () => {
   const navigate = useNavigate();
@@ -47,26 +48,37 @@ const QuizPage: React.FC = () => {
   };
 
   const handleAnswerSubmit = (response: UserResponse) => {
+    console.log('[DEBUG] handleAnswerSubmit called:', response);
+    
     if (showingStrategicQuestions) {
+      console.log('[DEBUG] Handling strategic answer:', response);
       handleStrategicAnswer(response.questionId, response.selectedOptions);
     } else {
+      console.log('[DEBUG] Handling normal answer:', response);
       handleAnswer(response.questionId, response.selectedOptions);
     }
   };
 
   const handleNextClick = () => {
+    console.log('[DEBUG] handleNextClick called. Strategic mode:', showingStrategicQuestions);
+    console.log('[DEBUG] Current strategic question index:', currentStrategicQuestionIndex);
+    
     if (showingStrategicQuestions) {
       if (currentStrategicQuestionIndex < 6) {
+        console.log('[DEBUG] Moving to next strategic question');
         setCurrentStrategicQuestionIndex(prev => prev + 1);
       } else {
+        console.log('[DEBUG] Strategic questions completed, submitting quiz');
         // Strategic questions completed, submit quiz and navigate to result
         submitQuizIfComplete();
         navigate('/resultado');
       }
     } else {
       if (currentQuestionIndex < totalQuestions - 1) {
+        console.log('[DEBUG] Moving to next normal question');
         handleNext();
       } else {
+        console.log('[DEBUG] Normal questions completed, showing strategic questions');
         // Regular questions completed, show strategic questions
         setShowingStrategicQuestions(true);
         setCurrentStrategicQuestionIndex(0);
@@ -77,10 +89,24 @@ const QuizPage: React.FC = () => {
   // Get current answers based on question type
   const getCurrentAnswers = () => {
     if (showingStrategicQuestions) {
-      const currentStrategicQuestion = require('@/data/strategicQuestions').strategicQuestions[currentStrategicQuestionIndex];
-      return currentStrategicQuestion ? (strategicAnswers[currentStrategicQuestion.id] || []) : [];
+      const currentStrategicQuestion = strategicQuestions[currentStrategicQuestionIndex];
+      const answers = currentStrategicQuestion ? (strategicAnswers[currentStrategicQuestion.id] || []) : [];
+      console.log('[DEBUG] Strategic answers for question', currentStrategicQuestion?.id, ':', answers);
+      return answers;
     }
+    console.log('[DEBUG] Normal answers:', currentAnswers);
     return currentAnswers;
+  };
+
+  // Get current question based on question type
+  const getCurrentQuestion = () => {
+    if (showingStrategicQuestions) {
+      const question = strategicQuestions[currentStrategicQuestionIndex];
+      console.log('[DEBUG] Current strategic question:', question);
+      return question;
+    }
+    console.log('[DEBUG] Current normal question:', currentQuestion);
+    return currentQuestion;
   };
 
   // Redirect to result if quiz is completed
@@ -112,10 +138,7 @@ const QuizPage: React.FC = () => {
       totalQuestions={totalQuestions}
       showingStrategicQuestions={showingStrategicQuestions}
       currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-      currentQuestion={showingStrategicQuestions 
-        ? require('@/data/strategicQuestions').strategicQuestions[currentStrategicQuestionIndex]
-        : currentQuestion
-      }
+      currentQuestion={getCurrentQuestion()}
       currentAnswers={getCurrentAnswers()}
       handleAnswerSubmit={handleAnswerSubmit}
       handleNextClick={handleNextClick}
