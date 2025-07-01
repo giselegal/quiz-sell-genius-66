@@ -19,7 +19,7 @@ export const optimizeCloudinaryUrl = (
     height,
     quality = 85,
     format = 'auto',
-    crop = 'limit'
+    crop = false
   } = options;
 
   // Extrair partes da URL do Cloudinary
@@ -52,7 +52,7 @@ export const optimizeCloudinaryUrl = (
   
   // Modo de corte
   if (crop) {
-    transformations.push(`c_${crop}`);
+    transformations.push('c_fill');
   }
   
   // Otimizar para retina display
@@ -89,7 +89,7 @@ export const getLowQualityPlaceholder = (url: string): string => {
     height: 20,
     quality: 10,
     format: 'auto',
-    crop: 'limit'
+    crop: true
   });
 };
 
@@ -132,4 +132,32 @@ export const getResponsiveImageSources = (
     srcset: getOptimizedImageUrl(url, width),
     width
   }));
+};
+
+/**
+ * Otimiza URLs do Cloudinary aplicando transformações para melhor qualidade e performance
+ * @param url URL da imagem do Cloudinary
+ * @param options Opções de otimização
+ * @returns URL otimizada
+ */
+export const optimizeImageUrl = (url: string, options: ImageOptimizationOptions = {}) => {
+  const {
+    quality = 80,
+    width,
+    height,
+    format = 'auto',
+    crop = false
+  } = options;
+
+  // Simplified optimization logic
+  const params = new URLSearchParams();
+  
+  if (quality !== 80) params.append('q', quality.toString());
+  if (width) params.append('w', width.toString());
+  if (height) params.append('h', height.toString());
+  if (format !== 'auto') params.append('f', format);
+  if (crop) params.append('c', 'fill');
+
+  const paramString = params.toString();
+  return paramString ? `${url}?${paramString}` : url;
 };

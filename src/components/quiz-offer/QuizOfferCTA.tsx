@@ -19,9 +19,9 @@ export const QuizOfferCTA: React.FC<QuizOfferCTAProps> = ({
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   
   const handleCTAClick = () => {
-    trackButtonClick('main-cta', 'Comprar Quiz Completo', 'cta-section', 'purchase');
+    trackButtonClick('main-cta', 'Comprar Quiz Completo', 'cta-section');
     // Registrar início de checkout
-    trackSaleConversion(39.0, 'Quiz de Estilo Completo');
+    trackSaleConversion(39.0, 'BRL', 'Quiz de Estilo Completo');
     // Redirecionar para checkout
     window.location.href = getCtaUrl();
   };

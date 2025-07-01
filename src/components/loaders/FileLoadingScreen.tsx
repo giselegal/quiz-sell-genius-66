@@ -1,118 +1,71 @@
+
 import React, { useState, useEffect } from 'react';
-import { Progress } from "@/components/ui/progress";
+import { Progress } from '@/components/ui/progress';
 
 interface FileLoadingScreenProps {
-  totalFiles?: number;
-  initialFilesLoaded?: number;
-  loadingSpeed?: number; // ms between file increments
-  onLoadingComplete?: () => void;
-  redirectUrl?: string;
-  title?: string;
-  subtitle?: string;
+  fileUrl?: string;
+  onFileLoaded?: () => void;
+  onError?: (error: Error) => void;
 }
 
-export const FileLoadingScreen: React.FC<FileLoadingScreenProps> = ({
-  totalFiles = 3700,
-  initialFilesLoaded = 2000,
-  loadingSpeed = 50,
-  onLoadingComplete,
-  redirectUrl,
-  title = "Lovable Editor",
-  subtitle = "Carregando arquivos do Editor Unificado"
+const FileLoadingScreen: React.FC<FileLoadingScreenProps> = ({ 
+  fileUrl = '', 
+  onFileLoaded = () => {}, 
+  onError = () => {} 
 }) => {
-  const [filesLoaded, setFilesLoaded] = useState(initialFilesLoaded);
-  const [loadingComplete, setLoadingComplete] = useState(false);
-  const [loadingText, setLoadingText] = useState('Carregando arquivos...');
-  
-  // Textos de carregamento por etapa
-  const loadingTexts = [
-    'Inicializando componentes...',
-    'Carregando arquivos...',
-    'Preparando editor visual...',
-    'Configurando ambiente...',
-    'Carregando templates...',
-    'Inicializando interface...',
-    'Quase pronto...'
-  ];
-  
+  const [progress, setProgress] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
+
   useEffect(() => {
-    // Trocar texto de carregamento periodicamente
-    const textInterval = setInterval(() => {
-      setLoadingText(loadingTexts[Math.floor(Math.random() * loadingTexts.length)]);
-    }, 2000);
-    
-    // Incrementar número de arquivos carregados
-    const interval = setInterval(() => {
-      setFilesLoaded(prev => {
-        if (prev >= totalFiles) {
-          clearInterval(interval);
-          clearInterval(textInterval);
-          setLoadingComplete(true);
-          setLoadingText('Carregamento concluído!');
-          
-          // Executar callback se existir
-          if (onLoadingComplete) {
-            onLoadingComplete();
-          }
-          
-          // Redirecionar se URL fornecida
-          if (redirectUrl) {
-            setTimeout(() => {
-              window.location.href = redirectUrl;
-            }, 1000);
-          }
-          
-          return totalFiles;
+    const timer = setInterval(() => {
+      setProgress(prev => {
+        const newProgress = prev + Math.random() * 15;
+        if (newProgress >= 100) {
+          setIsComplete(true);
+          clearInterval(timer);
+          setTimeout(() => {
+            onFileLoaded();
+          }, 500);
+          return 100;
         }
-        return prev + Math.floor(Math.random() * 10) + 1;
+        return newProgress;
       });
-    }, loadingSpeed);
-    
-    return () => {
-      clearInterval(interval);
-      clearInterval(textInterval);
-    };
-  }, [totalFiles, loadingSpeed, redirectUrl, onLoadingComplete]);
-  
-  const progressPercentage = (filesLoaded / totalFiles) * 100;
-  
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, [onFileLoaded]);
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#FAF9F7] to-[#EDE5DB]">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <div className="flex items-center justify-center mb-6">
-          <div className="mr-3">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 17L12 22L22 17" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 12L12 17L22 12" stroke="#B89B7A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <h2 className="text-2xl font-playfair text-[#432818]">{title}</h2>
+    <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center">
+      <div className="max-w-md w-full px-8">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-playfair text-[#432818] mb-2">
+            Carregando Sistema
+          </h1>
+          <p className="text-[#8F7A6A]">
+            Preparando sua experiência personalizada...
+          </p>
         </div>
         
-        <div className="mb-6">
-          <h3 className="text-lg font-medium mb-2 text-[#432818]">{subtitle}</h3>
-          <p className="text-[#8F7A6A] text-sm mb-4">{loadingText}</p>
-          
-          <Progress value={progressPercentage} className="h-3 mb-2" 
-            style={{
-              background: '#EDE5DB',
-              '--tw-progress-bar': loadingComplete ? '#4CAF50' : '#B89B7A'
-            }} 
-          />
-          
-          <div className="flex justify-between text-sm text-[#8F7A6A]">
-            <span>{filesLoaded} de {totalFiles} arquivos</span>
-            <span>{Math.round(progressPercentage)}%</span>
+        <div className="space-y-4">
+          <Progress value={progress} className="h-2" />
+          <div className="text-center">
+            <span className="text-sm text-[#8F7A6A]">
+              {Math.round(progress)}% concluído
+            </span>
           </div>
         </div>
         
-        {loadingComplete && (
-          <div className="text-center p-3 bg-green-50 rounded-md text-green-700">
-            Carregamento concluído! Redirecionando...
+        {isComplete && (
+          <div className="text-center mt-4">
+            <p className="text-[#432818] font-medium">
+              ✓ Carregamento concluído!
+            </p>
           </div>
         )}
       </div>
     </div>
   );
 };
+
+export default FileLoadingScreen;
