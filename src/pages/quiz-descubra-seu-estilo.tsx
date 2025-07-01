@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QuizIntro from '@/components/QuizIntro';
 import { QuizContent } from '@/components/QuizContent';
 import { useQuizLogic } from '@/hooks/useQuizLogic';
 import { UserResponse } from '@/types/quiz';
-import { StrategicQuestions } from '@/components/quiz/StrategicQuestions';
 import { storeUserForHotmart } from '@/utils/hotmartWebhook';
 
 const QuizPage: React.FC = () => {
@@ -25,7 +25,8 @@ const QuizPage: React.FC = () => {
     strategicAnswers,
     handleStrategicAnswer,
     totalQuestions,
-    isInitialLoadComplete
+    isInitialLoadComplete,
+    submitQuizIfComplete
   } = useQuizLogic();
 
   // Store user data for Hotmart integration when quiz starts
@@ -58,7 +59,8 @@ const QuizPage: React.FC = () => {
       if (currentStrategicQuestionIndex < 6) {
         setCurrentStrategicQuestionIndex(prev => prev + 1);
       } else {
-        // Strategic questions completed, navigate to result
+        // Strategic questions completed, submit quiz and navigate to result
+        submitQuizIfComplete();
         navigate('/resultado');
       }
     } else {
@@ -70,6 +72,15 @@ const QuizPage: React.FC = () => {
         setCurrentStrategicQuestionIndex(0);
       }
     }
+  };
+
+  // Get current answers based on question type
+  const getCurrentAnswers = () => {
+    if (showingStrategicQuestions) {
+      const currentStrategicQuestion = require('@/data/strategicQuestions').strategicQuestions[currentStrategicQuestionIndex];
+      return currentStrategicQuestion ? (strategicAnswers[currentStrategicQuestion.id] || []) : [];
+    }
+    return currentAnswers;
   };
 
   // Redirect to result if quiz is completed
@@ -94,16 +105,6 @@ const QuizPage: React.FC = () => {
     return <QuizIntro onStart={handleStart} />;
   }
 
-  if (showingStrategicQuestions) {
-    return (
-      <StrategicQuestions
-        currentQuestionIndex={currentStrategicQuestionIndex}
-        answers={strategicAnswers}
-        onAnswer={handleAnswerSubmit}
-      />
-    );
-  }
-
   return (
     <QuizContent
       user={user}
@@ -111,8 +112,11 @@ const QuizPage: React.FC = () => {
       totalQuestions={totalQuestions}
       showingStrategicQuestions={showingStrategicQuestions}
       currentStrategicQuestionIndex={currentStrategicQuestionIndex}
-      currentQuestion={currentQuestion}
-      currentAnswers={currentAnswers}
+      currentQuestion={showingStrategicQuestions 
+        ? require('@/data/strategicQuestions').strategicQuestions[currentStrategicQuestionIndex]
+        : currentQuestion
+      }
+      currentAnswers={getCurrentAnswers()}
       handleAnswerSubmit={handleAnswerSubmit}
       handleNextClick={handleNextClick}
       handlePrevious={handlePrevious}

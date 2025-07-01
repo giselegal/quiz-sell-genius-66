@@ -4,6 +4,7 @@ import { QuizQuestion } from './QuizQuestion';
 import { UserResponse } from '@/types/quiz';
 import { QuizHeader } from './quiz/QuizHeader';
 import { StrategicQuestions } from './quiz/StrategicQuestions';
+import QuizNavigation from './quiz/QuizNavigation';
 
 interface QuizContentProps {
   user: any;
@@ -38,6 +39,11 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   
   // Check if we have enough selections to proceed
   const canProceed = currentAnswers?.length === requiredSelections;
+  
+  // Determine if this is the last question
+  const isLastQuestion = showingStrategicQuestions 
+    ? currentStrategicQuestionIndex >= 6 
+    : currentQuestionIndex >= totalQuestions - 1;
 
   return (
     <>
@@ -67,8 +73,18 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
             showQuestionImage={true}
+            autoAdvance={false} // Desabilitamos o auto-advance do QuizQuestion para controlar via QuizNavigation
           />
         )}
+
+        <QuizNavigation
+          canProceed={canProceed}
+          onNext={handleNextClick}
+          onPrevious={currentQuestionIndex > 0 ? handlePrevious : undefined}
+          currentQuestionType={showingStrategicQuestions ? 'strategic' : 'normal'}
+          selectedOptionsCount={currentAnswers?.length || 0}
+          isLastQuestion={isLastQuestion}
+        />
       </div>
     </>
   );
