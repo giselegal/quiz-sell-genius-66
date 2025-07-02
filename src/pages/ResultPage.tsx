@@ -1,236 +1,62 @@
-import React, { useEffect, useState, Suspense, lazy, useCallback, createContext, useContext } from "react";
+import React, { useEffect, useState, Suspense, lazy, useCallback } from "react";
+import { useQuiz } from "@/hooks/useQuiz";
+import { useGlobalStyles } from "@/hooks/useGlobalStyles";
+import { Header } from "@/components/result/Header";
+import { styleConfig } from "@/config/styleConfig";
+import { Progress } from "@/components/ui/progress";
+import { Card } from "@/components/ui/card";
+import {
+  ShoppingCart,
+  CheckCircle,
+  ArrowDown,
+  Clock,
+  ChevronLeft,
+  ChevronRight,
+  Shield,
+  Award,
+  Hourglass,
+  Star,
+  Gift,
+  Target,
+  Zap,
+  TrendingUp,
+} from "lucide-react";
+import { AnimatedWrapper } from "@/components/ui/animated-wrapper";
+import SecondaryStylesSection from "@/components/quiz-result/SecondaryStylesSection";
+import ErrorState from "@/components/result/ErrorState";
+import { Button } from "@/components/ui/button";
+import { useLoadingState } from "@/hooks/useLoadingState";
+import { useIsLowPerformanceDevice } from "@/hooks/use-mobile";
+import ResultSkeleton from "@/components/result/ResultSkeleton";
+import { trackButtonClick } from "@/utils/analytics";
+import BuildInfo from "@/components/BuildInfo";
+import SecurePurchaseElement from "@/components/result/SecurePurchaseElement";
+import GuaranteeSeal from "@/components/result/GuaranteeSeal";
+import { useAuth } from "@/context/AuthContext";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import ProgressiveImage from "@/components/ui/progressive-image";
+import ResourcePreloader from "@/components/result/ResourcePreloader";
+import PerformanceMonitor from "@/components/result/PerformanceMonitor";
+import {
+  hotmartWebhookManager,
+  storeUserForHotmart,
+} from "@/utils/hotmartWebhook";
 
-// Mocking external hooks and components for demonstration purposes
-// In a real application, these would be imported from their actual paths.
-
-// --- MOCK: AuthContext and useAuth ---
-const AuthContext = createContext(null);
-
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    userName: "Usuária Teste",
-    email: "teste@example.com",
-    uid: "mock-user-id-123",
-  }); // Mock user data
-
-  useEffect(() => {
-    // Simulate async auth check
-    const timer = setTimeout(() => {
-      console.log("Auth state ready.");
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const value = { user }; // This is correct, 'user' is an object.
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-const useAuth = () => {
-  const context = useContext(AuthContext);
-  // Add a defensive check for context being null, though in this setup it should be provided.
-  if (context === null) {
-    console.error("useAuth must be used within an AuthProvider.");
-    return { user: null }; // Return a default or handle the error appropriately
-  }
-  return context;
-};
-
-// --- MOCK: useQuiz ---
-const useQuiz = () => {
-  const [primaryStyle, setPrimaryStyle] = useState(null);
-  const [secondaryStyles, setSecondaryStyles] = useState([]);
-
-  useEffect(() => {
-    // Simulate fetching quiz results
-    const timer = setTimeout(() => {
-      setPrimaryStyle({
-        category: "Clássico", // Example category
-        percentage: 92,
-      });
-      setSecondaryStyles([
-        { category: "Elegante", percentage: 78 },
-        { category: "Romântico", percentage: 65 },
-      ]);
-    }, 50); // Small delay to simulate async
-    return () => clearTimeout(timer);
-  }, []);
-
-  return { primaryStyle, secondaryStyles };
-};
-
-// --- MOCK: useGlobalStyles ---
-const useGlobalStyles = () => {
-  const globalStyles = {
-    logo: "https://placehold.co/150x50/B89B7A/ffffff?text=Logo", // Placeholder logo
-    logoAlt: "Minha Marca",
-    logoHeight: "50px",
-    fontFamily: "Inter, system-ui, sans-serif",
-  };
-  return { globalStyles };
-};
-
-// --- MOCK: useLoadingState ---
-const useLoadingState = ({ minDuration, disableTransitions }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const completeLoading = useCallback(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, minDuration);
-  }, [minDuration]);
-  return { isLoading, completeLoading };
-};
-
-// --- MOCK: useIsLowPerformanceDevice ---
-const useIsLowPerformanceDevice = () => {
-  // For demonstration, always return false. In a real app, this would detect device performance.
-  return false;
-};
-
-// --- MOCK: Utility Functions ---
-const trackButtonClick = (eventName, eventAction, eventCategory) => {
-  console.log(`Analytics: ${eventName} - ${eventAction} - ${eventCategory}`);
-};
-
-const hotmartWebhookManager = {
-  // Mock functions
-};
-const storeUserForHotmart = (email, data) => {
-  console.log(`Hotmart: Storing user ${email} with data:`, data);
-};
-
-// --- MOCK: UI Components ---
-const Header = () => <div className="hidden">Mock Header</div>;
-const Progress = ({ value, className, indicatorClassName }) => (
-  <div className={`w-full h-2 bg-gray-200 rounded-full ${className}`}>
-    <div
-      className={`h-full rounded-full ${indicatorClassName}`}
-      style={{ width: `${value}%` }}
-    ></div>
-  </div>
+// Seções carregadas via lazy
+const BeforeAfterTransformation = lazy(
+  () => import("@/components/result/BeforeAfterTransformation")
 );
-const Card = ({ children, className, style }) => (
-  <div className={`bg-white rounded-lg p-4 ${className}`} style={style}>
-    {children}
-  </div>
+const MotivationSection = lazy(
+  () => import("@/components/result/MotivationSection")
 );
-const AnimatedWrapper = ({ children, animation, show, duration, delay, className }) => (
-  <div className={className} style={{ opacity: show ? 1 : 0, transition: `opacity ${duration}ms ease ${delay || 0}ms` }}>
-    {children}
-  </div>
+const BonusSection = lazy(() => import("@/components/result/BonusSection"));
+const Testimonials = lazy(
+  () => import("@/components/quiz-result/sales/Testimonials")
 );
-const SecondaryStylesSection = ({ secondaryStyles }) => (
-  <div className="flex flex-wrap gap-4 justify-center">
-    {secondaryStyles.map((style, index) => (
-      <div key={index} className="bg-[#f0ebe3] text-[#2C1810] px-4 py-2 rounded-full text-sm font-medium shadow-sm">
-        {style.category} ({style.percentage}%)
-      </div>
-    ))}
-  </div>
+const GuaranteeSection = lazy(
+  () => import("@/components/result/GuaranteeSection")
 );
-const ErrorState = () => (
-  <div className="text-center py-20 text-red-500">Ocorreu um erro ao carregar os resultados.</div>
-);
-const Button = ({ children, onClick, className, style, type }) => (
-  <button onClick={onClick} className={`px-4 py-2 rounded ${className}`} style={style} type={type}>
-    {children}
-  </button>
-);
-const ResultSkeleton = () => (
-  <div className="text-center py-20 text-[#8F7A6A]">Carregando resultados...</div>
-);
-const BuildInfo = () => <div className="hidden">Mock Build Info</div>;
-const SecurePurchaseElement = () => <div className="hidden">Mock Secure Purchase Element</div>;
-const GuaranteeSeal = () => <div className="hidden">Mock Guarantee Seal</div>;
-const LoadingSpinner = ({ size, className }) => (
-  <div className={`animate-spin rounded-full border-4 border-t-4 border-[#B89B7A] border-opacity-25 ${size === 'lg' ? 'h-12 w-12' : 'h-8 w-8'} ${className}`}></div>
-);
-const ProgressiveImage = ({ src, alt, width, height, className, loading, fetchPriority, onLoad }) => (
-  <img
-    src={src}
-    alt={alt}
-    width={width}
-    height={height}
-    className={className}
-    loading={loading}
-    fetchPriority={fetchPriority}
-    onLoad={onLoad}
-    onError={(e) => { e.target.src = `https://placehold.co/${width}x${height}/ccc/000?text=Image+Error`; }} // Fallback image
-  />
-);
-const ResourcePreloader = () => <div className="hidden">Mock Resource Preloader</div>;
-const PerformanceMonitor = () => <div className="hidden">Mock Performance Monitor</div>;
-
-// --- MOCK: Lucide Icons (basic SVG fallback if not available) ---
-const ShoppingCart = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>;
-const CheckCircle = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-8.1"></path><path d="M22 4L12 14.01l-3-3"></path></svg>;
-const ArrowDown = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>;
-const Clock = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>;
-const ChevronLeft = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>;
-const ChevronRight = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>;
-const Shield = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>;
-const Award = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 22 12 18 17 22 15.79 13.88"></polyline></svg>;
-const Hourglass = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22v-4"></path><path d="M12 14V2"></path><path d="M5 17H19"></path><path d="M5 7H19"></path><path d="M12 12l-6 6v-6l6-6 6 6v6z"></path></svg>;
-const Star = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>;
-const Gift = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 12 12 12 12 20"></polyline><path d="M20 12v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2"></path><path d="M20 12h-8"></path><path d="M12 20v-8"></path><path d="M12 20H4a2 2 0 0 1-2-2v-2"></path><path d="M12 12V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v8"></path><path d="M12 12H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h8"></path></svg>;
-const Target = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>;
-const Zap = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>;
-const TrendingUp = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>;
-
-
-// --- MOCK: Lazy Loaded Sections ---
-const BeforeAfterTransformation = React.memo(() => (
-  <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-8 rounded-2xl text-center border border-[#B89B7A]/15">
-    <h3 className="text-2xl font-bold text-[#2C1810] mb-4">Transformações Incríveis</h3>
-    <p className="text-[#5D4A3A]">Veja o antes e depois de nossas clientes!</p>
-    <div className="flex justify-center gap-4 mt-6">
-      <img src="https://placehold.co/200x250/D4B79F/2C1810?text=Antes" alt="Antes" className="rounded-lg shadow-md" />
-      <img src="https://placehold.co/200x250/B89B7A/ffffff?text=Depois" alt="Depois" className="rounded-lg shadow-md" />
-    </div>
-  </div>
-));
-const MotivationSection = React.memo(() => (
-  <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-8 rounded-2xl text-center border border-[#B89B7A]/15">
-    <h3 className="text-2xl font-bold text-[#2C1810] mb-4">A Importância do Estilo Pessoal</h3>
-    <p className="text-[#5D4A3A]">Entenda como seu estilo impacta sua confiança e comunicação.</p>
-    <ul className="list-disc list-inside text-left mx-auto max-w-md mt-6 space-y-2 text-[#5D4A3A]">
-      <li>Autoconfiança Elevada</li>
-      <li>Comunicação Não-Verbal Eficaz</li>
-      <li>Expressão Autêntica</li>
-    </ul>
-  </div>
-));
-const BonusSection = React.memo(() => (
-  <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-8 rounded-2xl text-center border border-[#B89B7A]/15">
-    <h3 className="text-2xl font-bold text-[#2C1810] mb-4">Bônus Exclusivos Para Você!</h3>
-    <p className="text-[#5D4A3A]">Aproveite estes presentes especiais:</p>
-    <ul className="list-disc list-inside text-left mx-auto max-w-md mt-6 space-y-2 text-[#5D4A3A]">
-      <li>Guia de Peças Estratégicas</li>
-      <li>Manual de Visagismo</li>
-      <li>Comunidade Exclusiva</li>
-    </ul>
-  </div>
-));
-const Testimonials = React.memo(() => (
-  <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-8 rounded-2xl text-center border border-[#B89B7A]/15">
-    <h3 className="text-2xl font-bold text-[#2C1810] mb-4">O Que Nossas Clientes Dizem</h3>
-    <p className="text-[#5D4A3A] italic">"Minha vida mudou depois de descobrir meu estilo!" - Ana S.</p>
-    <p className="text-[#5D4A3A] italic mt-2">"Recomendo a todas as mulheres!" - Clara M.</p>
-  </div>
-));
-const GuaranteeSection = React.memo(() => (
-  <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-8 rounded-2xl text-center border border-[#B89B7A]/15">
-    <h3 className="text-2xl font-bold text-[#2C1810] mb-4">Nossa Garantia de Satisfação</h3>
-    <p className="text-[#5D4A3A]">Você tem 7 dias para experimentar e amar, ou seu dinheiro de volta!</p>
-    <Shield className="w-16 h-16 mx-auto mt-6 text-[#B89B7A]" />
-  </div>
-));
-const MentorSection = React.memo(() => (
-  <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-8 rounded-2xl text-center border border-[#B89B7A]/15">
-    <h3 className="text-2xl font-bold text-[#2C1810] mb-4">Conheça Gisele Galvão</h3>
-    <img src="https://placehold.co/150x150/B89B7A/ffffff?text=Mentor" alt="Gisele Galvão" className="rounded-full mx-auto mt-6 mb-4" />
-    <p className="text-[#5D4A3A]">Especialista em estilo e imagem pessoal, com anos de experiência transformando vidas.</p>
-  </div>
-));
+const MentorSection = lazy(() => import("@/components/result/MentorSection"));
 
 // Design tokens - SISTEMA APRIMORADO
 const tokens = {
@@ -309,51 +135,6 @@ const tokens = {
     },
   },
 };
-
-// Mock styleConfig for image paths
-const styleConfig = {
-  Natural: {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_500/v1745071344/GUIA_NATURAL_fzp6fc.webp",
-    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_900/v1745071344/GUIA_NATURAL_fzp6fc.webp",
-    description: "valoriza autenticidade e conforto, sem abrir mão da elegância natural"
-  },
-  Clássico: {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_500/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp",
-    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_900/v1745071343/GUIA_CL%C3%81SSICO_ux1yhf.webp",
-    description: "aprecia sofisticação atemporal e peças que nunca saem de moda"
-  },
-  Contemporâneo: {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_500/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp",
-    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_900/v1745071343/GUIA_CONTEMPOR%C3%82NEO_vcklxe.webp",
-    description: "está sempre em sintonia com as tendências, mas de forma equilibrada"
-  },
-  Elegante: {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_500/v1745071342/GUIA_ELEGANTE_asez1q.webp",
-    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_900/v1745071342/GUIA_ELEGANTE_asez1q.webp",
-    description: "irradia refinamento e classe em cada detalhe do seu visual"
-  },
-  Romântico: {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_500/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp",
-    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_900/v1745071343/GUIA_ROM%C3%82NTICO_ci4hgk.webp",
-    description: "expressa delicadeza e feminilidade através de looks encantadores"
-  },
-  Sexy: {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_500/v1745071349/GUIA_SEXY_t5x2ov.webp",
-    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_900/v1745071349/GUIA_SEXY_t5x2ov.webp",
-    description: "tem confiança para valorizar sua sensualidade de forma elegante"
-  },
-  Dramático: {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_500/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp",
-    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_900/v1745073346/GUIA_DRAM%C3%81TICO_mpn60d.webp",
-    description: "não tem medo de fazer declarações ousadas com seu estilo"
-  },
-  Criativo: {
-    image: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_500/v1745071342/GUIA_CRIATIVO_ntbzph.webp",
-    guideImage: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_900/v1745071342/GUIA_CRIATIVO_ntbzph.webp",
-    description: "expressa criatividade e originalidade em cada combinação de roupas"
-  },
-};
-
 
 // Componente de título melhorado - ESPAÇAMENTO PADRONIZADO
 const SectionTitle = React.memo<{
@@ -913,88 +694,6 @@ const ResultPage: React.FC = () => {
                   </div>
                 </div>
               </AnimatedWrapper>
-
-              {/* Primeira CTA com a oferta (Offer Card) */}
-              <AnimatedWrapper
-                animation={isLowPerformance ? "none" : "fade"}
-                show={true}
-                duration={600}
-                delay={900}
-              >
-                <Card className="p-6 md:p-8 border-[#aa6b5d]/20 mt-20 mb-16" style={{ boxShadow: tokens.shadows.xl }}>
-                  <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-6 text-center">
-                    Guia de Estilo Personalizado + Bônus Exclusivos
-                  </h2>
-
-                  <div className="grid md:grid-cols-2 gap-8 mb-8">
-                    <div>
-                      <ProgressiveImage
-                        src="https://res.cloudinary.com/dqljyf76t/image/upload/v1744911682/C%C3%B3pia_de_MOCKUPS_13_znzbks.webp"
-                        alt="Mockup do Guia de Estilo"
-                        className="rounded-lg shadow-md w-full"
-                        loading="lazy"
-                        width={600}
-                        height={400}
-                        style={{ aspectRatio: "3/2" }} // Added aspect ratio for consistency
-                      />
-                    </div>
-                    <div className="flex flex-col justify-center">
-                      <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">
-                        O que você vai receber:
-                      </h3>
-                      <ul className="space-y-3 mb-6">
-                        {[
-                          "Guia completo do seu estilo predominante",
-                          "Paleta de cores personalizada",
-                          "Lista de peças essenciais para seu guarda-roupa",
-                          "Guia de combinações e dicas de styling",
-                          "Acesso vitalício a atualizações"
-                        ].map((item, index) => (
-                          <li key={index} className="flex items-start text-[#2C1810]"> {/* Applied text color token */}
-                            <CheckCircle className="w-5 h-5 text-[#aa6b5d] mr-2 flex-shrink-0 mt-0.5" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
-                        <div className="text-center">
-                          <p className="text-sm text-[#8F7A6A] mb-1">Valor original</p> {/* Used textMuted */}
-                          <p className="text-lg line-through text-[#5D4A3A]"> {/* Used textSecondary */}
-                            R$ 175,00
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-sm text-[#aa6b5d] mb-1">Por apenas</p>
-                          <p className="text-3xl font-bold text-[#aa6b5d]">
-                            R$ 39,00
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-center md:text-right mb-4">
-                        <p className="text-sm text-[#2C1810]">Parcelamento: 5x de R$ 8,83*</p> {/* Used text */}
-                        <p className="text-sm text-[#2C1810]">ou R$ 39,90 à vista</p> {/* Used text */}
-                      </div>
-                      {/* CTA Button for this offer card */}
-                      <Button
-                        onClick={handleCTAClick}
-                        className="mt-6 w-full group relative text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
-                        style={{
-                          background: "linear-gradient(135deg, #4CAF50 0%, #43a047 100%)",
-                          boxShadow: "0 10px 20px rgba(76, 175, 80, 0.2)",
-                        }}
-                        type="button"
-                      >
-                        <span className="flex items-center justify-center gap-2 text-lg">
-                          <ShoppingCart className="w-5 h-5" />
-                          Quero Meu Guia e Bônus Agora!
-                        </span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 rounded-xl"></div>
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              </AnimatedWrapper>
             </AnimatedWrapper>
           </Card>
         </section>
@@ -1243,7 +942,6 @@ const ResultPage: React.FC = () => {
                         badge: "GUIA PRINCIPAL",
                         originalPrice: "R$ 77,00",
                         priority: true,
-                        aspectRatio: "4.6/5", // Tamanho padrão do guia principal (alto)
                       },
                       {
                         src: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1744911677/Cópia_de_MOCKUPS_15_-_Copia_grstwl.png",
@@ -1252,8 +950,7 @@ const ResultPage: React.FC = () => {
                           "Peças-chave que maximizam combinações e garantem versatilidade em qualquer situação.",
                         badge: "BÔNUS EXCLUSIVO",
                         originalPrice: "R$ 59,00",
-                        priority: true, // Destaque este bônus
-                        aspectRatio: "4.6/5", // Deixe-o maior (tamanho do guia principal)
+                        priority: false,
                       },
                       {
                         src: "https://res.cloudinary.com/dqljyf76t/image/upload/f_auto,q_90,w_700/v1744911666/Cópia_de_Template_Dossiê_Completo_2024_15_-_Copia_ssrhu3.png",
@@ -1262,8 +959,7 @@ const ResultPage: React.FC = () => {
                           "Descubra os cortes ideais para seu rosto e realce sua beleza natural.",
                         badge: "BÔNUS PREMIUM",
                         originalPrice: "R$ 39,00",
-                        priority: false, // Não destaque este bônus
-                        aspectRatio: "3/4.5", // Deixe-o menor (tamanho original do Visagismo)
+                        priority: false,
                       },
                     ].map((product, index) => (
                       <div
@@ -1277,7 +973,7 @@ const ResultPage: React.FC = () => {
                         <div className="absolute -top-4 -right-4 z-10">
                           <span
                             className={`text-xs font-bold px-4 py-2 rounded-full text-white shadow-lg transform rotate-12 ${
-                              product.priority
+                              index === 0
                                 ? "bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d]"
                                 : "bg-gradient-to-r from-[#aa6b5d] to-[#B89B7A]"
                             }`}
@@ -1291,7 +987,12 @@ const ResultPage: React.FC = () => {
                           className="relative mb-6 bg-gradient-to-br from-[#f9f4ef] to-[#fff7f3] rounded-xl p-4 overflow-hidden"
                           style={{
                             boxShadow: tokens.shadows.sm,
-                            aspectRatio: product.aspectRatio,
+                            aspectRatio:
+                              index === 0
+                                ? "4.6/5"
+                                : index === 1
+                                ? "6/3.5"
+                                : "3/4.5",
                           }}
                         >
                           <ProgressiveImage
@@ -1466,40 +1167,4 @@ const ResultPage: React.FC = () => {
   );
 };
 
-// Main App component to include Tailwind CSS and the ResultPage
-const App = () => {
-  useEffect(() => {
-    // Dynamically load Tailwind CSS CDN
-    const tailwindScript = document.createElement('script');
-    tailwindScript.src = "https://cdn.tailwindcss.com";
-    tailwindScript.id = "tailwind-cdn-script"; // Add an ID for potential cleanup or checking
-    document.head.appendChild(tailwindScript);
-
-    // Dynamically load Google Fonts
-    const googleFontLink = document.createElement('link');
-    googleFontLink.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap";
-    googleFontLink.rel = "stylesheet";
-    googleFontLink.id = "google-fonts-link"; // Add an ID
-    document.head.appendChild(googleFontLink);
-
-    // Optional: Clean up on component unmount to prevent multiple loads if App re-renders
-    return () => {
-      const existingTailwindScript = document.getElementById('tailwind-cdn-script');
-      if (existingTailwindScript) {
-        document.head.removeChild(existingTailwindScript);
-      }
-      const existingGoogleFontLink = document.getElementById('google-fonts-link');
-      if (existingGoogleFontLink) {
-        document.head.removeChild(existingGoogleFontLink);
-      }
-    };
-  }, []); // Empty dependency array ensures this runs only once on mount
-
-  return (
-    <AuthProvider>
-      <ResultPage />
-    </AuthProvider>
-  );
-};
-
-export default App;
+export default ResultPage;
