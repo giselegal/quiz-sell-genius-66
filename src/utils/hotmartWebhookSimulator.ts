@@ -33,23 +33,17 @@ export class HotmartWebhookSimulator {
       data: {
         purchase: {
           transaction: transactionId || `T${Date.now()}`,
-          status:
-            event === "PURCHASE_COMPLETE" || event === "PURCHASE_APPROVED"
-              ? "APPROVED"
-              : "CANCELED",
           checkout_country: "BR",
           approved_date: new Date().toISOString(),
         },
         buyer: {
           email,
           name: "Usuário Teste",
+          document: "000.000.000-00"
         },
         transaction: {
           id: transactionId || `T${Date.now()}`,
-          status:
-            event === "PURCHASE_COMPLETE" || event === "PURCHASE_APPROVED"
-              ? "APPROVED"
-              : "CANCELED",
+          timestamp: new Date().toISOString(),
         },
       },
     };

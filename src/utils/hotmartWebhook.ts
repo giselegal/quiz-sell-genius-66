@@ -1,8 +1,9 @@
 // Sistema de Webhook Hotmart
 // ID: agQzTLUehWUfhPzjhdwntVQz0JNT5E0216ae0d-00a9-48ae-85d1-f0d14bd8e0df
 
-import { trackSaleConversion, captureUTMParameters } from "./analytics.ts";
-import { trackConversion } from "./analytics.js";
+import { supabase } from "@/integrations/supabase/client";
+import { hotmartWebhookManager } from "./hotmartWebhookManager";
+import { trackSaleConversion } from "./analytics";
 
 // Interfaces para dados do webhook Hotmart
 export interface HotmartBuyer {

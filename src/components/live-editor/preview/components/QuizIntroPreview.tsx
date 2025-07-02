@@ -2,7 +2,6 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { EditorStage, EditorComponent } from '../../LiveQuizEditor';
-import QuizIntro from '@/components/QuizIntro';
 
 interface QuizIntroPreviewProps {
   stage: EditorStage;
@@ -20,10 +19,21 @@ export const QuizIntroPreview: React.FC<QuizIntroPreviewProps> = ({
   isPreviewMode
 }) => {
   if (isPreviewMode) {
-    // Renderizar o componente real do quiz
+    // Renderizar uma versão simplificada
     return (
-      <div className="h-full">
-        <QuizIntro onStartQuiz={(name) => console.log('Quiz started:', name)} />
+      <div className="h-full bg-[#FAF9F7] p-8">
+        <div className="max-w-md mx-auto text-center">
+          <h1 className="text-2xl font-bold mb-4">Quiz de Estilo</h1>
+          <p className="mb-6">Descubra seu estilo pessoal</p>
+          <input 
+            type="text" 
+            placeholder="Digite seu nome"
+            className="w-full p-3 border rounded mb-4"
+          />
+          <button className="w-full bg-[#B89B7A] text-white p-3 rounded">
+            Começar Quiz
+          </button>
+        </div>
       </div>
     );
   }
@@ -33,7 +43,20 @@ export const QuizIntroPreview: React.FC<QuizIntroPreviewProps> = ({
     <div className="h-full bg-[#FAF9F7] relative">
       {/* Background do quiz atual */}
       <div className="absolute inset-0 opacity-50">
-        <QuizIntro onStartQuiz={(name) => console.log('Quiz started:', name)} />
+        <div className="h-full bg-[#FAF9F7] p-8">
+          <div className="max-w-md mx-auto text-center">
+            <h1 className="text-2xl font-bold mb-4">Quiz de Estilo</h1>
+            <p className="mb-6">Descubra seu estilo pessoal</p>
+            <input 
+              type="text" 
+              placeholder="Digite seu nome"
+              className="w-full p-3 border rounded mb-4"
+            />
+            <button className="w-full bg-[#B89B7A] text-white p-3 rounded">
+              Começar Quiz
+            </button>
+          </div>
+        </div>
       </div>
       
       {/* Overlay editável */}

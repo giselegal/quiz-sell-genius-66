@@ -24,7 +24,7 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
   return (
     <div className="min-h-screen bg-[#FAF9F7] px-4 py-8">
       <div className="max-w-3xl mx-auto">
-        <AnimatedWrapper>
+        <AnimatedWrapper show={true}>
           <Card className="p-8 space-y-8 bg-white shadow-md mb-10 border-[#B89B7A]/20">
             <h2 className="text-2xl font-playfair text-[#432818] text-center tracking-normal font-semibold">
               Enquanto calculamos o seu resultado...
@@ -46,7 +46,7 @@ const QuizTransition: React.FC<QuizTransitionProps> = ({ onContinue, onAnswer, c
           </Card>
         </AnimatedWrapper>
 
-        <AnimatedWrapper>
+        <AnimatedWrapper show={true}>
           <QuizQuestion
             question={strategicQuestions[0]}
             onAnswer={handleFirstStrategicAnswer}

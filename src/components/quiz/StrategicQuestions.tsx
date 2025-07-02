@@ -94,7 +94,7 @@ export const StrategicQuestions: React.FC<StrategicQuestionsProps> = ({
   if (currentQuestionIndex >= strategicQuestions.length) return null;
 
   return (
-    <AnimatedWrapper key={mountKey}>
+    <AnimatedWrapper key={mountKey} show={true}>
       <QuizQuestion
         question={strategicQuestions[currentQuestionIndex]}
         onAnswer={onAnswer}
