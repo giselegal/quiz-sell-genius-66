@@ -410,3 +410,27 @@ export const getCreativePerformance = (days = 7) => {
   
   return creativeStats;
 };
+
+/**
+ * Rastreia conversões de venda especificamente
+ * @param {number} value - Valor da venda
+ * @param {string} currency - Moeda da venda
+ * @param {string} productName - Nome do produto
+ * @param {object} additionalData - Dados adicionais sobre a venda
+ */
+export const trackSaleConversion = (value, currency = 'BRL', productName, additionalData = {}) => {
+  if (typeof window === 'undefined') return;
+  
+  const saleData = {
+    value: value,
+    currency: currency,
+    content_name: productName,
+    content_type: 'product',
+    ...additionalData
+  };
+  
+  // Usar a função trackConversion existente com tipo 'purchase'
+  trackConversion('purchase', saleData);
+  
+  console.log(`[Analytics] Conversão de venda rastreada: ${productName} - ${currency} ${value}`, saleData);
+};
