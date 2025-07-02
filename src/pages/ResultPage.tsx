@@ -10,20 +10,21 @@ import { motion } from "framer-motion";
 import { Progress } from "../components/ui/progress";
 import { Card } from "../components/ui/card";
 import { AnimatedWrapper, OptimizedImage } from "../components/ui/animated-wrapper";
-import { BonusSection, MethodsSection, GuaranteeSection, BeforeAfterSection } from "../components/result/BonusSection";
-import Testimonials from "../components/result/Testimonials";
+import BonusSection from "../components/result/BonusSection";
+import Testimonials from "../components/quiz-result/sales/Testimonials";
 import { Button } from "../components/ui/button";
 import { useABTest } from "../hooks/useABTest";
 import { useIsMobile } from "../hooks/use-mobile";
 import SecondaryStylesSection from "../components/quiz-result/SecondaryStylesSection";
 import { trackSaleConversion } from "../utils/analytics";
 import { SecurePurchaseElement } from "../components/ui/SecurePurchaseElement";
-import { useAuth as useAuthContext } from "../integrations/supabase/auth";
+// import { useAuth as useAuthContext } from "../integrations/supabase/auth";
 import { Link } from "react-router-dom";
 import { SquarePen } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import { ArrowUp, Lock } from "lucide-react";
 import { CircleCheckBig } from "lucide-react";
+import { useLoadingState } from "../hooks/useLoadingState";
 
 const ResultPage = () => {
   const { primaryStyle, secondaryStyles } = useQuizResult();
@@ -112,11 +113,7 @@ const ResultPage = () => {
       <div className="absolute top-1/2 left-1/2 w-1/2 h-1/2 bg-[#B89B7A]/3 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
 
       <ResultHeader 
-        primaryStyle={primaryStyle}
-        logoHeight={globalStyles.logoHeight}
-        logo={globalStyles.logo}
-        logoAlt={globalStyles.logoAlt}
-        userName={user?.userName}
+        userName={user?.userName || "Visitante"}
       />
 
       {isAdmin && (
@@ -247,19 +244,7 @@ const ResultPage = () => {
           </div>
         </AnimatedWrapper>
 
-        {/* Rest of the content blocks */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <AnimatedWrapper animation={isMobile ? "none" : "fade"} show={true} duration={400} delay={800} className="flex flex-col">
-            <MethodsSection />
-          </AnimatedWrapper>
-          <AnimatedWrapper animation={isMobile ? "none" : "fade"} show={true} duration={400} delay={850} className="flex flex-col">
-            <GuaranteeSection />
-          </AnimatedWrapper>
-        </div>
-
-        <AnimatedWrapper animation={isMobile ? "none" : "fade"} show={true} duration={400} delay={850}>
-          <BeforeAfterSection />
-        </AnimatedWrapper>
+        {/* Content continues with testimonials */}
 
         <AnimatedWrapper animation={isMobile ? "none" : "fade"} show={true} duration={400} delay={900}>
           <Testimonials />
