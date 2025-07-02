@@ -9,63 +9,30 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      image_bank: {
-        Row: {
-          active: boolean | null
-          category: string | null
-          created_at: string
-          created_by: string | null
-          id: string
-          name: string
-          updated_at: string
-          url: string
-        }
-        Insert: {
-          active?: boolean | null
-          category?: string | null
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          name: string
-          updated_at?: string
-          url: string
-        }
-        Update: {
-          active?: boolean | null
-          category?: string | null
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          name?: string
-          updated_at?: string
-          url?: string
-        }
-        Relationships: []
-      }
       participant_answers: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
-          option_id: string
-          participant_id: string
-          points: number
-          question_id: string
+          option_id: string | null
+          participant_id: string | null
+          points: number | null
+          question_id: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: string
-          option_id: string
-          participant_id: string
-          points: number
-          question_id: string
+          option_id?: string | null
+          participant_id?: string | null
+          points?: number | null
+          question_id?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
-          option_id?: string
-          participant_id?: string
-          points?: number
-          question_id?: string
+          option_id?: string | null
+          participant_id?: string | null
+          points?: number | null
+          question_id?: string | null
         }
         Relationships: [
           {
@@ -91,69 +58,36 @@ export type Database = {
           },
         ]
       }
-      profiles: {
-        Row: {
-          created_at: string
-          first_name: string | null
-          id: string
-          is_admin: boolean | null
-          last_name: string | null
-        }
-        Insert: {
-          created_at?: string
-          first_name?: string | null
-          id: string
-          is_admin?: boolean | null
-          last_name?: string | null
-        }
-        Update: {
-          created_at?: string
-          first_name?: string | null
-          id?: string
-          is_admin?: boolean | null
-          last_name?: string | null
-        }
-        Relationships: []
-      }
       question_options: {
         Row: {
-          active: boolean | null
-          created_at: string
+          created_at: string | null
           id: string
           image_url: string | null
           order_index: number
-          points: number
-          question_id: string
-          style_code: string
-          style_type_id: string
+          points: number | null
+          question_id: string | null
+          style_code: string | null
           text: string
-          updated_at: string
         }
         Insert: {
-          active?: boolean | null
-          created_at?: string
+          created_at?: string | null
           id?: string
           image_url?: string | null
           order_index: number
-          points?: number
-          question_id: string
-          style_code: string
-          style_type_id: string
+          points?: number | null
+          question_id?: string | null
+          style_code?: string | null
           text: string
-          updated_at?: string
         }
         Update: {
-          active?: boolean | null
-          created_at?: string
+          created_at?: string | null
           id?: string
           image_url?: string | null
           order_index?: number
-          points?: number
-          question_id?: string
-          style_code?: string
-          style_type_id?: string
+          points?: number | null
+          question_id?: string | null
+          style_code?: string | null
           text?: string
-          updated_at?: string
         }
         Relationships: [
           {
@@ -164,97 +98,44 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "question_options_style_type_id_fkey"
-            columns: ["style_type_id"]
+            foreignKeyName: "question_options_style_code_fkey"
+            columns: ["style_code"]
             isOneToOne: false
             referencedRelation: "style_types"
             referencedColumns: ["id"]
           },
         ]
       }
-      quiz_analytics: {
-        Row: {
-          action_type: string
-          created_at: string
-          id: string
-          participant_id: string
-          question_id: string | null
-        }
-        Insert: {
-          action_type: string
-          created_at?: string
-          id?: string
-          participant_id: string
-          question_id?: string | null
-        }
-        Update: {
-          action_type?: string
-          created_at?: string
-          id?: string
-          participant_id?: string
-          question_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "quiz_analytics_participant_id_fkey"
-            columns: ["participant_id"]
-            isOneToOne: false
-            referencedRelation: "quiz_participants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       quiz_participants: {
         Row: {
-          additional_info: Json | null
-          completed: boolean | null
-          completed_at: string | null
-          created_at: string
-          current_question_id: string | null
+          created_at: string | null
           email: string | null
           id: string
-          ip_address: string | null
-          last_activity_at: string | null
-          name: string
-          progress_percentage: number | null
-          quiz_id: string
-          referrer: string | null
-          started_at: string
-          user_agent: string | null
+          name: string | null
+          quiz_id: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
         }
         Insert: {
-          additional_info?: Json | null
-          completed?: boolean | null
-          completed_at?: string | null
-          created_at?: string
-          current_question_id?: string | null
+          created_at?: string | null
           email?: string | null
           id?: string
-          ip_address?: string | null
-          last_activity_at?: string | null
-          name: string
-          progress_percentage?: number | null
-          quiz_id: string
-          referrer?: string | null
-          started_at?: string
-          user_agent?: string | null
+          name?: string | null
+          quiz_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Update: {
-          additional_info?: Json | null
-          completed?: boolean | null
-          completed_at?: string | null
-          created_at?: string
-          current_question_id?: string | null
+          created_at?: string | null
           email?: string | null
           id?: string
-          ip_address?: string | null
-          last_activity_at?: string | null
-          name?: string
-          progress_percentage?: number | null
-          quiz_id?: string
-          referrer?: string | null
-          started_at?: string
-          user_agent?: string | null
+          name?: string | null
+          quiz_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Relationships: [
           {
@@ -269,45 +150,33 @@ export type Database = {
       quiz_questions: {
         Row: {
           active: boolean | null
-          columns_count: number | null
-          created_at: string
+          created_at: string | null
           id: string
-          image_size: string | null
           order_index: number
-          quiz_id: string
+          quiz_id: string | null
           required_selections: number | null
-          subtitle: string | null
           title: string
           type: string
-          updated_at: string
         }
         Insert: {
           active?: boolean | null
-          columns_count?: number | null
-          created_at?: string
+          created_at?: string | null
           id?: string
-          image_size?: string | null
           order_index: number
-          quiz_id: string
+          quiz_id?: string | null
           required_selections?: number | null
-          subtitle?: string | null
           title: string
-          type: string
-          updated_at?: string
+          type?: string
         }
         Update: {
           active?: boolean | null
-          columns_count?: number | null
-          created_at?: string
+          created_at?: string | null
           id?: string
-          image_size?: string | null
           order_index?: number
-          quiz_id?: string
+          quiz_id?: string | null
           required_selections?: number | null
-          subtitle?: string | null
           title?: string
           type?: string
-          updated_at?: string
         }
         Relationships: [
           {
@@ -319,98 +188,63 @@ export type Database = {
           },
         ]
       }
-      quiz_settings: {
-        Row: {
-          created_at: string
-          id: string
-          quiz_id: string
-          settings: Json
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          quiz_id: string
-          settings?: Json
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          quiz_id?: string
-          settings?: Json
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "quiz_settings_quiz_id_fkey"
-            columns: ["quiz_id"]
-            isOneToOne: false
-            referencedRelation: "quizzes"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       quizzes: {
         Row: {
           active: boolean | null
-          created_at: string
-          created_by: string | null
+          created_at: string | null
           description: string | null
           id: string
           title: string
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
           active?: boolean | null
-          created_at?: string
-          created_by?: string | null
-          description?: string | null
-          id?: string
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          active?: boolean | null
-          created_at?: string
-          created_by?: string | null
+          created_at?: string | null
           description?: string | null
           id?: string
           title?: string
-          updated_at?: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          title?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
       style_results: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
           is_primary: boolean | null
-          participant_id: string
-          percentage: number
-          points: number
-          rank: number
-          style_type_id: string
+          participant_id: string | null
+          percentage: number | null
+          points: number | null
+          rank: number | null
+          style_type_id: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           is_primary?: boolean | null
-          participant_id: string
-          percentage: number
-          points: number
-          rank: number
-          style_type_id: string
+          participant_id?: string | null
+          percentage?: number | null
+          points?: number | null
+          rank?: number | null
+          style_type_id?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           is_primary?: boolean | null
-          participant_id?: string
-          percentage?: number
-          points?: number
-          rank?: number
-          style_type_id?: string
+          participant_id?: string | null
+          percentage?: number | null
+          points?: number | null
+          rank?: number | null
+          style_type_id?: string | null
         }
         Relationships: [
           {
@@ -431,23 +265,26 @@ export type Database = {
       }
       style_types: {
         Row: {
-          code: string
-          created_at: string
-          description: string
+          color_primary: string | null
+          color_secondary: string | null
+          created_at: string | null
+          description: string | null
           id: string
           name: string
         }
         Insert: {
-          code: string
-          created_at?: string
-          description: string
-          id?: string
+          color_primary?: string | null
+          color_secondary?: string | null
+          created_at?: string | null
+          description?: string | null
+          id: string
           name: string
         }
         Update: {
-          code?: string
-          created_at?: string
-          description?: string
+          color_primary?: string | null
+          color_secondary?: string | null
+          created_at?: string | null
+          description?: string | null
           id?: string
           name?: string
         }
@@ -455,27 +292,44 @@ export type Database = {
       }
       utm_analytics: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
+          participant_id: string | null
           utm_campaign: string | null
+          utm_content: string | null
           utm_medium: string | null
           utm_source: string | null
+          utm_term: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: string
+          participant_id?: string | null
           utm_campaign?: string | null
+          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          utm_term?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
+          participant_id?: string | null
           utm_campaign?: string | null
+          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          utm_term?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "utm_analytics_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_participants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
