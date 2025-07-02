@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useQuizResult } from '@/hooks/useQuizResult';
-import { styleConfig } from '@/config/styleConfig';
+import { styleConfig } from '@/data/styleConfig';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
 import { Button } from '@/components/ui/button';
 import { SecurePurchaseElement, BuyButton } from '@/components/ui/SecurePurchaseElement';
@@ -76,7 +76,7 @@ const ResultPage: React.FC = () => {
                 </p>
                 <div className="bg-[#B89B7A]/10 p-4 rounded-lg">
                   <div className="text-lg font-medium text-[#432818]">
-                    {primaryStyle.points} pontos ({primaryStyle.percentage}%)
+                    {primaryStyle.percentage}% de compatibilidade
                   </div>
                 </div>
               </div>
@@ -103,7 +103,7 @@ const ResultPage: React.FC = () => {
                       />
                       <h4 className="font-medium text-[#432818] mb-2">{style.category}</h4>
                       <div className="text-sm text-[#8F7A6A]">
-                        {style.points} pontos ({style.percentage}%)
+                        {style.percentage}% de compatibilidade
                       </div>
                     </div>
                   );

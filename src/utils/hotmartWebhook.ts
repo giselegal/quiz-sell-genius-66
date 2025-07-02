@@ -1,8 +1,8 @@
+
 // Sistema de Webhook Hotmart
 // ID: agQzTLUehWUfhPzjhdwntVQz0JNT5E0216ae0d-00a9-48ae-85d1-f0d14bd8e0df
 
 import { supabase } from "@/integrations/supabase/client";
-import { hotmartWebhookManager } from "./hotmartWebhookManager";
 import { trackSaleConversion } from "./analytics";
 
 // Interfaces para dados do webhook Hotmart
@@ -28,6 +28,7 @@ export interface HotmartPurchase {
   commission?: {
     value: number;
   };
+  approved_date: string;
 }
 
 export interface HotmartWebhookData {
@@ -470,6 +471,7 @@ export const simulateHotmartWebhook = (
           id: 123456,
           name: "Transformação de Imagem - Gisele Galvão",
         },
+        approved_date: new Date().toISOString(),
       },
       transaction: {
         id: transactionId || `test_${Date.now()}`,

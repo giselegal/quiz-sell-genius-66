@@ -1,3 +1,4 @@
+
 // Simulador de Webhook Hotmart para testes
 // Este arquivo simula o recebimento de webhooks da Hotmart no frontend
 
@@ -33,8 +34,15 @@ export class HotmartWebhookSimulator {
       data: {
         purchase: {
           transaction: transactionId || `T${Date.now()}`,
-          checkout_country: "BR",
           approved_date: new Date().toISOString(),
+          price: {
+            value: 297,
+            currency_value: "BRL",
+          },
+          product: {
+            id: 123456,
+            name: "Transformação de Imagem - Gisele Galvão",
+          },
         },
         buyer: {
           email,
