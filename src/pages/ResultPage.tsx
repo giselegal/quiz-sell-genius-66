@@ -13,6 +13,7 @@ import {
   TestimonialsBlock,
   TransformationsBlock 
 } from '@/components/result/blocks';
+import { ShoppingCart } from 'lucide-react';
 
 const ResultPage: React.FC = () => {
   const { user } = useAuth();
@@ -113,7 +114,24 @@ const ResultPage: React.FC = () => {
           </AnimatedWrapper>
         )}
 
-        {/* Offer Section */}
+        {/* Guia de Estilo Image */}
+        <AnimatedWrapper show={true}>
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-12 border border-[#B89B7A]/20 text-center">
+            <h3 className="text-2xl md:text-3xl font-bold mb-4 text-[#432818]">
+              Seu Guia de Estilo Personalizado
+            </h3>
+            <img 
+              src={styleInfo.guideImage} 
+              alt={`Guia de Estilo ${primaryStyle.category}`}
+              className="w-full max-w-md mx-auto rounded-lg mb-6"
+            />
+            <p className="text-lg mb-6 text-[#8F7A6A]">
+              Transforme sua relação com a moda e eleve sua autoestima com nosso guia personalizado
+            </p>
+          </div>
+        </AnimatedWrapper>
+
+        {/* Nova Seção de Oferta */}
         <AnimatedWrapper show={true}>
           <div className="bg-gradient-to-r from-[#B89B7A] to-[#A1835D] rounded-xl shadow-lg p-8 mb-12 text-white text-center">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
@@ -122,15 +140,30 @@ const ResultPage: React.FC = () => {
             <p className="text-lg mb-6 opacity-90">
               Transforme sua relação com a moda e eleve sua autoestima com nosso guia personalizado
             </p>
-            <img 
-              src={styleInfo.guideImage} 
-              alt={`Guia de Estilo ${primaryStyle.category}`}
-              className="w-full max-w-md mx-auto rounded-lg mb-6"
-            />
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-6">
+              <div className="grid md:grid-cols-2 gap-6 items-center">
+                <div>
+                  <div className="text-3xl font-bold mb-2">R$ 39,00</div>
+                  <div className="text-sm opacity-80 line-through">De R$ 175,00</div>
+                  <div className="text-sm mt-2">ou 4x de R$ 10,86</div>
+                </div>
+                <div className="text-left">
+                  <ul className="space-y-2 text-sm">
+                    <li>✓ Guia de Estilo Personalizado</li>
+                    <li>✓ Cartela de Cores Exclusiva</li>
+                    <li>✓ Dicas de Maquiagem</li>
+                    <li>✓ Guia de Compras Inteligentes</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
             <BuyButton 
-              onClick={() => window.open('https://pay.hotmart.com/exemplo', '_blank')}
-              className="bg-white text-[#432818] hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-full transition-all transform hover:scale-105"
+              onClick={() => window.open('https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912', '_blank')}
+              className="bg-white text-[#432818] hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-full transition-all transform hover:scale-105 mb-4"
             >
+              <ShoppingCart className="w-5 h-5 mr-2" />
               Quero Meu Guia Personalizado
             </BuyButton>
             <SecurePurchaseElement />
