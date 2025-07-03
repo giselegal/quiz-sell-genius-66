@@ -30,6 +30,7 @@ const QuizDescubraSeuEstilo = lazy(
   () => import("./pages/quiz-descubra-seu-estilo")
 );
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
+const EnhancedResultPageEditorPage = lazy(() => import("./pages/EnhancedResultPageEditorPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App = () => {
@@ -77,6 +78,11 @@ const App = () => {
                 <Route
                   path="/descubra-seu-estilo"
                   element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Advanced Editor */}
+                <Route
+                  path="/advanced-editor"
+                  element={<EnhancedResultPageEditorPage />}
                 />
                 {/* Admin - protegido com AdminAuthProvider */}
                 <Route
