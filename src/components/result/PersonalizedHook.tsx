@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card'; // Card pode ser removido se não for usado para outros fins neste arquivo
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Star } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react'; // Ícone Star removido daqui
 
 interface PersonalizedHookProps {
   styleCategory: string;
@@ -82,9 +82,10 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
           {messages.congratsMessage}
         </p>
         
+        {/* Mensagem de Poder - Removido o Ícone Star */}
         <div className="bg-white/80 rounded-lg p-4 sm:p-5 shadow-sm border border-[#B89B7A]/20 mt-6 mb-6 text-left">
           <div className="flex items-start gap-3">
-            <Star className="w-5 h-5 text-[#B89B7A] mt-1 flex-shrink-0" />
+            {/* Ícone Star REMOVIDO AQUI */}
             <p className="text-[#432818] leading-relaxed text-base sm:text-lg">
               {messages.powerMessage}
             </p>
@@ -97,12 +98,10 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
           🎯 {messages.exclusive} - 78% OFF
         </div>
         
-        {/* Primary CTA Button - AJUSTE AQUI PARA DIMINUIR A FONTE NO MOBILE */}
         <Button
           onClick={onCTAClick}
-          className="w-full sm:w-auto text-white py-3 sm:py-4 px-8 rounded-lg font-semibold transition-all duration-300
-                     hover:scale-102 active:scale-98
-                     text-sm sm:text-base md:text-lg" /* Fonte menor: text-sm (14px) para mobile, sm:text-base (16px) para sm+, md:text-lg (18px) para md+ */
+          className="w-full sm:w-auto text-white py-4 px-8 rounded-lg font-semibold transition-all duration-300
+                     hover:scale-102 active:scale-98 text-sm sm:text-base md:text-lg"
           style={{
             background: "linear-gradient(to right, #4CAF50, #45a049)",
             boxShadow: "0 2px 8px rgba(76, 175, 80, 0.2)"
