@@ -90,7 +90,6 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
           
           <div className="bg-white/80 rounded-lg p-4 sm:p-5 md:p-6 shadow-sm border border-[#B89B7A]/20 mb-6 text-left">
             <div className="flex items-start gap-3">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#B89B7A] mt-1 flex-shrink-0" />
               <p className="text-[#432818] leading-relaxed text-base sm:text-lg">
                 {messages.powerMessage}
               </p>
