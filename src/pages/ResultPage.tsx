@@ -377,7 +377,7 @@ const ResultPage: React.FC = () => {
               onMouseLeave={() => setIsButtonHovered(false)}
             >
               <span className="flex items-center justify-center gap-3">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-125' : ''}`} />
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-100' : ''}`} />
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
             </Button>
