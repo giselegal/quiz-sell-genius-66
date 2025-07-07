@@ -91,7 +91,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
 
-    const criticalImages = [globalStyles.logo || '[https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp](https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp)'];
+    const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
     criticalImages.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -153,7 +153,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
       });
     }
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page'); // Seu rastreamento existente
-    window.location.href = '[https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912](https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912)';
+    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
 
   return (
@@ -230,8 +230,11 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
                 </AnimatedWrapper>
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
+                {/* --- AJUSTE AQUI: max-w-xs para imagem do estilo predominante em mobile --- */}
                 <div className="max-w-[238px] mx-auto relative">
-                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" width="238" height="auto" />
+                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} 
+                       className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300 max-w-xs sm:max-w-[238px]" /* max-w-xs para mobile, sm:max-w-[238px] para sm+ */
+                       loading="eager" fetchPriority="high" width="238" height="auto" />
                   {/* Elegant decorative corner */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
                   <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-2 border-l-2 border-[#B89B7A]"></div>
@@ -390,7 +393,8 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
               com autenticidade e transformar sua imagem em ferramenta de poder.
             </p>
 
-            <div className="bg-gradient-to-r from-[#fff7f3] to-[#f9f4ef] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
+            {/* SEÇÃO COM O AJUSTE DE FUNDO: 'O Guia de Estilo e Imagem + Bônus Exclusivos' */}
+            <div className="bg-[#fffaf7] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
               <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
                 {["Looks com intenção e identidade", "Cores, modelagens e tecidos a seu favor", "Imagem alinhada aos seus objetivos", "Guarda-roupa funcional, sem compras por impulso"].map((item, index) => <li key={index} className="flex items-start">
