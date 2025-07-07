@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Sparkles, Crown } from 'lucide-react';
+import { ShoppingCart, Sparkles } from 'lucide-react'; // Crown icon removed
 
 interface PersonalizedHookProps {
   styleCategory: string;
@@ -75,16 +75,14 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
   return (
     <Card className="bg-gradient-to-br from-[#fff8f4] via-[#faf6f1] to-[#f5f0ea] border-[#B89B7A]/40 p-4 sm:p-6 md:p-8 lg:p-10 mb-8 shadow-lg max-w-4xl mx-auto">
       <div className="text-center">
-        {/* Congratulations Header */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-4">
-          <Crown className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#FFD700] mb-2 sm:mb-0" />
+        {/* Congratulations Header - Crown icons removed, adjusted for centering */}
+        <div className="flex items-center justify-center mb-4"> {/* Simplified flex layout */}
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair text-[#aa6b5d] leading-tight">
             Parabéns, <span className="font-bold">{userName}</span>!
           </h1>
-          <Crown className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#FFD700] mt-2 sm:mt-0" />
         </div>
         
-        {/* Style Revelation */}
+        {/* Style Revelation - Text sizes and padding adapt for mobile */}
         <div className="mb-6 px-2 sm:px-4">
           <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-[#432818] mb-3 leading-snug">
             Você é <span className="font-bold text-[#B89B7A] text-xl sm:text-2xl md:text-3xl lg:text-4xl">{styleCategory}</span> —{" "}
@@ -101,28 +99,28 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
           </div>
         </div>
         
-        {/* Exclusive Offer Badge */}
+        {/* Exclusive Offer Badge - Font size and padding adapt */}
         <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 sm:px-6 py-1 sm:py-2 rounded-full shadow-lg text-xs sm:text-sm md:text-base font-medium transform -rotate-2 inline-block mb-6 whitespace-nowrap">
-          🎯 {messages.exclusive} - 75% OFF
+          � {messages.exclusive} - 75% OFF
         </div>
         
-        {/* Primary CTA */}
+        {/* Primary CTA Button - Full width on small screens, adjusts on larger screens */}
         <Button
           onClick={onCTAClick}
-          className="w-full sm:w-auto text-white py-3 sm:py-4 px-6 sm:px-8 rounded-lg text-base sm:text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg mb-4"
+          className="w-full sm:w-auto text-white py-3 sm:py-4 px-6 sm:px-8 rounded-lg text-base sm:text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg"
           style={{
             background: "linear-gradient(to right, #4CAF50, #45a049)",
             boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)"
           }}
         >
-          <span className="flex items-center justify-center gap-2 sm:gap-3">
+          <span className="flex items-center justify-center gap-2 sm:gap-3 leading-none"> {/* leading-none ensures compact text */}
             <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
             {messages.ctaText}
           </span>
         </Button>
         
-        {/* Urgency Message */}
-        <p className="text-[#ff6b6b] text-xs sm:text-sm font-medium animate-pulse">
+        {/* Urgency Message - Font size adapts, spacing for mobile */}
+        <p className="text-[#ff6b6b] text-xs sm:text-sm font-medium animate-pulse mt-4">
           ⚡ Esta oferta expira quando você sair desta página
         </p>
       </div>
@@ -131,3 +129,4 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
 };
 
 export default PersonalizedHook;
+�
