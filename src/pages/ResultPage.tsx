@@ -3,7 +3,7 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
-import { Progress } from '@/components/ui/progress';
+import { Progress } = from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
@@ -367,7 +367,7 @@ const ResultPage: React.FC = () => {
 
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-6 px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 mb-4 w-full max-w-md mx-auto block" 
+              className="text-white py-6 px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 w-full max-w-md mx-auto block" /* Removed mb-4 */
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
                 boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
@@ -382,12 +382,11 @@ const ResultPage: React.FC = () => {
               </span>
             </Button>
             
-            <div className="text-center mb-4">
-              <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20">
-                <p className="text-sm text-[#ff6b6b] font-medium animate-pulse">
-                  ⚡ Esta oferta expira quando você sair desta página
-                </p>
-              </div>
+            {/* Moved urgency message to be immediately after the button, added mt-2 */}
+            <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20 mt-2">
+              <p className="text-sm text-[#ff6b6b] font-medium animate-pulse">
+                ⚡ Esta oferta expira quando você sair desta página
+              </p>
             </div>
             
             <SecurePurchaseElement />
