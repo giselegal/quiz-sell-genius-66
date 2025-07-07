@@ -97,19 +97,17 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
           🎯 {messages.exclusive} - 78% OFF
         </div>
         
-        {/* Primary CTA Button - Ajustado padding vertical para mobile */}
+        {/* Primary CTA Button - AJUSTE AQUI PARA DIMINUIR A FONTE NO MOBILE */}
         <Button
           onClick={onCTAClick}
-          // py-3 para mobile (12px), sm:py-4 para desktop (16px)
-          // text-base para mobile, sm:text-lg para desktop
           className="w-full sm:w-auto text-white py-3 sm:py-4 px-8 rounded-lg font-semibold transition-all duration-300
-                     hover:scale-102 active:scale-98 text-base sm:text-lg"
+                     hover:scale-102 active:scale-98
+                     text-sm sm:text-base md:text-lg" /* Fonte menor: text-sm (14px) para mobile, sm:text-base (16px) para sm+, md:text-lg (18px) para md+ */
           style={{
             background: "linear-gradient(to right, #4CAF50, #45a049)",
             boxShadow: "0 2px 8px rgba(76, 175, 80, 0.2)"
           }}
         >
-          {/* span com leading-none já para menor altura da linha */}
           <span className="flex items-center justify-center gap-3 leading-none"> 
             <ShoppingCart className="w-6 h-6" />
             {messages.ctaText}
@@ -117,7 +115,6 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         </Button>
       </div>
       
-      {/* Urgency Message */}
       <p className="text-[#ff6b6b] text-sm font-medium">
         ⚡ Esta oferta expira quando você sair desta página
       </p>
