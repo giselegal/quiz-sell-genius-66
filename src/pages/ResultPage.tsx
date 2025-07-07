@@ -73,23 +73,26 @@ const ResultPage: React.FC = () => {
       guideImage
     } = styleConfig[category];
     const styleImg = new Image();
-    styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
+    styleImg.src = `${image}?q=auto:best&f=auto&w=238`; // Updated width
     styleImg.onload = () => setImagesLoaded(prev => ({
       ...prev,
       style: true
     }));
     const guideImg = new Image();
-    guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
+    guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`; // Kept width, but responsive styles below
     guideImg.onload = () => setImagesLoaded(prev => ({
       ...prev,
       guide: true
     }));
   }, [primaryStyle, globalStyles.logo]);
+
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
+
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
+
   const {
     category
   } = primaryStyle;
@@ -98,12 +101,14 @@ const ResultPage: React.FC = () => {
     guideImage,
     description
   } = styleConfig[category];
+
   const handleCTAClick = () => {
     // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     // Open in same window for better conversion
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
+
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
       backgroundColor: globalStyles.backgroundColor || '#fffaf7',
@@ -167,7 +172,7 @@ const ResultPage: React.FC = () => {
                 </AnimatedWrapper>
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
-                <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
+                <div className="max-w-[238px] mx-auto relative">
                   <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" width="238" height="auto" />
                   {/* Elegant decorative corner */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
@@ -275,9 +280,9 @@ const ResultPage: React.FC = () => {
             </div>
             
             <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
-            background: "linear-gradient(to right, #4CAF50, #45a049)",
-            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
-          }}>
+              background: "linear-gradient(to right, #4CAF50, #45a049)",
+              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+            }}>
               <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 Quero meu Guia de Estilo Agora
@@ -336,15 +341,15 @@ const ResultPage: React.FC = () => {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Guia Principal</span>
-                  <span className="font-medium">R$ 97,00</span>
+                  <span className="font-medium">R$ 79,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Peças-chave</span>
-                  <span className="font-medium">R$ 129,00</span>
+                  <span className="font-medium">R$ 69,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Visagismo Facial</span>
-                  <span className="font-medium">R$ 71,00</span>
+                  <span className="font-medium">R$ 29,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 pt-3 font-bold">
                   <span>Valor Total</span>
@@ -356,9 +361,9 @@ const ResultPage: React.FC = () => {
               </div>
               
               <div className="text-center p-4 bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg border border-[#4CAF50]/30">
-                <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -84% HOJE</p>
-                <p className="text-4xl font-bold text-[#4CAF50]">R$ 47,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 16,57</p>
+                <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -78% HOJE</p>
+                <p className="text-4xl font-bold text-[#4CAF50]">R$ 39,00</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 8,83</p>
                 <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
                   <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 175 em breve</p>
                 </div>
@@ -367,16 +372,16 @@ const ResultPage: React.FC = () => {
 
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-6 px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 mb-4 w-full max-w-md mx-auto block" 
+              className="text-white py-6 px-4 sm:px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 mb-4 w-full max-w-md mx-auto block" 
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
                 boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
-                fontSize: "1.1rem"
+                fontSize: "1.1rem" // Keep this for base size
               }} 
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex items-center justify-center gap-3 leading-none"> {/* Added leading-none here */}
+              <span className="flex items-center justify-center gap-2 sm:gap-3 text-base sm:text-lg lg:text-xl leading-tight sm:leading-none"> {/* Adjusted font size and line height */}
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
@@ -384,7 +389,7 @@ const ResultPage: React.FC = () => {
             
             <div className="text-center mb-4">
               <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20">
-                <p className="text-sm text-[#ff6b6b] font-medium animate-pulse">
+                <p className="text-sm text-[#ff6b6b] font-medium animate-pulse leading-tight"> {/* Added leading-tight */}
                   ⚡ Esta oferta expira quando você sair desta página
                 </p>
               </div>
