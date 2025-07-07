@@ -3,6 +3,7 @@
 import React from 'react';
 import { Crown } from 'lucide-react'; // Embora não seja usada neste snippet, mantive por estar no seu arquivo original
 import { StyleResult } from '@/types/quiz'; // Ainda é necessário se `primaryStyle` for passado como prop para outros componentes do Header, mas se não for usado aqui, podemos remover.
+import { useAuth } from '@/context/AuthContext'; // Certifique-se de que este import está correto
 
 interface HeaderProps {
   primaryStyle?: StyleResult; // Mantém como opcional caso outros componentes ainda usem
@@ -18,13 +19,11 @@ export const Header: React.FC<HeaderProps> = ({
   logoHeight = 50,
   logo,
   logoAlt = "Logo",
-  userName = "Querida"
+  userName // Usaremos este se fornecido, senão o do contexto
 }) => {
-  // ... o restante do seu código Header.tsx (por exemplo, uso do useAuth para userName)
-
-  // Se você usa o `userName` do contexto AuthContext no Header:
-  // const { user } = useAuth();
-  // const displayName = userName || user?.userName || 'Visitante';
+  // Obter userName do contexto AuthContext se não fornecido como prop
+  const { user } = useAuth();
+  const displayName = userName || user?.userName || 'Visitante'; // 'Visitante' como fallback
 
   return (
     <header className="py-6 px-4 md:px-8 text-center relative z-20">
@@ -36,20 +35,16 @@ export const Header: React.FC<HeaderProps> = ({
           style={{ height: `${logoHeight}px` }}
         />
       )}
-      <h1 className="text-3xl md:text-4xl font-playfair text-[#aa6b5d] leading-tight">
-        Seu Estilo Principal é <span className="font-bold">Descoberto!</span> {/* Texto genérico */}
+      
+      {/* MUDANÇA PRINCIPAL AQUI: Reorganizando o texto e elementos */}
+      <h1 className="text-xl md:text-2xl font-playfair text-[#432818] leading-tight">
+        Olá, <span className="font-medium">{displayName}</span>!
+        <br className="sm:hidden" /> {/* Quebra de linha no mobile para "descobrimos..." */}
+        <span className="text-3xl md:text-4xl text-[#aa6b5d]"> Parábens! Seu Estilo Predomiante é:!</span>
       </h1>
-      {userName && ( // Ou `displayName` se estiver usando o contexto
-        <p className="text-xl md:text-2xl text-[#432818] mt-2">Olá, {userName}!</p>
-      )}
+      
+      {/* Opcional: Se primaryStyle for importante para o contexto, mas não exibido diretamente */}
       {/* REMOVIDO: A exibição de primaryStyle.category e o h2 completo que o continha */}
-      {/*
-      {primaryStyle && (
-        <h2 className="font-bold text-[#B89B7A] mt-2 text-2xl">
-          {primaryStyle.category}
-        </h2>
-      )}
-      */}
     </header>
   );
 };
