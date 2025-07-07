@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-import { Clock, AlertTriangle } from 'lucide-react'; // AlertTriangle pode ser removido se não for usado para outros fins neste arquivo
+// Removido 'Clock' da importação
+import { AlertTriangle } from 'lucide-react'; // AlertTriangle pode ser removido se não for usado para outros fins neste arquivo
 
 interface UrgencyCountdownProps {
   hours?: number;
@@ -74,10 +75,12 @@ export const UrgencyCountdown: React.FC<UrgencyCountdownProps> = ({
           </div>
         </div>
         
-        {/* Ícone de Relógio no rodapé do cronômetro */}
+        {/* REMOVIDO: O div que continha o Ícone de Relógio */}
+        {/*
         <div className="flex items-center justify-center gap-2 text-sm text-[#432818]/70">
           <Clock className="w-4 h-4" />
         </div>
+        */}
       </div>
     </Card>
   );
