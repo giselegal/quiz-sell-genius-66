@@ -13,8 +13,8 @@ import MotivationSection from '@/components/result/MotivationSection';
 import MentorSection from '@/components/result/MentorSection';
 import GuaranteeSection from '@/components/result/GuaranteeSection';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
-import BeforeAfterTransformation from '@/components/quiz-result/BeforeAfterTransformation';
-import BonusSection from '@/components/quiz-result/BonusSection';
+import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation'; // Corrected import path
+import BonusSection from '@/components/result/BonusSection'; // Corrected import path
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
@@ -368,7 +368,7 @@ const ResultPage: React.FC = () => {
             {/* Replaced the problematic button with a copy of the middle CTA button */}
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-4 px-6 rounded-md btn-cta-green w-full max-w-md mx-auto block" /* Adjusted padding, rounded corners, and class */
+              className="text-white py-4 px-6 rounded-md btn-cta-green w-full max-w-md mx-auto block" 
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)} 
               style={{
@@ -376,9 +376,9 @@ const ResultPage: React.FC = () => {
                 boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
               }}
             >
-              <span className="flex items-center justify-center gap-2 leading-none"> {/* Adjusted gap and kept leading-none */}
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} /> {/* Adjusted scale on hover */}
-                <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span> {/* Restored original text */}
+              <span className="flex items-center justify-center gap-2 leading-none">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
             </Button>
             
