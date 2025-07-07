@@ -99,7 +99,7 @@ export const StyleSpecificProof: React.FC<StyleSpecificProofProps> = ({
       
       <div className="text-center">
         <p className="text-sm text-[#432818] bg-[#B89B7A]/10 rounded-full px-4 py-2 inline-block">
-          <strong>Transformação típica:</strong> {data.beforeAfter}
+          <strong>Transformação de uma imagem sem identidade:</strong> {data.beforeAfter}
         </p>
       </div>
       
