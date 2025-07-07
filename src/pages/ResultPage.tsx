@@ -383,7 +383,7 @@ const ResultPage: React.FC = () => {
             </Button>
             
             <div className="text-center mb-4">
-              <div className="bg-[#ff6b6b]/10 rounded-full px-4 py-1 inline-block border border-[#ff6b6b]/30">
+              <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20">
                 <p className="text-sm text-[#ff6b6b] font-medium animate-pulse">
                   ⚡ Esta oferta expira quando você sair desta página
                 </p>
