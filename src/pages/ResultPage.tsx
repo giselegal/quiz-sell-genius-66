@@ -377,7 +377,7 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-            <Button 
+           <Button 
               onClick={handleCTAClick} 
               className="text-white py-6 px-3 sm:px-8 md:px-10 rounded-lg mb-4 w-full max-w-md mx-auto block
                          transition-all duration-300 transform-none hover:scale-105 active:scale-95
@@ -389,18 +389,14 @@ const ResultPage: React.FC = () => {
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex flex-col sm:flex-row items-center justify-center 
+              {/* ATENÇÃO ÀS MUDANÇAS AQUI NO SPAN */}
+              <span className="flex flex-wrap flex-col sm:flex-row items-center justify-center 
                                  gap-1 sm:gap-3 
                                  text-[0.65rem] xs:text-xs sm:text-base md:text-lg lg:text-xl 
-                                 leading-none text-center font-semibold
-                                 min-w-0">
+                                 leading-tight sm:leading-normal font-semibold
+                                 min-w-0 text-balance" /* Adicionado flex-wrap e text-balance */>
                 <ShoppingCart className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
-                
-                {/* *** ALTERAÇÃO CRUCIAL AQUI: TEXTO CONDICIONAL *** */}
-                <span className="hidden sm:inline">GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
-                <span className="inline sm:hidden">GARANTIR GUIA {category.toUpperCase().split(' ')[0]}</span> 
-                {/* Ou ainda mais curto: "GARANTIR MEU GUIA" ou "PEÇA SEU GUIA" */}
-                {/* Adaptei para pegar a primeira palavra da categoria para manter alguma personalização */}
+                <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
             </Button>
             
