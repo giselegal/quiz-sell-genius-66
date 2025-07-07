@@ -379,7 +379,8 @@ const ResultPage: React.FC = () => {
 
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-6 px-4 sm:px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 mb-4 w-full max-w-md mx-auto block" 
+              // Ajustes no className do Button
+              className="text-white py-6 px-3 sm:px-8 md:px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 mb-4 w-full max-w-md mx-auto block" 
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
                 boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
@@ -387,7 +388,11 @@ const ResultPage: React.FC = () => {
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 text-[0.7rem] xs:text-sm sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal font-semibold px-0.5">
+              {/* Ajustes no span que envolve o ícone e o texto */}
+              <span className="flex flex-col sm:flex-row items-center justify-center 
+                                 gap-1 sm:gap-3 
+                                 text-[0.65rem] xs:text-xs sm:text-base md:text-lg lg:text-xl 
+                                 leading-none text-center font-semibold"> {/* Simplificado leading e alinhamento */}
                 <ShoppingCart className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
