@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card'; // Card pode ser removido se não for usado para outros fins neste arquivo
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Star } from 'lucide-react'; // Alterado Sparkles para Star
+import { ShoppingCart, Star } from 'lucide-react';
 
 interface PersonalizedHookProps {
   styleCategory: string;
@@ -18,49 +18,49 @@ const styleMessages: Record<string, {
   'Natural': {
     congratsMessage: "você é uma mulher autêntica e espontânea!",
     powerMessage: "Mulheres com seu estilo conquistam admiração pela naturalidade e charme genuíno. Sua beleza está na simplicidade elegante.",
-    ctaText: "QUERO POTENCIALIZAR MEU ESTILO NATURAL",
+    ctaText: "ACESSE SEU GUIA NATURAL AGORA",
     exclusive: "Oferta Especial"
   },
   'Clássico': {
     congratsMessage: "você possui elegância atemporal!",
     powerMessage: "Mulheres com seu estilo transmitem confiança e sofisticação. Você é vista como referência de bom gosto e refinamento.",
-    ctaText: "QUERO APERFEIÇOAR MEU ESTILO CLÁSSICO",
+    ctaText: "ACESSE SEU GUIA CLÁSSICO AGORA",
     exclusive: "Oferta Especial"
   },
   'Contemporâneo': {
     congratsMessage: "você tem o equilíbrio perfeito entre moderno e prático!",
     powerMessage: "Mulheres com seu estilo são admiradas pela versatilidade e atualidade. Você sempre parece estar à frente do seu tempo.",
-    ctaText: "QUERO DOMINAR MEU ESTILO CONTEMPORÂNEO",
+    ctaText: "ACESSE SEU GUIA CONTEMPORÂNEO AGORA",
     exclusive: "Oferta Especial"
   },
   'Elegante': {
     congratsMessage: "você possui presença e sofisticação únicos!",
     powerMessage: "Mulheres com seu estilo comandam respeito e admiração onde chegam. Sua elegância é sua marca registrada.",
-    ctaText: "QUERO MAXIMIZAR MEU ESTILO ELEGANTE",
+    ctaText: "ACESSE SEU GUIA ELEGANTE AGORA",
     exclusive: "Oferta Especial"
   },
   'Romântico': {
     congratsMessage: "você irradia feminilidade e delicadeza!",
     powerMessage: "Mulheres com seu estilo encantam pela suavidade e charme feminino. Você desperta o lado protetor das pessoas.",
-    ctaText: "QUERO REALÇAR MEU ESTILO ROMÂNTICO",
+    ctaText: "ACESSE SEU GUIA ROMÂNTICO AGORA",
     exclusive: "Oferta Especial"
   },
   'Sexy': {
     congratsMessage: "você possui magnetismo e confiança únicos!",
     powerMessage: "Mulheres com seu estilo fascinam pela presença marcante e autoconfiança. Você comanda a atenção naturalmente.",
-    ctaText: "QUERO APRIMORAR MEU ESTILO SEXY",
+    ctaText: "ACESSE SEU GUIA SEXY AGORA",
     exclusive: "Oferta Especial"
   },
   'Dramático': {
     congratsMessage: "você tem presença e força impressionantes!",
     powerMessage: "Mulheres com seu estilo lideram e inspiram por onde passam. Sua personalidade forte é seu maior trunfo.",
-    ctaText: "QUERO INTENSIFICAR MEU ESTILO DRAMÁTICO",
+    ctaText: "ACESSE SEU GUIA DRAMÁTICO AGORA",
     exclusive: "Oferta Especial"
   },
   'Criativo': {
     congratsMessage: "você é única e expressiva!",
     powerMessage: "Mulheres com seu estilo se destacam pela originalidade e criatividade. Você é uma obra de arte viva.",
-    ctaText: "QUERO LIBERAR MEU ESTILO CRIATIVO",
+    ctaText: "ACESSE SEU GUIA CRIATIVO AGORA",
     exclusive: "Oferta Especial"
   }
 };
@@ -73,24 +73,18 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
   const messages = styleMessages[styleCategory] || styleMessages['Natural'];
   
   return (
-    // Removida a tag <Card> externa e seus estilos, pois ela agora é renderizada no ResultPage.tsx
-    <div className="text-center p-0"> {/* Removido padding, Card pai já tem */}
-      
-      {/* Style Revelation - A GRANDE REVELAÇÃO AGORA */}
+    <div className="text-center p-0">
       <div className="mb-6">
-        {/* Nome do Estilo: Grande e em destaque */}
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-playfair text-[#aa6b5d] font-bold leading-tight mb-2">
           {styleCategory}
         </h2>
-        {/* Mensagem de Congratulações: logo abaixo do nome do estilo */}
         <p className="text-lg sm:text-xl md:text-2xl text-[#432818] mb-4 italic leading-relaxed">
           {messages.congratsMessage}
         </p>
         
-        {/* Mensagem de Poder - Usando Ícone Star mais discreto */}
         <div className="bg-white/80 rounded-lg p-4 sm:p-5 shadow-sm border border-[#B89B7A]/20 mt-6 mb-6 text-left">
           <div className="flex items-start gap-3">
-            <Star className="w-5 h-5 text-[#B89B7A] mt-1 flex-shrink-0" /> {/* Ícone Star */}
+            <Star className="w-5 h-5 text-[#B89B7A] mt-1 flex-shrink-0" />
             <p className="text-[#432818] leading-relaxed text-base sm:text-lg">
               {messages.powerMessage}
             </p>
@@ -98,19 +92,19 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         </div>
       </div>
       
-      {/* Exclusive Offer Badge - Fundo sólido elegante, sombra suave, SEM rotação */}
-      <div className="bg-[#B89B7A] text-white px-6 py-2 rounded-full shadow-sm text-sm font-medium inline-block mb-6 whitespace-nowrap">
+      {/* Exclusive Offer Badge - Alterado para `block` e `mx-auto` para centralizar e garantir que fique acima do botão */}
+      <div className="bg-[#B89B7A] text-white px-6 py-2 rounded-full shadow-sm text-sm font-medium block mb-6 mx-auto w-fit"> {/* Adicionado `block`, `mx-auto`, `w-fit` */}
         🎯 {messages.exclusive} - 78% OFF
       </div>
       
-      {/* Primary CTA Button - AGORA NA COR VERDE CONVENCIONAL DE OFERTA */}
+      {/* Primary CTA Button */}
       <Button
         onClick={onCTAClick}
         className="w-full sm:w-auto text-white py-4 px-8 rounded-lg text-lg font-semibold transition-all duration-300 mb-4
-                   hover:scale-102 active:scale-98" /* Ajustes de hover e active para sutileza */
+                   hover:scale-102 active:scale-98"
         style={{
-          background: "linear-gradient(to right, #4CAF50, #45a049)", // Verde convencional de oferta
-          boxShadow: "0 2px 8px rgba(76, 175, 80, 0.2)" // Sombra ajustada para o novo verde
+          background: "linear-gradient(to right, #4CAF50, #45a049)",
+          boxShadow: "0 2px 8px rgba(76, 175, 80, 0.2)"
         }}
       >
         <span className="flex items-center justify-center gap-3">
@@ -119,7 +113,7 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         </span>
       </Button>
       
-      {/* Urgency Message - Removido animate-pulse */}
+      {/* Urgency Message */}
       <p className="text-[#ff6b6b] text-sm font-medium">
         ⚡ Esta oferta expira quando você sair desta página
       </p>
