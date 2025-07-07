@@ -25,10 +25,12 @@ import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import PersonalizedHook from '@/components/result/PersonalizedHook';
 import UrgencyCountdown from '@/components/result/UrgencyCountdown';
-// import StyleSpecificProof from '@/components/result/StyleSpecificProof'; // Mantido comentado se você removeu a seção
+// import StyleSpecificProof from '@/components/result/StyleSpecificProof';
 
-// Remover 'export' da declaração 'export const ResultPage'
-const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
+// Importe o novo componente
+import StyleGuidesVisual from '@/components/result/StyleGuidesVisual';
+
+const ResultPage: React.FC = () => {
   const {
     primaryStyle,
     secondaryStyles
@@ -58,15 +60,13 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
 
   useEffect(() => {
     if (!hasTestAssignedRef.current) {
-      let variant = localStorage.getItem('ab_test_urgency_countdown_position'); // Nome do teste no localStorage
+      let variant = localStorage.getItem('ab_test_urgency_countdown_position');
       if (!variant) {
         variant = Math.random() < 0.5 ? 'A' : 'B'; // 50/50 split
         localStorage.setItem('ab_test_urgency_countdown_position', variant);
       }
       setTestVariant(variant as 'A' | 'B');
 
-      // --- IMPORTANTE: Rastreamento para o Google Analytics ou ferramenta similar ---
-      // Certifique-se de que o gtag/dataLayer esteja disponível globalmente
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', 'ab_test_view', {
           'test_name': 'urgency_countdown_position',
@@ -79,12 +79,9 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
           'variant': variant
         });
       }
-      // ----------------------------------------------------------------------------
-
       hasTestAssignedRef.current = true;
     }
-  }, []); // Rodar apenas uma vez na montagem do componente
-  // --- FIM: LÓGICA DO TESTE A/B ---
+  }, []);
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   useEffect(() => {
@@ -135,7 +132,6 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
   } = styleConfig[category];
 
   const handleCTAClick = () => {
-    // Ao clicar no CTA, você também deve rastrear qual variante levou à conversão
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'checkout_initiated', {
         'test_name': 'urgency_countdown_position',
@@ -152,7 +148,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
         'event_label': `CTA_Click_${category}`
       });
     }
-    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page'); // Seu rastreamento existente
+    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
 
@@ -170,12 +166,8 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} className="mb-0" />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
-        {/* --- INÍCIO: SEÇÃO INICIAL CONSOLIDADA (Hero Section) --- */}
-        {/* Card que agrupa a revelação principal do estilo e a urgência (para Variante A) */}
-        {/* Fundo sólido branco para um visual mais limpo e elegante, sombras suaves */}
-        <Card className="p-4 sm:p-6 md:p-8 mb-8 md:mb-12 bg-white border-[#B89B7A]/10 shadow-sm -mt-4 sm:-mt-6 md:-mt-8"> {/* Margem negativa para encaixar no Header */}
+        <Card className="p-4 sm:p-6 md:p-8 mb-8 md:mb-12 bg-white border-[#B89B7A]/10 shadow-sm -mt-4 sm:-mt-6 md:-mt-8">
             <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
-                {/* PersonalizedHook agora revela o estilo com grande destaque */}
                 <PersonalizedHook 
                     styleCategory={category}
                     userName={user?.userName}
@@ -183,14 +175,12 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
                 />
             </AnimatedWrapper>
 
-            {/* UrgencyCountdown para a Variante A, dentro deste Card com espaçamento */}
             {testVariant === 'A' && (
-                <AnimatedWrapper animation="fade" show={true} duration={400} delay={200} className="mt-6 md:mt-8"> {/* Espaçamento interno */}
+                <AnimatedWrapper animation="fade" show={true} duration={400} delay={200} className="mt-6 md:mt-8">
                     <UrgencyCountdown styleCategory={category} />
                 </AnimatedWrapper>
             )}
         </Card>
-        {/* --- FIM: SEÇÃO INICIAL CONSOLIDADA (Hero Section) --- */}
 
         {/* PROVA SOCIAL: Style-Specific Social Proof (Mantenha comentado ou remova se não for usar) */}
         {/*
@@ -230,7 +220,8 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
                 </AnimatedWrapper>
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
-                {/* --- AJUSTE AQUI: max-w-xs para imagem do estilo predominante em mobile --- */}
+                {/* --- MANTIDO AQUI: A IMAGEM DO ESTILO PREDOMINANTE (IMAGE) --- */}
+                {/* As classes max-w-xs sm:max-w-[238px] já fazem ela ser menor no mobile */}
                 <div className="max-w-[238px] mx-auto relative">
                   <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} 
                        className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300 max-w-xs sm:max-w-[238px]" /* max-w-xs para mobile, sm:max-w-[238px] para sm+ */
@@ -241,14 +232,16 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
                 </div>
               </AnimatedWrapper>
             </div>
+
+            {/* --- AJUSTADO AQUI: A SECTION DA IMAGEM DO GUIA PRINCIPAL E AS MINIATURAS --- */}
+            {/* O StyleGuidesVisual encapsula o guideImage e as miniaturas, removendo o div antigo */}
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
-              <div className="mt-8 max-w-[540px] mx-auto relative">
-                <img src={`${guideImage}?q=auto:best&f=auto&w=540`} alt={`Guia de Estilo ${category}`} loading="lazy" className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" width="540" height="auto" />
-                {/* Elegant badge */}
-                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
-                  Exclusivo
-                </div>
-              </div>
+              <StyleGuidesVisual 
+                primaryGuideImage={guideImage} 
+                category={category} 
+                secondaryStyles={secondaryStyles} 
+                isLowPerformance={isLowPerformance} 
+              />
             </AnimatedWrapper>
             
             {/* CTA Section after Style Guide */}
@@ -393,7 +386,6 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
               com autenticidade e transformar sua imagem em ferramenta de poder.
             </p>
 
-            {/* SEÇÃO COM O AJUSTE DE FUNDO: 'O Guia de Estilo e Imagem + Bônus Exclusivos' */}
             <div className="bg-[#fffaf7] p-6 rounded-lg mb-6 border border-[#B89B7A]/10 glass-panel">
               <h3 className="text-xl font-medium text-[#aa6b5d] mb-4">O Guia de Estilo e Imagem + Bônus Exclusivos</h3>
               <ul className="space-y-3 text-left max-w-xl mx-auto text-[#432818]">
