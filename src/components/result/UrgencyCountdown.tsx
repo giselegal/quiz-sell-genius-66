@@ -39,8 +39,7 @@ export const UrgencyCountdown: React.FC<UrgencyCountdownProps> = ({
     <Card className="bg-white p-4 mb-6 border-[#B89B7A]/20 shadow-sm">
       <div className="flex items-center justify-center gap-3 mb-3">
         <AlertTriangle className="w-5 h-5 text-[#ff6b6b]" />
-        <span className="text-[#ff6b6b] font-medium text-sm uppercase tracking-wide">
-          OFERTA ESPECIAL PARA {styleCategory.toUpperCase()}
+        <span className="text-[#ff6b6b] font-medium text-sm uppercase tracking-wide"
         </span>
       </div>
       
