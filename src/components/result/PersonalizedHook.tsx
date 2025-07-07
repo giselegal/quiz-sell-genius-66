@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Sparkles } from 'lucide-react'; // Crown icon removed
 
 interface PersonalizedHookProps {
   styleCategory: string;
