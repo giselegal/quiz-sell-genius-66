@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@/components/ui/card'; // Card pode ser removido se não for usado para outros fins neste arquivo
 import { Button } from '@/components/ui/button';
-import { ShoppingCart } from 'lucide-react'; // Ícone Star removido daqui
+import { ShoppingCart, Star } from 'lucide-react'; // Ícone Star removido daqui
 
 interface PersonalizedHookProps {
   styleCategory: string;
@@ -82,7 +82,6 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
           {messages.congratsMessage}
         </p>
         
-        {/* Mensagem de Poder - Removido o Ícone Star */}
         <div className="bg-white/80 rounded-lg p-4 sm:p-5 shadow-sm border border-[#B89B7A]/20 mt-6 mb-6 text-left">
           <div className="flex items-start gap-3">
             {/* Ícone Star REMOVIDO AQUI */}
@@ -93,7 +92,8 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         </div>
       </div>
       
-      <div className="flex flex-col items-center justify-center gap-4 mb-4">
+      {/* Ajustado o gap para dar mais espaço entre o selo, o botão e a mensagem de urgência */}
+      <div className="flex flex-col items-center justify-center gap-5 sm:gap-6 mb-6"> {/* Aumentado gap para 5/6, e mb para 6 */}
         <div className="bg-[#B89B7A] text-white px-6 py-2 rounded-full shadow-sm text-sm font-medium whitespace-nowrap">
           🎯 {messages.exclusive} - 78% OFF
         </div>
@@ -114,7 +114,8 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         </Button>
       </div>
       
-      <p className="text-[#ff6b6b] text-sm font-medium">
+      {/* Mensagem de Urgência - Agora com um mt- para separá-la do bloco de selo/botão */}
+      <p className="text-[#ff6b6b] text-sm font-medium mt-4 sm:mt-6"> {/* Adicionado mt-4/6 */}
         ⚡ Esta oferta expira quando você sair desta página
       </p>
     </div>
