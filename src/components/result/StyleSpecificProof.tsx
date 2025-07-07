@@ -17,7 +17,7 @@ const styleProofData: Record<string, {
     count: 847,
     testimonial: "Finalmente me visto com autenticidade! O estilo Natural me trouxe leveza e confiança.",
     author: "Marina, 34 anos",
-    beforeAfter: "De looks forçados para um visual autêntico e confortável"
+    beforeAfter: "De looks desconfortáveis para um visual autêntico e confortável"
   },
   'Clássico': {
     count: 1243,
@@ -41,7 +41,7 @@ const styleProofData: Record<string, {
     count: 612,
     testimonial: "Descobri como expressar minha feminilidade de forma delicada e autêntica.",
     author: "Juliana, 32 anos",
-    beforeAfter: "De looks masculinizados para um visual doce e feminino"
+    beforeAfter: "De looks sem personalidade para um visual doce e feminino"
   },
   'Sexy': {
     count: 534,
