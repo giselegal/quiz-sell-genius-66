@@ -116,7 +116,7 @@ const ResultPage: React.FC = () => {
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
 
-      <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
+      <div className="container mx-auto px-4 py-8 max-w-4xl relative z-10"> {/* Increased vertical padding for container */}
         {/* HOOK IMEDIATO: Personalized Hook with Primary CTA */}
         <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
           <PersonalizedHook 
@@ -140,7 +140,7 @@ const ResultPage: React.FC = () => {
         </AnimatedWrapper>
 
         {/* ATTENTION: Primary Style Card */}
-        <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
+        <Card className="p-6 mb-12 bg-white shadow-md border border-[#B89B7A]/20 card-elegant"> {/* Increased mb- */}
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
               <div className="max-w-md mx-auto mb-6">
@@ -264,7 +264,7 @@ const ResultPage: React.FC = () => {
 
         {/* DESIRE: Featured CTA (Green) */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
-          <div className="text-center my-10">
+          <div className="text-center my-12"> {/* Increased vertical margin */}
             <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
                 Descubra Como Aplicar Seu Estilo na Prática
@@ -306,7 +306,7 @@ const ResultPage: React.FC = () => {
 
         {/* ACTION: Final Value Proposition and CTA */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
-          <div className="text-center mt-10">
+          <div className="text-center mt-12"> {/* Increased vertical margin */}
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
               Vista-se de Você — na Prática
             </h2>
@@ -358,27 +358,27 @@ const ResultPage: React.FC = () => {
               <div className="text-center p-4 bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg border border-[#4CAF50]/30">
                 <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -78% HOJE</p>
                 <p className="text-4xl font-bold text-[#4CAF50]">R$ 39,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 5x de R$ 8,83</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 8,83</p>
                 <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
                   <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 175 em breve</p>
                 </div>
               </div>
             </div>
 
+            {/* Replaced the problematic button with a copy of the middle CTA button */}
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-6 px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 w-full max-w-md mx-auto block" 
+              className="text-white py-4 px-6 rounded-md btn-cta-green w-full max-w-md mx-auto block" 
+              onMouseEnter={() => setIsButtonHovered(true)} 
+              onMouseLeave={() => setIsButtonHovered(false)} 
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
-                boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
-                fontSize: "1.1rem"
-              }} 
-              onMouseEnter={() => setIsButtonHovered(true)} 
-              onMouseLeave={() => setIsButtonHovered(false)}
+                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+              }}
             >
-              <span className="flex items-center justify-center gap-3 leading-none">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
-                <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
+              <span className="flex items-center justify-center gap-2 leading-none">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+                <span>Quero meu Guia de Estilo Agora</span>
               </span>
             </Button>
             
