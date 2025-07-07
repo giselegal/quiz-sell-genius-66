@@ -99,18 +99,18 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
       </div>
       
       {/* Exclusive Offer Badge - Fundo sólido elegante, sombra suave, SEM rotação */}
-      <div className="bg-[#B89B7A] text-white px-6 py-2 rounded-full shadow-sm text-sm font-medium inline-block mb-6">
+      <div className="bg-[#B89B7A] text-white px-6 py-2 rounded-full shadow-sm text-sm font-medium inline-block mb-6 whitespace-nowrap">
         🎯 {messages.exclusive} - 78% OFF
       </div>
       
-      {/* Primary CTA Button - Sombra mais suave, hover menos agressivo, e ajustes de responsividade */}
+      {/* Primary CTA Button - AGORA NA COR VERDE CONVENCIONAL DE OFERTA */}
       <Button
         onClick={onCTAClick}
         className="w-full sm:w-auto text-white py-4 px-8 rounded-lg text-lg font-semibold transition-all duration-300 mb-4
                    hover:scale-102 active:scale-98" /* Ajustes de hover e active para sutileza */
         style={{
-          background: "linear-gradient(to right, #458B74, #3D7A65)", // Verde floresta mais elegante
-          boxShadow: "0 2px 8px rgba(61, 122, 101, 0.2)" // Sombra mais suave
+          background: "linear-gradient(to right, #4CAF50, #45a049)", // Verde convencional de oferta
+          boxShadow: "0 2px 8px rgba(76, 175, 80, 0.2)" // Sombra ajustada para o novo verde
         }}
       >
         <span className="flex items-center justify-center gap-3">
