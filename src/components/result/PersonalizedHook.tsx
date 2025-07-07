@@ -1,13 +1,14 @@
 import React from 'react';
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/card'; // Card pode ser removido se não for usado para outros fins neste arquivo
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Sparkles } from 'lucide-react'; // Crown icon removed
+import { ShoppingCart, Star } from 'lucide-react'; // Alterado Sparkles para Star
 
 interface PersonalizedHookProps {
   styleCategory: string;
   userName?: string;
   onCTAClick: () => void;
 }
+
 const styleMessages: Record<string, {
   congratsMessage: string;
   powerMessage: string;
@@ -63,44 +64,67 @@ const styleMessages: Record<string, {
     exclusive: "Oferta Especial"
   }
 };
+
 export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
   styleCategory,
   userName = "Querida",
   onCTAClick
 }) => {
   const messages = styleMessages[styleCategory] || styleMessages['Natural'];
-  return <Card className="bg-gradient-to-br from-[#fff8f4] via-[#faf6f1] to-[#f5f0ea] border-[#B89B7A]/40 p-4 sm:p-6 md:p-8 lg:p-10 mb-8 shadow-lg max-w-4xl mx-auto">
-      <div className="text-center">
-        {/* Congratulations Header - Crown icons removed, adjusted for centering */}
-        <div className="flex items-center justify-center mb-4"> {/* Simplified flex layout */}
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair text-[#aa6b5d] leading-tight">
-          </h1>
-        </div>
+  
+  return (
+    // Removida a tag <Card> externa e seus estilos, pois ela agora é renderizada no ResultPage.tsx
+    <div className="text-center p-0"> {/* Removido padding, Card pai já tem */}
+      
+      {/* Style Revelation - A GRANDE REVELAÇÃO AGORA */}
+      <div className="mb-6">
+        {/* Nome do Estilo: Grande e em destaque */}
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-playfair text-[#aa6b5d] font-bold leading-tight mb-2">
+          {styleCategory}
+        </h2>
+        {/* Mensagem de Congratulações: logo abaixo do nome do estilo */}
+        <p className="text-lg sm:text-xl md:text-2xl text-[#432818] mb-4 italic leading-relaxed">
+          {messages.congratsMessage}
+        </p>
         
-        {/* Style Revelation - Text sizes and padding adapt for mobile */}
-        <div className="mb-6 px-2 sm:px-4">
-          <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-[#432818] mb-3 leading-snug">
-            <span className="font-bold text-[#B89B7A] text-xl sm:text-2xl md:text-3xl lg:text-4xl">{styleCategory}</span> —{" "}
-            <span className="italic block sm:inline">{messages.congratsMessage}</span>
-          </h2>
-          
-          <div className="bg-white/80 rounded-lg p-4 sm:p-5 md:p-6 shadow-sm border border-[#B89B7A]/20 mb-6 text-left">
-            <div className="flex items-start gap-3">
-              <p className="text-[#432818] leading-relaxed text-base sm:text-lg">
-                {messages.powerMessage}
-              </p>
-            </div>
+        {/* Mensagem de Poder - Usando Ícone Star mais discreto */}
+        <div className="bg-white/80 rounded-lg p-4 sm:p-5 shadow-sm border border-[#B89B7A]/20 mt-6 mb-6 text-left">
+          <div className="flex items-start gap-3">
+            <Star className="w-5 h-5 text-[#B89B7A] mt-1 flex-shrink-0" /> {/* Ícone Star */}
+            <p className="text-[#432818] leading-relaxed text-base sm:text-lg">
+              {messages.powerMessage}
+            </p>
           </div>
         </div>
-        
-        {/* Exclusive Offer Badge - Font size and padding adapt */}
-        <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 sm:px-6 py-1 sm:py-2 rounded-full shadow-lg text-xs sm:text-sm md:text-base font-medium transform -rotate-2 inline-block mb-6 whitespace-nowrap">
-          🎯 {messages.exclusive} - 78% OFF
-        </div>
-        
-        <p className="text-[#ff6b6b] text-xs sm:text-sm font-medium animate-pulse mt-4">
-você possui presença e sofisticação únicos!</p>
       </div>
-    </Card>;
+      
+      {/* Exclusive Offer Badge - Fundo sólido elegante, sombra suave, SEM rotação */}
+      <div className="bg-[#B89B7A] text-white px-6 py-2 rounded-full shadow-sm text-sm font-medium inline-block mb-6">
+        🎯 {messages.exclusive} - 78% OFF
+      </div>
+      
+      {/* Primary CTA Button - Sombra mais suave, hover menos agressivo, e ajustes de responsividade */}
+      <Button
+        onClick={onCTAClick}
+        className="w-full sm:w-auto text-white py-4 px-8 rounded-lg text-lg font-semibold transition-all duration-300 mb-4
+                   hover:scale-102 active:scale-98" /* Ajustes de hover e active para sutileza */
+        style={{
+          background: "linear-gradient(to right, #458B74, #3D7A65)", // Verde floresta mais elegante
+          boxShadow: "0 2px 8px rgba(61, 122, 101, 0.2)" // Sombra mais suave
+        }}
+      >
+        <span className="flex items-center justify-center gap-3">
+          <ShoppingCart className="w-6 h-6" />
+          {messages.ctaText}
+        </span>
+      </Button>
+      
+      {/* Urgency Message - Removido animate-pulse */}
+      <p className="text-[#ff6b6b] text-sm font-medium">
+        ⚡ Esta oferta expira quando você sair desta página
+      </p>
+    </div>
+  );
 };
+
 export default PersonalizedHook;
