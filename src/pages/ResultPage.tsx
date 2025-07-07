@@ -376,20 +376,19 @@ const ResultPage: React.FC = () => {
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
                 boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
-                // Removed explicit fontSize: "1.1rem" here to let responsive classes take full control
               }} 
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal font-semibold"> {/* **Ajustes cruciais aqui** */}
-                <ShoppingCart className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} /> {/* **Ícone responsivo** */}
+              <span className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 text-xs sm:text-base md:text-lg lg:text-xl leading-none text-center sm:text-left font-semibold"> {/* **Mudei para flex-col no mobile** */}
+                <ShoppingCart className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
             </Button>
             
             <div className="text-center mb-4">
               <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20">
-                <p className="text-xs sm:text-sm text-[#ff6b6b] font-medium animate-pulse leading-tight"> {/* **Ajuste na fonte da urgência** */}
+                <p className="text-xs sm:text-sm text-[#ff6b6b] font-medium animate-pulse leading-tight">
                   ⚡ Esta oferta expira quando você sair desta página
                 </p>
               </div>
