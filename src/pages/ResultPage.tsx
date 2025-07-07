@@ -3,7 +3,7 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
-import { Progress } = from '@/components/ui/progress';
+import { Progress } from '@/components/ui/progress'; // Corrected import statement
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
@@ -13,8 +13,8 @@ import MotivationSection from '@/components/result/MotivationSection';
 import MentorSection from '@/components/result/MentorSection';
 import GuaranteeSection from '@/components/result/GuaranteeSection';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
-import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
-import BonusSection from '@/components/result/BonusSection';
+import BeforeAfterTransformation from '@/components/quiz-result/BeforeAfterTransformation';
+import BonusSection from '@/components/quiz-result/BonusSection';
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
@@ -367,7 +367,7 @@ const ResultPage: React.FC = () => {
 
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-6 px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 w-full max-w-md mx-auto block" /* Removed mb-4 */
+              className="text-white py-6 px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 w-full max-w-md mx-auto block" 
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
                 boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
@@ -376,7 +376,7 @@ const ResultPage: React.FC = () => {
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex items-center justify-center gap-3 leading-none"> {/* Added leading-none here */}
+              <span className="flex items-center justify-center gap-3 leading-none">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
