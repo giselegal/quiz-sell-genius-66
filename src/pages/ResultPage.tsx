@@ -1,10 +1,8 @@
-// src/pages/ResultPage.tsx
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
-import { styleConfig } from '@/config/styleConfig'; // CORRIGIDO AQUI: 'from' ao invés de '='
+import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
@@ -17,7 +15,7 @@ import GuaranteeSection from '@/components/result/GuaranteeSection';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
 import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
 import BonusSection from '@/components/result/BonusSection';
-import { Button } from '@/components/ui/button'; // CORRIGIDO AQUI: 'from' ao invés de '='
+import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
@@ -27,10 +25,9 @@ import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import PersonalizedHook from '@/components/result/PersonalizedHook';
 import UrgencyCountdown from '@/components/result/UrgencyCountdown';
-// import StyleSpecificProof from '@/components/result/StyleSpecificProof'; // Mantido comentado se você removeu a seção
+// import StyleSpecificProof from '@/components/result/StyleSpecificProof'; 
 
-// AQUI ESTÁ A MUDANÇA PRINCIPAL: remova 'export' da declaração 'export const ResultPage'
-const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
+const ResultPage: React.FC = () => {
   const {
     primaryStyle,
     secondaryStyles
@@ -53,6 +50,37 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
     minDuration: isLowPerformance ? 400 : 800,
     disableTransitions: isLowPerformance
   });
+
+  // --- INÍCIO: LÓGICA DO TESTE A/B ---
+  const [testVariant, setTestVariant] = useState<'A' | 'B'>('A');
+  const hasTestAssignedRef = useRef(false);
+
+  useEffect(() => {
+    if (!hasTestAssignedRef.current) {
+      let variant = localStorage.getItem('ab_test_urgency_countdown_position');
+      if (!variant) {
+        variant = Math.random() < 0.5 ? 'A' : 'B';
+        localStorage.setItem('ab_test_urgency_countdown_position', variant);
+      }
+      setTestVariant(variant as 'A' | 'B');
+
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'ab_test_view', {
+          'test_name': 'urgency_countdown_position',
+          'variant': variant
+        });
+      } else if (typeof window !== 'undefined' && (window as any).dataLayer) {
+        (window as any).dataLayer.push({
+          'event': 'ab_test_view',
+          'test_name': 'urgency_countdown_position',
+          'variant': variant
+        });
+      }
+
+      hasTestAssignedRef.current = true;
+    }
+  }, []);
+  // --- FIM: LÓGICA DO TESTE A/B ---
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   useEffect(() => {
@@ -103,6 +131,22 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
   } = styleConfig[category];
 
   const handleCTAClick = () => {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'checkout_initiated', {
+        'test_name': 'urgency_countdown_position',
+        'variant': testVariant,
+        'event_category': 'ecommerce',
+        'event_label': `CTA_Click_${category}`
+      });
+    } else if (typeof window !== 'undefined' && (window as any).dataLayer) {
+       (window as any).dataLayer.push({
+        'event': 'checkout_initiated',
+        'test_name': 'urgency_countdown_position',
+        'variant': testVariant,
+        'event_category': 'ecommerce',
+        'event_label': `CTA_Click_${category}`
+      });
+    }
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
@@ -117,26 +161,33 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
+      {/* Header component now focuses on logo and general greeting */}
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
-        {/* HOOK IMEDIATO: Personalized Hook with Primary CTA */}
-        <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
-          <PersonalizedHook 
-            styleCategory={category}
-            userName={user?.userName}
-            onCTAClick={handleCTAClick}
-          />
-        </AnimatedWrapper>
+        {/* --- INÍCIO: SEÇÃO INICIAL CONSOLIDADA (Hero Section) --- */}
+        {/* Usando uma Card para agrupar o PersonalizedHook e o UrgencyCountdown */}
+        <Card className="p-4 sm:p-6 md:p-8 mb-8 md:mb-12 bg-gradient-to-br from-[#fff8f4] via-[#faf6f1] to-[#f5f0ea] border-[#B89B7A]/40 shadow-lg">
+            <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
+                <PersonalizedHook 
+                    styleCategory={category}
+                    userName={user?.userName}
+                    onCTAClick={handleCTAClick}
+                />
+            </AnimatedWrapper>
 
-        {/* URGÊNCIA: Countdown Timer */}
-        {/* Aumentando o mb para dar mais respiro após o countdown */}
-        <AnimatedWrapper animation="fade" show={true} duration={400} delay={200} className="mb-8 md:mb-12">
-          <UrgencyCountdown styleCategory={category} />
-        </AnimatedWrapper>
+            {/* Renderização Condicional do UrgencyCountdown dentro da mesma Card */}
+            {testVariant === 'A' && (
+                <AnimatedWrapper animation="fade" show={true} duration={400} delay={200} className="mt-6 md:mt-8"> {/* Adicionado mt- para espaçamento interno */}
+                    <UrgencyCountdown styleCategory={category} />
+                </AnimatedWrapper>
+            )}
+            {/* O UrgencyCountdown para a Variante B será renderizado mais abaixo na página */}
+        </Card>
+        {/* --- FIM: SEÇÃO INICIAL CONSOLIDADA (Hero Section) --- */}
 
-        {/* PROVA SOCIAL: Style-Specific Social Proof */}
-        {/* <-- ESTE BLOCO SERÁ REMOVIDO OU COMENTADO SE VOCÊ JÁ REMOVEU O IMPORT ANTES */}
+
+        {/* PROVA SOCIAL: Style-Specific Social Proof (se reativado, adicione aqui ou onde desejar) */}
         {/*
         <AnimatedWrapper animation="fade" show={true} duration={400} delay={300} className="mb-8 md:mb-12">
           <StyleSpecificProof 
@@ -146,8 +197,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
         </AnimatedWrapper>
         */}
 
-        {/* ATTENTION: Primary Style Card */}
-        {/* Este Card já tinha mb-10, vamos aumentar para mb-12 em mobile e md:mb-16 em desktop */}
+        {/* ATTENTION: Primary Style Card (your existing main style description card) */}
         <Card className="p-6 mb-12 md:mb-16 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
@@ -202,7 +252,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
                 </h4>
                 <p className="text-gray-700 mb-6 leading-relaxed max-w-2xl mx-auto">
                   Seu estilo é uma ferramenta poderosa. Não se trata apenas de
-                  roupas, mas de comunicar quem você é e aspira ser. Com a
+                   roupas, mas de comunicar quem você é e aspira ser. Com a
                   orientação certa, você pode:
                 </p>
                 <ul className="space-y-3 text-gray-700 mb-8 max-w-xl mx-auto text-left">
@@ -251,31 +301,35 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
         </Card>
 
         {/* INTEREST: Before/After Transformation Section */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700} className="mb-8 md:mb-12">
           <BeforeAfterTransformation />
         </AnimatedWrapper>
 
+        {/* --- INÍCIO: RENDERIZAÇÃO CONDICIONAL PARA O TESTE A/B (Variante B) --- */}
+        {testVariant === 'B' && (
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={750} className="mb-8 md:mb-12">
+            <UrgencyCountdown styleCategory={category} />
+          </AnimatedWrapper>
+        )}
+        {/* --- FIM: RENDERIZAÇÃO CONDICIONAL PARA O TESTE A/B (Variante B) --- */}
+
+
         {/* INTEREST: Motivation Section */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800} className="mb-8 md:mb-12">
           <MotivationSection />
         </AnimatedWrapper>
 
         {/* INTEREST: Bonus Section */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850} className="mb-8 md:mb-12">
           <BonusSection />
         </AnimatedWrapper>
 
         {/* DESIRE: Testimonials */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900} className="mb-8 md:mb-12">
           <Testimonials />
         </AnimatedWrapper>
 
         {/* DESIRE: Featured CTA (Green) */}
-        {/* Aumentando o mb no container geral do CTA */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950} className="mb-8 md:mb-12">
           <div className="text-center my-10">
             <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
@@ -308,19 +362,16 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
         </AnimatedWrapper>
 
         {/* DESIRE: Guarantee Section */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000} className="mb-8 md:mb-12">
           <GuaranteeSection />
         </AnimatedWrapper>
 
         {/* DESIRE: Mentor and Trust Elements */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050} className="mb-8 md:mb-12">
           <MentorSection />
         </AnimatedWrapper>
 
         {/* ACTION: Final Value Proposition and CTA */}
-        {/* Container principal para o CTA final e preço. Ajustando o mt/mb */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100} className="mt-8 mb-12 md:mt-10 md:mb-16">
           <div className="text-center">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
