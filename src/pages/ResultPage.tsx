@@ -25,12 +25,13 @@ import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import PersonalizedHook from '@/components/result/PersonalizedHook';
 import UrgencyCountdown from '@/components/result/UrgencyCountdown';
-// import StyleSpecificProof from '@/components/result/StyleSpecificProof';
+// import StyleSpecificProof from '@/components/result/StyleSpecificProof'; 
 
-// Importe o novo componente
-import StyleGuidesVisual from '@/components/result/StyleGuidesVisual';
+// Importe StyleResult, pois será usado no StyleGuidesVisual aninhado
+import { StyleResult } from '@/types/quiz'; 
 
-const ResultPage: React.FC = () => {
+// Remover 'export' da declaração 'export const ResultPage'
+const ResultPage: React.FC = () => { 
   const {
     primaryStyle,
     secondaryStyles
@@ -82,6 +83,7 @@ const ResultPage: React.FC = () => {
       hasTestAssignedRef.current = true;
     }
   }, []);
+  // --- FIM: LÓGICA DO TESTE A/B ---
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   useEffect(() => {
@@ -94,25 +96,14 @@ const ResultPage: React.FC = () => {
       img.src = src;
     });
 
-    const {
-      category
-    } = primaryStyle;
-    const {
-      image,
-      guideImage
-    } = styleConfig[category];
+    const { category } = primaryStyle;
+    const { image, guideImage } = styleConfig[category];
     const styleImg = new Image();
     styleImg.src = `${image}?q=auto:best&f=auto&w=238`;
-    styleImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      style: true
-    }));
+    styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
     const guideImg = new Image();
     guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
-    guideImg.onload = () => setImagesLoaded(prev => ({
-      ...prev,
-      guide: true
-    }));
+    guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
   }, [primaryStyle, globalStyles.logo]);
 
   useEffect(() => {
@@ -122,35 +113,78 @@ const ResultPage: React.FC = () => {
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
 
-  const {
-    category
-  } = primaryStyle;
-  const {
-    image,
-    guideImage,
-    description
-  } = styleConfig[category];
+  const { category } = primaryStyle;
+  const { image, guideImage, description } = styleConfig[category];
 
   const handleCTAClick = () => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'checkout_initiated', {
-        'test_name': 'urgency_countdown_position',
-        'variant': testVariant,
-        'event_category': 'ecommerce',
-        'event_label': `CTA_Click_${category}`
-      });
+      (window as any).gtag('event', 'checkout_initiated', { 'test_name': 'urgency_countdown_position', 'variant': testVariant, 'event_category': 'ecommerce', 'event_label': `CTA_Click_${category}` });
     } else if (typeof window !== 'undefined' && (window as any).dataLayer) {
-       (window as any).dataLayer.push({
-        'event': 'checkout_initiated',
-        'test_name': 'urgency_countdown_position',
-        'variant': testVariant,
-        'event_category': 'ecommerce',
-        'event_label': `CTA_Click_${category}`
-      });
+      (window as any).dataLayer.push({ 'event': 'checkout_initiated', 'test_name': 'urgency_countdown_position', 'variant': testVariant, 'event_category': 'ecommerce', 'event_label': `CTA_Click_${category}` });
     }
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
+
+  // --- INÍCIO: COMPONENTE StyleGuidesVisual ANINHADO ---
+  // Remova o StyleGuidesVisual.tsx se você não precisar mais dele como arquivo separado
+  interface StyleGuidesVisualProps {
+    primaryGuideImage: string;
+    category: string;
+    secondaryStyles: StyleResult[];
+    isLowPerformance: boolean; // Para controlar animações
+  }
+
+  const StyleGuidesVisual: React.FC<StyleGuidesVisualProps> = ({
+    primaryGuideImage,
+    category,
+    secondaryStyles,
+    isLowPerformance,
+  }) => {
+    // Filtrar até 2 estilos secundários para miniaturas, garantindo que tenham guideImage no styleConfig
+    const secondaryGuideImages = secondaryStyles
+      .filter(style => styleConfig[style.category]?.guideImage) // Garante que a imagem exista
+      .slice(0, 2) // Limita a 2 miniaturas
+      .map(style => ({
+        src: `${styleConfig[style.category].guideImage}?q=auto:best&f=auto&w=80`, // Miniatura de 80px
+        alt: `Guia de Estilo ${style.category}`
+      }));
+
+    return (
+      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mt-8 max-w-[600px] mx-auto relative">
+        {/* Imagem do Guia Principal */}
+        <img
+          src={`${primaryGuideImage}?q=auto:best&f=auto&w=540`}
+          alt={`Guia de Estilo ${category}`}
+          loading="lazy"
+          className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300 max-w-[300px] md:max-w-[400px] flex-shrink-0" // Ajuste max-w para desktop
+          width="540" height="auto" // Mantém o width/height para acessibilidade
+        />
+
+        {/* Miniaturas dos Guias Secundários (apenas se houver) */}
+        {secondaryGuideImages.length > 0 && (
+          <div className="flex flex-row md:flex-col gap-2 md:gap-3 justify-center md:justify-start flex-wrap">
+            {secondaryGuideImages.map((miniature, index) => (
+              <img
+                key={index}
+                src={miniature.src}
+                alt={miniature.alt}
+                loading="lazy"
+                className="w-[60px] h-auto rounded-md shadow-sm border border-[#B89B7A]/20 hover:scale-105 transition-transform duration-300" // Miniaturas menores
+                width="80" height="auto"
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Elegant badge (mantido na imagem principal, mas ajustado o posicionamento se for dentro deste componente) */}
+        <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium transform rotate-12">
+          Exclusivo
+        </div>
+      </div>
+    );
+  };
+  // --- FIM: COMPONENTE StyleGuidesVisual ANINHADO ---
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
@@ -162,7 +196,6 @@ const ResultPage: React.FC = () => {
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
-      {/* Header component - Agora mais conciso e elegante. `mb-0` para se "encaixar" */}
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} className="mb-0" />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
@@ -220,8 +253,7 @@ const ResultPage: React.FC = () => {
                 </AnimatedWrapper>
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
-                {/* --- MANTIDO AQUI: A IMAGEM DO ESTILO PREDOMINANTE (IMAGE) --- */}
-                {/* As classes max-w-xs sm:max-w-[238px] já fazem ela ser menor no mobile */}
+                {/* AQUI ESTÁ A IMAGEM DO ESTILO PREDOMINANTE. Ela deve ser menor no mobile */}
                 <div className="max-w-[238px] mx-auto relative">
                   <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} 
                        className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300 max-w-xs sm:max-w-[238px]" /* max-w-xs para mobile, sm:max-w-[238px] para sm+ */
@@ -233,8 +265,8 @@ const ResultPage: React.FC = () => {
               </AnimatedWrapper>
             </div>
 
-            {/* --- AJUSTADO AQUI: A SECTION DA IMAGEM DO GUIA PRINCIPAL E AS MINIATURAS --- */}
-            {/* O StyleGuidesVisual encapsula o guideImage e as miniaturas, removendo o div antigo */}
+            {/* --- AJUSTADO AQUI: A SEÇÃO DA IMAGEM DO GUIA PRINCIPAL E AS MINIATURAS --- */}
+            {/* Agora usando o componente StyleGuidesVisual aninhado */}
             <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
               <StyleGuidesVisual 
                 primaryGuideImage={guideImage} 
