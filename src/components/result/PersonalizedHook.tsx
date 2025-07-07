@@ -102,22 +102,6 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
           🎯 {messages.exclusive} - 78% OFF
         </div>
         
-        {/* Primary CTA Button - Full width on small screens, adjusts on larger screens */}
-        <Button
-          onClick={onCTAClick}
-          className="w-full sm:w-auto text-white py-3 sm:py-4 px-6 sm:px-8 rounded-lg text-base sm:text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg"
-          style={{
-            background: "linear-gradient(to right, #4CAF50, #45a049)",
-            boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)"
-          }}
-        >
-          <span className="flex items-center justify-center gap-2 sm:gap-3 leading-none"> {/* leading-none ensures compact text */}
-            <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
-            {messages.ctaText}
-          </span>
-        </Button>
-        
-        {/* Urgency Message - Font size adapts, spacing for mobile */}
         <p className="text-[#ff6b6b] text-xs sm:text-sm font-medium animate-pulse mt-4">
           ⚡ Esta oferta expira quando você sair desta página
         </p>
