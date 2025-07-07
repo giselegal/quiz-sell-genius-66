@@ -84,7 +84,7 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         {/* Style Revelation - Text sizes and padding adapt for mobile */}
         <div className="mb-6 px-2 sm:px-4">
           <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-[#432818] mb-3 leading-snug">
-            Seu Estilo de Ser é: <span className="font-bold text-[#B89B7A] text-xl sm:text-2xl md:text-3xl lg:text-4xl">{styleCategory}</span> —{" "}
+            <span className="font-bold text-[#B89B7A] text-xl sm:text-2xl md:text-3xl lg:text-4xl">{styleCategory}</span> —{" "}
             <span className="italic block sm:inline">{messages.congratsMessage}</span>
           </h2>
           
