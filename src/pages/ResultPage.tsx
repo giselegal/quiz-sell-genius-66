@@ -3,7 +3,7 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
-import { Progress } = '@/components/ui/progress';
+import { Progress } from '@/components/ui/progress'; // CORRECTED LINE HERE
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
@@ -348,15 +348,15 @@ const ResultPage: React.FC = () => {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Guia Principal</span>
-                  <span className="font-medium">R$ 97,00</span>
+                  <span className="font-medium">R$ 79,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Peças-chave</span>
-                  <span className="font-medium">R$ 129,00</span>
+                  <span className="font-medium">R$ 67,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Visagismo Facial</span>
-                  <span className="font-medium">R$ 71,00</span>
+                  <span className="font-medium">R$ 29,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 pt-3 font-bold">
                   <span>Valor Total</span>
@@ -368,9 +368,9 @@ const ResultPage: React.FC = () => {
               </div>
               
               <div className="text-center p-4 bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg border border-[#4CAF50]/30">
-                <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -84% HOJE</p>
+                <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -78% HOJE</p>
                 <p className="text-4xl font-bold text-[#4CAF50]">R$ 47,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 16,57</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 5x de R$ 8,83</p>
                 <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
                   <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 175 em breve</p>
                 </div>
