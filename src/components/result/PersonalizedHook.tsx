@@ -8,7 +8,6 @@ interface PersonalizedHookProps {
   userName?: string;
   onCTAClick: () => void;
 }
-
 const styleMessages: Record<string, {
   congratsMessage: string;
   powerMessage: string;
@@ -64,16 +63,13 @@ const styleMessages: Record<string, {
     exclusive: "Oferta Especial"
   }
 };
-
 export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
   styleCategory,
   userName = "Querida",
   onCTAClick
 }) => {
   const messages = styleMessages[styleCategory] || styleMessages['Natural'];
-  
-  return (
-    <Card className="bg-gradient-to-br from-[#fff8f4] via-[#faf6f1] to-[#f5f0ea] border-[#B89B7A]/40 p-4 sm:p-6 md:p-8 lg:p-10 mb-8 shadow-lg max-w-4xl mx-auto">
+  return <Card className="bg-gradient-to-br from-[#fff8f4] via-[#faf6f1] to-[#f5f0ea] border-[#B89B7A]/40 p-4 sm:p-6 md:p-8 lg:p-10 mb-8 shadow-lg max-w-4xl mx-auto">
       <div className="text-center">
         {/* Congratulations Header - Crown icons removed, adjusted for centering */}
         <div className="flex items-center justify-center mb-4"> {/* Simplified flex layout */}
@@ -103,11 +99,8 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         </div>
         
         <p className="text-[#ff6b6b] text-xs sm:text-sm font-medium animate-pulse mt-4">
-          ⚡ Esta oferta expira quando você sair desta página
-        </p>
+você possui presença e sofisticação únicos!</p>
       </div>
-    </Card>
-  );
+    </Card>;
 };
-
 export default PersonalizedHook;
