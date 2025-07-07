@@ -3,7 +3,7 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
-import { Progress } from '@/components/ui/progress'; // Corrected import statement
+import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
@@ -228,7 +228,7 @@ const ResultPage: React.FC = () => {
                   onMouseEnter={() => setIsButtonHovered(true)}
                   onMouseLeave={() => setIsButtonHovered(false)}
                 >
-                  <span className="flex items-center justify-center gap-2 leading-none"> {/* Added leading-none here */}
+                  <span className="flex items-center justify-center gap-2 leading-none">
                     <ShoppingCart
                       className={`w-5 h-5 transition-transform duration-300 ${
                         isButtonHovered ? "scale-110" : ""
@@ -278,7 +278,7 @@ const ResultPage: React.FC = () => {
             background: "linear-gradient(to right, #4CAF50, #45a049)",
             boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
           }}>
-              <span className="flex items-center justify-center gap-2 leading-none"> {/* Added leading-none here */}
+              <span className="flex items-center justify-center gap-2 leading-none">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 Quero meu Guia de Estilo Agora
               </span>
@@ -358,7 +358,7 @@ const ResultPage: React.FC = () => {
               <div className="text-center p-4 bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg border border-[#4CAF50]/30">
                 <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -78% HOJE</p>
                 <p className="text-4xl font-bold text-[#4CAF50]">R$ 39,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 5x de R$ 8,83</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 8,83</p>
                 <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
                   <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 175 em breve</p>
                 </div>
