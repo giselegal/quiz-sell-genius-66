@@ -349,7 +349,7 @@ const ResultPage: React.FC = () => {
                 <div className="flex justify-between items-center p-2 pt-3 font-bold">
                   <span>Valor Total</span>
                   <div className="relative">
-                    <span>R$ 297,00</span>
+                    <span>R$ 175,00</span>
                     <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
                   </div>
                 </div>
@@ -360,7 +360,7 @@ const ResultPage: React.FC = () => {
                 <p className="text-4xl font-bold text-[#4CAF50]">R$ 47,00</p>
                 <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 16,57</p>
                 <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
-                  <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 297 em breve</p>
+                  <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 175 em breve</p>
                 </div>
               </div>
             </div>
