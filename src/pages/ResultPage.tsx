@@ -345,7 +345,7 @@ const ResultPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Peças-chave</span>
-                  <span className="font-medium">R$ 69,00</span>
+                  <span className="font-medium">R$ 67,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Visagismo Facial</span>
@@ -361,9 +361,9 @@ const ResultPage: React.FC = () => {
               </div>
               
               <div className="text-center p-4 bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg border border-[#4CAF50]/30">
-                <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -78% HOJE</p>
+                <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -84% HOJE</p>
                 <p className="text-4xl font-bold text-[#4CAF50]">R$ 39,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 8,83</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 5x de R$ 8,83</p>
                 <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
                   <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 175 em breve</p>
                 </div>
@@ -376,20 +376,20 @@ const ResultPage: React.FC = () => {
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
                 boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
-                fontSize: "1.1rem" // Keep this for base size
+                // Removed explicit fontSize: "1.1rem" here to let responsive classes take full control
               }} 
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex items-center justify-center gap-2 sm:gap-3 text-base sm:text-lg lg:text-xl leading-tight sm:leading-none"> {/* Adjusted font size and line height */}
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
+              <span className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal font-semibold"> {/* **Ajustes cruciais aqui** */}
+                <ShoppingCart className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} /> {/* **Ícone responsivo** */}
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
             </Button>
             
             <div className="text-center mb-4">
               <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20">
-                <p className="text-sm text-[#ff6b6b] font-medium animate-pulse leading-tight"> {/* Added leading-tight */}
+                <p className="text-xs sm:text-sm text-[#ff6b6b] font-medium animate-pulse leading-tight"> {/* **Ajuste na fonte da urgência** */}
                   ⚡ Esta oferta expira quando você sair desta página
                 </p>
               </div>
