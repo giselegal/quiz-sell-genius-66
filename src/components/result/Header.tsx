@@ -1,60 +1,55 @@
+// src/components/result/Header.tsx
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
-import { useAuth } from '@/context/AuthContext';
+import { Crown } from 'lucide-react'; // Embora não seja usada neste snippet, mantive por estar no seu arquivo original
+import { StyleResult } from '@/types/quiz'; // Ainda é necessário se `primaryStyle` for passado como prop para outros componentes do Header, mas se não for usado aqui, podemos remover.
 
 interface HeaderProps {
+  primaryStyle?: StyleResult; // Mantém como opcional caso outros componentes ainda usem
+  logoHeight?: number;
   logo?: string;
   logoAlt?: string;
-  title?: string;
-  primaryStyle?: StyleResult;
-  logoHeight?: number;
   userName?: string;
-  isScrolled?: boolean;
-  className?: string;
+  // Outras props que você possa ter adicionado ou que já existiam
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  logo = "https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp",
-  logoAlt = "Logo Gisele Galvão",
-  title = "Olá",
-  primaryStyle,
-  logoHeight = 80,
-  userName,
-  isScrolled,
-  className = ''
+  primaryStyle, // Mantemos primaryStyle aqui caso ele seja útil para outras lógicas ou passe para outros componentes internos do Header
+  logoHeight = 50,
+  logo,
+  logoAlt = "Logo",
+  userName = "Querida"
 }) => {
-  // Get userName from context if not provided as prop
-  const { user } = useAuth();
-  const displayName = userName || user?.userName || 'Visitante';
-  
+  // ... o restante do seu código Header.tsx (por exemplo, uso do useAuth para userName)
+
+  // Se você usa o `userName` do contexto AuthContext no Header:
+  // const { user } = useAuth();
+  // const displayName = userName || user?.userName || 'Visitante';
+
   return (
-    <Card className={`bg-white shadow-sm p-6 mb-6 border-0 ${className}`}>
-      <div className="flex flex-col items-center gap-5">
-        <div className="flex justify-center w-full">
-          <Logo 
-            src={logo} 
-            alt={logoAlt} 
-            className="h-auto mx-auto" 
-            style={{
-              height: `${logoHeight}px`,
-              maxWidth: '100%'
-            }} 
-          />
-        </div>
-        
-        <div className="text-center">
-          <h1 className="text-xl md:text-2xl font-playfair text-[#432818]">
-            {title} <span className="font-medium">{displayName}</span>, Descobrimos o seu Estilo de Ser:
-          </h1>
-          
-          {primaryStyle && (
-            <h2 className="font-bold text-[#B89B7A] mt-2 text-2xl">
-              {primaryStyle.category}
-            </h2>
-          )}
-        </div>
-      </div>
-    </Card>
+    <header className="py-6 px-4 md:px-8 text-center relative z-20">
+      {logo && (
+        <img
+          src={logo}
+          alt={logoAlt}
+          className="mx-auto mb-4"
+          style={{ height: `${logoHeight}px` }}
+        />
+      )}
+      <h1 className="text-3xl md:text-4xl font-playfair text-[#aa6b5d] leading-tight">
+        Descobrimos seu <span className="font-bold">Estilo de Ser!</span> {/* Texto genérico */}
+      </h1>
+      {userName && ( // Ou `displayName` se estiver usando o contexto
+        <p className="text-xl md:text-2xl text-[#432818] mt-2">Olá, {userName}!</p>
+      )}
+      {/* REMOVIDO: A exibição de primaryStyle.category e o h2 completo que o continha */}
+      {/*
+      {primaryStyle && (
+        <h2 className="font-bold text-[#B89B7A] mt-2 text-2xl">
+          {primaryStyle.category}
+        </h2>
+      )}
+      */}
+    </header>
   );
 };
