@@ -377,13 +377,13 @@ const ResultPage: React.FC = () => {
               onMouseLeave={() => setIsButtonHovered(false)}
             >
               <span className="flex items-center justify-center gap-3">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-100' : ''}`} />
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
             </Button>
             
             <div className="text-center mb-4">
-              <div className="bg-[#ff6b6b]/10 rounded-full px-4 py-2 inline-block border border-[#ff6b6b]/30">
+              <div className="bg-[#ff6b6b]/10 rounded-full px-4 py-1 inline-block border border-[#ff6b6b]/30">
                 <p className="text-sm text-[#ff6b6b] font-medium animate-pulse">
                   ⚡ Esta oferta expira quando você sair desta página
                 </p>
