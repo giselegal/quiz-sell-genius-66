@@ -37,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
         />
       )}
       <h1 className="text-3xl md:text-4xl font-playfair text-[#aa6b5d] leading-tight">
-        Descobrimos seu <span className="font-bold">Estilo de Ser!</span> {/* Texto genérico */}
+        Seu Estilo Principal é <span className="font-bold">Descoberto!</span> {/* Texto genérico */}
       </h1>
       {userName && ( // Ou `displayName` se estiver usando o contexto
         <p className="text-xl md:text-2xl text-[#432818] mt-2">Olá, {userName}!</p>
