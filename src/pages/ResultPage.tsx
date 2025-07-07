@@ -379,20 +379,21 @@ const ResultPage: React.FC = () => {
 
             <Button 
               onClick={handleCTAClick} 
-              // Ajustes no className do Button
-              className="text-white py-6 px-3 sm:px-8 md:px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 mb-4 w-full max-w-md mx-auto block" 
+              // **AJUSTE AQUI NO CLASSNAME DO BUTTON**
+              className="text-white py-6 px-3 sm:px-8 md:px-10 rounded-lg mb-4 w-full max-w-md mx-auto block
+                         transition-all duration-300 transform-none hover:scale-105 active:scale-95 /* padrão */
+                         sm:transform hover:scale-105 sm:shadow-lg sm:hover:shadow-xl" /* Reativar em sm+ */
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
-                boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
+                // **Removendo boxShadow daqui para Tailwind controlar**
               }} 
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              {/* Ajustes no span que envolve o ícone e o texto */}
               <span className="flex flex-col sm:flex-row items-center justify-center 
                                  gap-1 sm:gap-3 
                                  text-[0.65rem] xs:text-xs sm:text-base md:text-lg lg:text-xl 
-                                 leading-none text-center font-semibold"> {/* Simplificado leading e alinhamento */}
+                                 leading-none text-center font-semibold">
                 <ShoppingCart className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
