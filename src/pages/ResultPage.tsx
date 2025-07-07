@@ -410,7 +410,7 @@ const ResultPage: React.FC = () => {
 
             <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
               <Lock className="w-3 h-3" />
-              <span>Oferta exclusiva para {category} - Apenas nesta página</span>
+              <span>Oferta exclusiva - Apenas nesta página</span>
             </p>
           </div>
         </AnimatedWrapper>
