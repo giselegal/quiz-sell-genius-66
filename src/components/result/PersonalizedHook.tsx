@@ -73,28 +73,28 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
   const messages = styleMessages[styleCategory] || styleMessages['Natural'];
   
   return (
-    <Card className="bg-gradient-to-br from-[#fff8f4] via-[#faf6f1] to-[#f5f0ea] border-[#B89B7A]/40 p-8 mb-8 shadow-lg">
+    <Card className="bg-gradient-to-br from-[#fff8f4] via-[#faf6f1] to-[#f5f0ea] border-[#B89B7A]/40 p-4 sm:p-6 md:p-8 lg:p-10 mb-8 shadow-lg max-w-4xl mx-auto">
       <div className="text-center">
         {/* Congratulations Header */}
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <Crown className="w-6 h-6 text-[#FFD700]" />
-          <h1 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d]">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-4">
+          <Crown className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#FFD700] mb-2 sm:mb-0" />
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair text-[#aa6b5d] leading-tight">
             Parabéns, <span className="font-bold">{userName}</span>!
           </h1>
-          <Crown className="w-6 h-6 text-[#FFD700]" />
+          <Crown className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#FFD700] mt-2 sm:mt-0" />
         </div>
         
         {/* Style Revelation */}
-        <div className="mb-6">
-          <h2 className="text-xl md:text-2xl text-[#432818] mb-3">
-            Você é <span className="font-bold text-[#B89B7A] text-2xl md:text-3xl">{styleCategory}</span> —{" "}
-            <span className="italic">{messages.congratsMessage}</span>
+        <div className="mb-6 px-2 sm:px-4">
+          <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-[#432818] mb-3 leading-snug">
+            Você é <span className="font-bold text-[#B89B7A] text-xl sm:text-2xl md:text-3xl lg:text-4xl">{styleCategory}</span> —{" "}
+            <span className="italic block sm:inline">{messages.congratsMessage}</span>
           </h2>
           
-          <div className="bg-white/80 rounded-lg p-4 shadow-sm border border-[#B89B7A]/20 mb-6">
+          <div className="bg-white/80 rounded-lg p-4 sm:p-5 md:p-6 shadow-sm border border-[#B89B7A]/20 mb-6 text-left">
             <div className="flex items-start gap-3">
-              <Sparkles className="w-5 h-5 text-[#B89B7A] mt-1 flex-shrink-0" />
-              <p className="text-[#432818] leading-relaxed text-lg">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#B89B7A] mt-1 flex-shrink-0" />
+              <p className="text-[#432818] leading-relaxed text-base sm:text-lg">
                 {messages.powerMessage}
               </p>
             </div>
@@ -102,27 +102,27 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         </div>
         
         {/* Exclusive Offer Badge */}
-        <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-6 py-2 rounded-full shadow-lg text-sm font-medium transform -rotate-2 inline-block mb-6">
+        <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 sm:px-6 py-1 sm:py-2 rounded-full shadow-lg text-xs sm:text-sm md:text-base font-medium transform -rotate-2 inline-block mb-6 whitespace-nowrap">
           🎯 {messages.exclusive} - 75% OFF
         </div>
         
         {/* Primary CTA */}
         <Button
           onClick={onCTAClick}
-          className="text-white py-4 px-8 rounded-lg text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg mb-4"
+          className="w-full sm:w-auto text-white py-3 sm:py-4 px-6 sm:px-8 rounded-lg text-base sm:text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg mb-4"
           style={{
             background: "linear-gradient(to right, #4CAF50, #45a049)",
             boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)"
           }}
         >
-          <span className="flex items-center justify-center gap-3">
-            <ShoppingCart className="w-6 h-6" />
+          <span className="flex items-center justify-center gap-2 sm:gap-3">
+            <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
             {messages.ctaText}
           </span>
         </Button>
         
         {/* Urgency Message */}
-        <p className="text-[#ff6b6b] text-sm font-medium animate-pulse">
+        <p className="text-[#ff6b6b] text-xs sm:text-sm font-medium animate-pulse">
           ⚡ Esta oferta expira quando você sair desta página
         </p>
       </div>
