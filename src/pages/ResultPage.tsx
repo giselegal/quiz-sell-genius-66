@@ -15,7 +15,7 @@ import GuaranteeSection from '@/components/result/GuaranteeSection';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
 import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
 import BonusSection from '@/components/result/BonusSection';
-import { Button } => '@/components/ui/button'; // <-- CORREÇÃO AQUI, era '=' ao invés de 'from'
+import { Button } from '@/components/ui/button'; // CORRIGIDO AQUI: 'from' ao invés de '='
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
@@ -25,7 +25,7 @@ import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
 import PersonalizedHook from '@/components/result/PersonalizedHook';
 import UrgencyCountdown from '@/components/result/UrgencyCountdown';
-// import StyleSpecificProof from '@/components/result/StyleSpecificProof'; // <-- ESTA LINHA SERÁ REMOVIDA OU COMENTADA
+// import StyleSpecificProof from '@/components/result/StyleSpecificProof'; // Mantido comentado se você removeu a seção
 
 const ResultPage: React.FC = () => {
   const {
@@ -133,7 +133,7 @@ const ResultPage: React.FC = () => {
         </AnimatedWrapper>
 
         {/* PROVA SOCIAL: Style-Specific Social Proof */}
-        {/* <-- ESTE BLOCO SERÁ REMOVIDO OU COMENTADO */}
+        {/* <-- ESTE BLOCO SERÁ REMOVIDO OU COMENTADO SE VOCÊ JÁ REMOVEU O IMPORT ANTES */}
         {/*
         <AnimatedWrapper animation="fade" show={true} duration={400} delay={300} className="mb-8 md:mb-12">
           <StyleSpecificProof 
