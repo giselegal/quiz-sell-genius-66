@@ -1,8 +1,10 @@
+// src/pages/ResultPage.tsx
+
 import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
-import { styleConfig } from '@/config/styleConfig';
+import { styleConfig } from '@/config/styleConfig'; // CORRIGIDO AQUI: 'from' ao invés de '='
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
@@ -27,7 +29,8 @@ import PersonalizedHook from '@/components/result/PersonalizedHook';
 import UrgencyCountdown from '@/components/result/UrgencyCountdown';
 // import StyleSpecificProof from '@/components/result/StyleSpecificProof'; // Mantido comentado se você removeu a seção
 
-const ResultPage: React.FC = () => {
+// AQUI ESTÁ A MUDANÇA PRINCIPAL: remova 'export' da declaração 'export const ResultPage'
+const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
   const {
     primaryStyle,
     secondaryStyles
@@ -421,3 +424,6 @@ const ResultPage: React.FC = () => {
     </div>
   );
 };
+
+// EXPORTAÇÃO PADRÃO AQUI
+export default ResultPage;
