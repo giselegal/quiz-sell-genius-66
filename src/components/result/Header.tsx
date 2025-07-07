@@ -46,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
         
         <div className="text-center">
           <h1 className="text-xl md:text-2xl font-playfair text-[#432818]">
-            {title} <span className="font-medium">{displayName}</span>, seu Estilo Predominante é:
+            {title} <span className="font-medium">{displayName}</span>, Descobrimos o seu Estilo de Ser:
           </h1>
           
           {primaryStyle && (
