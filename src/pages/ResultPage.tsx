@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -59,13 +58,15 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
 
   useEffect(() => {
     if (!hasTestAssignedRef.current) {
-      let variant = localStorage.getItem('ab_test_urgency_countdown_position');
+      let variant = localStorage.getItem('ab_test_urgency_countdown_position'); // Nome do teste no localStorage
       if (!variant) {
         variant = Math.random() < 0.5 ? 'A' : 'B'; // 50/50 split
         localStorage.setItem('ab_test_urgency_countdown_position', variant);
       }
       setTestVariant(variant as 'A' | 'B');
 
+      // --- IMPORTANTE: Rastreamento para o Google Analytics ou ferramenta similar ---
+      // Certifique-se de que o gtag/dataLayer esteja disponível globalmente
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', 'ab_test_view', {
           'test_name': 'urgency_countdown_position',
@@ -78,10 +79,11 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
           'variant': variant
         });
       }
+      // ----------------------------------------------------------------------------
 
       hasTestAssignedRef.current = true;
     }
-  }, []);
+  }, []); // Rodar apenas uma vez na montagem do componente
   // --- FIM: LÓGICA DO TESTE A/B ---
 
   const [isButtonHovered, setIsButtonHovered] = useState(false);
@@ -133,6 +135,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
   } = styleConfig[category];
 
   const handleCTAClick = () => {
+    // Ao clicar no CTA, você também deve rastrear qual variante levou à conversão
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'checkout_initiated', {
         'test_name': 'urgency_countdown_position',
@@ -149,7 +152,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
         'event_label': `CTA_Click_${category}`
       });
     }
-    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
+    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page'); // Seu rastreamento existente
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
 
