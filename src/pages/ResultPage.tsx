@@ -398,7 +398,7 @@ const ResultPage: React.FC = () => {
             </Button>
             
             <div className="text-center mb-4">
-              <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20">
+              <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/40">
                 <p className="text-[0.65rem] xs:text-xs sm:text-sm text-[#ff6b6b] font-medium animate-pulse leading-tight tracking-tight px-1 py-0.5">
                   ⚡ Esta oferta expira ao sair desta página
                 </p>
