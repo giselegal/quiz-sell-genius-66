@@ -38,9 +38,9 @@ export const Header: React.FC<HeaderProps> = ({
       
       {/* MUDANÇA PRINCIPAL AQUI: Reorganizando o texto e elementos */}
       <h1 className="text-xl md:text-2xl font-playfair text-[#432818] leading-tight">
-        Olá, <span className="font-medium">{displayName}</span>!
+        Parabéns, <span className="font-medium">{displayName}</span>!
         <br className="sm:hidden" /> {/* Quebra de linha no mobile para "descobrimos..." */}
-        <span className="text-3xl md:text-4xl text-[#aa6b5d]"> Parábens! Seu Estilo Predomiante é:!</span>
+        <span className="text-3xl md:text-4xl text-[#aa6b5d]"> Seu Estilo Predomiante é:!</span>
       </h1>
       
       {/* Opcional: Se primaryStyle for importante para o contexto, mas não exibido diretamente */}
