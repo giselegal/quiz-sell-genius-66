@@ -358,7 +358,7 @@ const ResultPage: React.FC = () => {
               <div className="text-center p-4 bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg border border-[#4CAF50]/30">
                 <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -78% HOJE</p>
                 <p className="text-4xl font-bold text-[#4CAF50]">R$ 39,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 8,83</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 5x de R$ 8,83</p>
                 <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
                   <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 175 em breve</p>
                 </div>
@@ -368,7 +368,7 @@ const ResultPage: React.FC = () => {
             {/* Replaced the problematic button with a copy of the middle CTA button */}
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-4 px-6 rounded-md btn-cta-green w-full max-w-md mx-auto block" 
+              className="text-white py-4 px-6 rounded-md btn-cta-green w-full max-w-md mx-auto block" /* Adjusted padding, rounded corners, and class */
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)} 
               style={{
@@ -376,9 +376,9 @@ const ResultPage: React.FC = () => {
                 boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
               }}
             >
-              <span className="flex items-center justify-center gap-2 leading-none">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                <span>Quero meu Guia de Estilo Agora</span>
+              <span className="flex items-center justify-center gap-2 leading-none"> {/* Adjusted gap and kept leading-none */}
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} /> {/* Adjusted scale on hover */}
+                <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span> {/* Restored original text */}
               </span>
             </Button>
             
