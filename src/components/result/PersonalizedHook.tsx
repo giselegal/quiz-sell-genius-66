@@ -78,7 +78,6 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         {/* Congratulations Header - Crown icons removed, adjusted for centering */}
         <div className="flex items-center justify-center mb-4"> {/* Simplified flex layout */}
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair text-[#aa6b5d] leading-tight">
-            Parabéns, <span className="font-bold">{userName}</span>!
           </h1>
         </div>
         
