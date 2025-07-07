@@ -3,7 +3,7 @@ import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
 import { styleConfig } from '@/config/styleConfig';
-import { Progress } from '@/components/ui/progress';
+import { Progress } = '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
@@ -13,8 +13,8 @@ import MotivationSection from '@/components/result/MotivationSection';
 import MentorSection from '@/components/result/MentorSection';
 import GuaranteeSection from '@/components/result/GuaranteeSection';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
-import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation'; // Corrected import path
-import BonusSection from '@/components/result/BonusSection'; // Corrected import path
+import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
+import BonusSection from '@/components/result/BonusSection';
 import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
@@ -57,14 +57,12 @@ const ResultPage: React.FC = () => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
 
-    // Pré-carregar imagens críticas primeiro
     const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
     criticalImages.forEach(src => {
       const img = new Image();
       img.src = src;
     });
 
-    // Depois carregar as imagens específicas do estilo
     const {
       category
     } = primaryStyle;
@@ -73,7 +71,7 @@ const ResultPage: React.FC = () => {
       guideImage
     } = styleConfig[category];
     const styleImg = new Image();
-    styleImg.src = `${image}?q=auto:best&f=auto&w=340`;
+    styleImg.src = `${image}?q=auto:best&f=auto&w=238`;
     styleImg.onload = () => setImagesLoaded(prev => ({
       ...prev,
       style: true
@@ -85,11 +83,14 @@ const ResultPage: React.FC = () => {
       guide: true
     }));
   }, [primaryStyle, globalStyles.logo]);
+
   useEffect(() => {
     if (imagesLoaded.style && imagesLoaded.guide) completeLoading();
   }, [imagesLoaded, completeLoading]);
+
   if (!primaryStyle) return <ErrorState />;
   if (isLoading) return <ResultSkeleton />;
+
   const {
     category
   } = primaryStyle;
@@ -98,12 +99,12 @@ const ResultPage: React.FC = () => {
     guideImage,
     description
   } = styleConfig[category];
+
   const handleCTAClick = () => {
-    // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
-    // Open in same window for better conversion
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
+
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
       backgroundColor: globalStyles.backgroundColor || '#fffaf7',
@@ -116,7 +117,7 @@ const ResultPage: React.FC = () => {
       
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl relative z-10"> {/* Increased vertical padding for container */}
+      <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
         {/* HOOK IMEDIATO: Personalized Hook with Primary CTA */}
         <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
           <PersonalizedHook 
@@ -127,12 +128,14 @@ const ResultPage: React.FC = () => {
         </AnimatedWrapper>
 
         {/* URGÊNCIA: Countdown Timer */}
-        <AnimatedWrapper animation="fade" show={true} duration={400} delay={200}>
+        {/* Aumentando o mb para dar mais respiro após o countdown */}
+        <AnimatedWrapper animation="fade" show={true} duration={400} delay={200} className="mb-8 md:mb-12">
           <UrgencyCountdown styleCategory={category} />
         </AnimatedWrapper>
 
         {/* PROVA SOCIAL: Style-Specific Social Proof */}
-        <AnimatedWrapper animation="fade" show={true} duration={400} delay={300}>
+        {/* Aumentando o mb para dar mais respiro após o proof */}
+        <AnimatedWrapper animation="fade" show={true} duration={400} delay={300} className="mb-8 md:mb-12">
           <StyleSpecificProof 
             styleCategory={category}
             userName={user?.userName}
@@ -140,7 +143,8 @@ const ResultPage: React.FC = () => {
         </AnimatedWrapper>
 
         {/* ATTENTION: Primary Style Card */}
-        <Card className="p-6 mb-12 bg-white shadow-md border border-[#B89B7A]/20 card-elegant"> {/* Increased mb- */}
+        {/* Este Card já tinha mb-10, vamos aumentar para mb-12 em mobile e md:mb-16 em desktop */}
+        <Card className="p-6 mb-12 md:mb-16 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
               <div className="max-w-md mx-auto mb-6">
@@ -167,7 +171,7 @@ const ResultPage: React.FC = () => {
                 </AnimatedWrapper>
               </div>
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
-                <div className="max-w-[238px] mx-auto relative"> {/* Reduzido de 340px para 238px (30% menor) */}
+                <div className="max-w-[238px] mx-auto relative">
                   <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300" loading="eager" fetchPriority="high" width="238" height="auto" />
                   {/* Elegant decorative corner */}
                   <div className="absolute -top-2 -right-2 w-8 h-8 border-t-2 border-r-2 border-[#B89B7A]"></div>
@@ -228,7 +232,7 @@ const ResultPage: React.FC = () => {
                   onMouseEnter={() => setIsButtonHovered(true)}
                   onMouseLeave={() => setIsButtonHovered(false)}
                 >
-                  <span className="flex items-center justify-center gap-2 leading-none">
+                  <span className="flex items-center justify-center gap-2">
                     <ShoppingCart
                       className={`w-5 h-5 transition-transform duration-300 ${
                         isButtonHovered ? "scale-110" : ""
@@ -243,28 +247,33 @@ const ResultPage: React.FC = () => {
         </Card>
 
         {/* INTEREST: Before/After Transformation Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700}>
+        {/* Aumentando o mb para dar mais respiro */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700} className="mb-8 md:mb-12">
           <BeforeAfterTransformation />
         </AnimatedWrapper>
 
         {/* INTEREST: Motivation Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800}>
+        {/* Aumentando o mb para dar mais respiro */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800} className="mb-8 md:mb-12">
           <MotivationSection />
         </AnimatedWrapper>
 
         {/* INTEREST: Bonus Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
+        {/* Aumentando o mb para dar mais respiro */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850} className="mb-8 md:mb-12">
           <BonusSection />
         </AnimatedWrapper>
 
         {/* DESIRE: Testimonials */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900}>
+        {/* Aumentando o mb para dar mais respiro */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900} className="mb-8 md:mb-12">
           <Testimonials />
         </AnimatedWrapper>
 
         {/* DESIRE: Featured CTA (Green) */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950}>
-          <div className="text-center my-12"> {/* Increased vertical margin */}
+        {/* Aumentando o mb no container geral do CTA */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950} className="mb-8 md:mb-12">
+          <div className="text-center my-10"> {/* 'my-10' já dá margin top/bottom, mas podemos ajustar para ser mais consistente */}
             <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
                 Descubra Como Aplicar Seu Estilo na Prática
@@ -275,10 +284,10 @@ const ResultPage: React.FC = () => {
             </div>
             
             <Button onClick={handleCTAClick} className="text-white py-4 px-6 rounded-md btn-cta-green" onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} style={{
-            background: "linear-gradient(to right, #4CAF50, #45a049)",
-            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
-          }}>
-              <span className="flex items-center justify-center gap-2 leading-none">
+              background: "linear-gradient(to right, #4CAF50, #45a049)",
+              boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
+            }}>
+              <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
                 Quero meu Guia de Estilo Agora
               </span>
@@ -295,18 +304,21 @@ const ResultPage: React.FC = () => {
         </AnimatedWrapper>
 
         {/* DESIRE: Guarantee Section */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000}>
+        {/* Aumentando o mb para dar mais respiro */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000} className="mb-8 md:mb-12">
           <GuaranteeSection />
         </AnimatedWrapper>
 
         {/* DESIRE: Mentor and Trust Elements */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050}>
+        {/* Aumentando o mb para dar mais respiro */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050} className="mb-8 md:mb-12">
           <MentorSection />
         </AnimatedWrapper>
 
         {/* ACTION: Final Value Proposition and CTA */}
-        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100}>
-          <div className="text-center mt-12"> {/* Increased vertical margin */}
+        {/* Container principal para o CTA final e preço. Ajustando o mt/mb */}
+        <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100} className="mt-8 mb-12 md:mt-10 md:mb-16">
+          <div className="text-center">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
               Vista-se de Você — na Prática
             </h2>
@@ -336,15 +348,15 @@ const ResultPage: React.FC = () => {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Guia Principal</span>
-                  <span className="font-medium">R$ 79,00</span>
+                  <span className="font-medium">R$ 97,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Peças-chave</span>
-                  <span className="font-medium">R$ 67,00</span>
+                  <span className="font-medium">R$ 129,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Visagismo Facial</span>
-                  <span className="font-medium">R$ 29,00</span>
+                  <span className="font-medium">R$ 71,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 pt-3 font-bold">
                   <span>Valor Total</span>
@@ -356,37 +368,37 @@ const ResultPage: React.FC = () => {
               </div>
               
               <div className="text-center p-4 bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg border border-[#4CAF50]/30">
-                <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -78% HOJE</p>
-                <p className="text-4xl font-bold text-[#4CAF50]">R$ 39,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 5x de R$ 8,83</p>
+                <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -84% HOJE</p>
+                <p className="text-4xl font-bold text-[#4CAF50]">R$ 47,00</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 16,57</p>
                 <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
                   <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 175 em breve</p>
                 </div>
               </div>
             </div>
 
-            {/* Replaced the problematic button with a copy of the middle CTA button */}
             <Button 
               onClick={handleCTAClick} 
-              className="text-white py-4 px-6 rounded-md btn-cta-green w-full max-w-md mx-auto block" 
-              onMouseEnter={() => setIsButtonHovered(true)} 
-              onMouseLeave={() => setIsButtonHovered(false)} 
+              className="text-white py-6 px-4 sm:px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 mb-4 w-full max-w-md mx-auto block" 
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
-                boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)"
-              }}
+                boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
+              }} 
+              onMouseEnter={() => setIsButtonHovered(true)} 
+              onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex items-center justify-center gap-2 leading-none">
-                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
+              <span className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 text-[0.7rem] xs:text-sm sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal font-semibold px-0.5">
+                <ShoppingCart className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
             </Button>
             
-            {/* Moved urgency message to be immediately after the button, added mt-2 */}
-            <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20 mt-2">
-              <p className="text-sm text-[#ff6b6b] font-medium animate-pulse">
-                ⚡ Esta oferta expira quando você sair desta página
-              </p>
+            <div className="text-center mb-4">
+              <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20">
+                <p className="text-[0.65rem] xs:text-xs sm:text-sm text-[#ff6b6b] font-medium animate-pulse leading-tight tracking-tight px-1 py-0.5">
+                  ⚡ Esta oferta expira ao sair desta página
+                </p>
+              </div>
             </div>
             
             <SecurePurchaseElement />
