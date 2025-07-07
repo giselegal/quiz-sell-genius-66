@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import Logo from '../ui/logo';
-import { StyleResult } from '@/types/quiz';
+import Logo from '../ui/logo';;
 import { useAuth } from '@/context/AuthContext';
 
 interface HeaderProps {
