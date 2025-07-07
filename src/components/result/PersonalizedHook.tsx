@@ -19,49 +19,49 @@ const styleMessages: Record<string, {
     congratsMessage: "você é uma mulher autêntica e espontânea!",
     powerMessage: "Mulheres com seu estilo conquistam admiração pela naturalidade e charme genuíno. Sua beleza está na simplicidade elegante.",
     ctaText: "QUERO POTENCIALIZAR MEU ESTILO NATURAL",
-    exclusive: "Oferta Especial Natural"
+    exclusive: "Oferta Especial"
   },
   'Clássico': {
     congratsMessage: "você possui elegância atemporal!",
     powerMessage: "Mulheres com seu estilo transmitem confiança e sofisticação. Você é vista como referência de bom gosto e refinamento.",
     ctaText: "QUERO APERFEIÇOAR MEU ESTILO CLÁSSICO",
-    exclusive: "Oferta Especial Clássica"
+    exclusive: "Oferta Especial"
   },
   'Contemporâneo': {
     congratsMessage: "você tem o equilíbrio perfeito entre moderno e prático!",
     powerMessage: "Mulheres com seu estilo são admiradas pela versatilidade e atualidade. Você sempre parece estar à frente do seu tempo.",
     ctaText: "QUERO DOMINAR MEU ESTILO CONTEMPORÂNEO",
-    exclusive: "Oferta Especial Contemporânea"
+    exclusive: "Oferta Especial"
   },
   'Elegante': {
     congratsMessage: "você possui presença e sofisticação únicos!",
     powerMessage: "Mulheres com seu estilo comandam respeito e admiração onde chegam. Sua elegância é sua marca registrada.",
     ctaText: "QUERO MAXIMIZAR MEU ESTILO ELEGANTE",
-    exclusive: "Oferta Especial Elegante"
+    exclusive: "Oferta Especial"
   },
   'Romântico': {
     congratsMessage: "você irradia feminilidade e delicadeza!",
     powerMessage: "Mulheres com seu estilo encantam pela suavidade e charme feminino. Você desperta o lado protetor das pessoas.",
     ctaText: "QUERO REALÇAR MEU ESTILO ROMÂNTICO",
-    exclusive: "Oferta Especial Romântica"
+    exclusive: "Oferta Especial"
   },
   'Sexy': {
     congratsMessage: "você possui magnetismo e confiança únicos!",
     powerMessage: "Mulheres com seu estilo fascinam pela presença marcante e autoconfiança. Você comanda a atenção naturalmente.",
     ctaText: "QUERO APRIMORAR MEU ESTILO SEXY",
-    exclusive: "Oferta Especial Sexy"
+    exclusive: "Oferta Especial"
   },
   'Dramático': {
     congratsMessage: "você tem presença e força impressionantes!",
     powerMessage: "Mulheres com seu estilo lideram e inspiram por onde passam. Sua personalidade forte é seu maior trunfo.",
     ctaText: "QUERO INTENSIFICAR MEU ESTILO DRAMÁTICO",
-    exclusive: "Oferta Especial Dramática"
+    exclusive: "Oferta Especial"
   },
   'Criativo': {
     congratsMessage: "você é única e expressiva!",
     powerMessage: "Mulheres com seu estilo se destacam pela originalidade e criatividade. Você é uma obra de arte viva.",
     ctaText: "QUERO LIBERAR MEU ESTILO CRIATIVO",
-    exclusive: "Oferta Especial Criativa"
+    exclusive: "Oferta Especial"
   }
 };
 
