@@ -358,7 +358,7 @@ const ResultPage: React.FC = () => {
               <div className="text-center p-4 bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg border border-[#4CAF50]/30">
                 <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -78% HOJE</p>
                 <p className="text-4xl font-bold text-[#4CAF50]">R$ 39,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 8,83</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 5x de R$ 8,83</p>
                 <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
                   <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 175 em breve</p>
                 </div>
