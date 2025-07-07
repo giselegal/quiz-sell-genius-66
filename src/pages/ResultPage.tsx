@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
-import { styleConfig } from '@/config/styleConfig'; // CORRIGIDO AQUI: 'from' ao invés de '='
+import { styleConfig } from '@/config/styleConfig';
 import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
@@ -15,7 +15,7 @@ import GuaranteeSection from '@/components/result/GuaranteeSection';
 import Testimonials from '@/components/quiz-result/sales/Testimonials';
 import BeforeAfterTransformation from '@/components/result/BeforeAfterTransformation';
 import BonusSection from '@/components/result/BonusSection';
-import { Button } from '@/components/ui/button'; // CORRIGIDO AQUI: 'from' ao invés de '='
+import { Button } from '@/components/ui/button';
 import { useLoadingState } from '@/hooks/useLoadingState';
 import { useIsLowPerformanceDevice } from '@/hooks/use-mobile';
 import ResultSkeleton from '@/components/result/ResultSkeleton';
@@ -27,7 +27,7 @@ import PersonalizedHook from '@/components/result/PersonalizedHook';
 import UrgencyCountdown from '@/components/result/UrgencyCountdown';
 // import StyleSpecificProof from '@/components/result/StyleSpecificProof'; // Mantido comentado se você removeu a seção
 
-// AQUI ESTÁ A MUDANÇA PRINCIPAL: remova 'export' da declaração 'export const ResultPage'
+// Remover 'export' da declaração 'export const ResultPage'
 const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
   const {
     primaryStyle,
@@ -52,12 +52,46 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
     disableTransitions: isLowPerformance
   });
 
+  // --- INÍCIO: LÓGICA DO TESTE A/B ---
+  const [testVariant, setTestVariant] = useState<'A' | 'B'>('A');
+  const hasTestAssignedRef = useRef(false);
+
+  useEffect(() => {
+    if (!hasTestAssignedRef.current) {
+      let variant = localStorage.getItem('ab_test_urgency_countdown_position'); // Nome do teste no localStorage
+      if (!variant) {
+        variant = Math.random() < 0.5 ? 'A' : 'B'; // 50/50 split
+        localStorage.setItem('ab_test_urgency_countdown_position', variant);
+      }
+      setTestVariant(variant as 'A' | 'B');
+
+      // --- IMPORTANTE: Rastreamento para o Google Analytics ou ferramenta similar ---
+      // Certifique-se de que o gtag/dataLayer esteja disponível globalmente
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'ab_test_view', {
+          'test_name': 'urgency_countdown_position',
+          'variant': variant
+        });
+      } else if (typeof window !== 'undefined' && (window as any).dataLayer) {
+        (window as any).dataLayer.push({
+          'event': 'ab_test_view',
+          'test_name': 'urgency_countdown_position',
+          'variant': variant
+        });
+      }
+      // ----------------------------------------------------------------------------
+
+      hasTestAssignedRef.current = true;
+    }
+  }, []); // Rodar apenas uma vez na montagem do componente
+  // --- FIM: LÓGICA DO TESTE A/B ---
+
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   useEffect(() => {
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
 
-    const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
+    const criticalImages = [globalStyles.logo || '[https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp](https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp)'];
     criticalImages.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -101,8 +135,25 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
   } = styleConfig[category];
 
   const handleCTAClick = () => {
-    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
-    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    // Ao clicar no CTA, você também deve rastrear qual variante levou à conversão
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'checkout_initiated', {
+        'test_name': 'urgency_countdown_position',
+        'variant': testVariant,
+        'event_category': 'ecommerce',
+        'event_label': `CTA_Click_${category}`
+      });
+    } else if (typeof window !== 'undefined' && (window as any).dataLayer) {
+       (window as any).dataLayer.push({
+        'event': 'checkout_initiated',
+        'test_name': 'urgency_countdown_position',
+        'variant': testVariant,
+        'event_category': 'ecommerce',
+        'event_label': `CTA_Click_${category}`
+      });
+    }
+    trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page'); // Seu rastreamento existente
+    window.location.href = '[https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912](https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912)';
   };
 
   return (
@@ -111,30 +162,37 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
       color: globalStyles.textColor || '#432818',
       fontFamily: globalStyles.fontFamily || 'inherit'
     }}>
-      {/* Decorative background elements */}
+      {/* Decorative background elements - Mantidos, pois são sutis e adicionam profundidade */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
       
-      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
+      {/* Header component - Agora mais conciso e elegante. `mb-0` para se "encaixar" */}
+      <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} className="mb-0" />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
-        {/* HOOK IMEDIATO: Personalized Hook with Primary CTA */}
-        <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
-          <PersonalizedHook 
-            styleCategory={category}
-            userName={user?.userName}
-            onCTAClick={handleCTAClick}
-          />
-        </AnimatedWrapper>
+        {/* --- INÍCIO: SEÇÃO INICIAL CONSOLIDADA (Hero Section) --- */}
+        {/* Card que agrupa a revelação principal do estilo e a urgência (para Variante A) */}
+        {/* Fundo sólido branco para um visual mais limpo e elegante, sombras suaves */}
+        <Card className="p-4 sm:p-6 md:p-8 mb-8 md:mb-12 bg-white border-[#B89B7A]/10 shadow-sm -mt-4 sm:-mt-6 md:-mt-8"> {/* Margem negativa para encaixar no Header */}
+            <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
+                {/* PersonalizedHook agora revela o estilo com grande destaque */}
+                <PersonalizedHook 
+                    styleCategory={category}
+                    userName={user?.userName}
+                    onCTAClick={handleCTAClick}
+                />
+            </AnimatedWrapper>
 
-        {/* URGÊNCIA: Countdown Timer */}
-        {/* Aumentando o mb para dar mais respiro após o countdown */}
-        <AnimatedWrapper animation="fade" show={true} duration={400} delay={200} className="mb-8 md:mb-12">
-          <UrgencyCountdown styleCategory={category} />
-        </AnimatedWrapper>
+            {/* UrgencyCountdown para a Variante A, dentro deste Card com espaçamento */}
+            {testVariant === 'A' && (
+                <AnimatedWrapper animation="fade" show={true} duration={400} delay={200} className="mt-6 md:mt-8"> {/* Espaçamento interno */}
+                    <UrgencyCountdown styleCategory={category} />
+                </AnimatedWrapper>
+            )}
+        </Card>
+        {/* --- FIM: SEÇÃO INICIAL CONSOLIDADA (Hero Section) --- */}
 
-        {/* PROVA SOCIAL: Style-Specific Social Proof */}
-        {/* <-- ESTE BLOCO SERÁ REMOVIDO OU COMENTADO SE VOCÊ JÁ REMOVEU O IMPORT ANTES */}
+        {/* PROVA SOCIAL: Style-Specific Social Proof (Mantenha comentado ou remova se não for usar) */}
         {/*
         <AnimatedWrapper animation="fade" show={true} duration={400} delay={300} className="mb-8 md:mb-12">
           <StyleSpecificProof 
@@ -144,8 +202,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
         </AnimatedWrapper>
         */}
 
-        {/* ATTENTION: Primary Style Card */}
-        {/* Este Card já tinha mb-10, vamos aumentar para mb-12 em mobile e md:mb-16 em desktop */}
+        {/* ATTENTION: Primary Style Card - Seção principal de descrição do estilo */}
         <Card className="p-6 mb-12 md:mb-16 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
             <div className="text-center mb-8">
@@ -249,31 +306,36 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
         </Card>
 
         {/* INTEREST: Before/After Transformation Section */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={700} className="mb-8 md:mb-12">
           <BeforeAfterTransformation />
         </AnimatedWrapper>
 
+        {/* --- INÍCIO: RENDERIZAÇÃO CONDICIONAL PARA O TESTE A/B (Variante B) --- */}
+        {/* UrgencyCountdown para a Variante B, mais abaixo na página */}
+        {testVariant === 'B' && (
+          <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={750} className="mb-8 md:mb-12">
+            <UrgencyCountdown styleCategory={category} />
+          </AnimatedWrapper>
+        )}
+        {/* --- FIM: RENDERIZAÇÃO CONDICIONAL PARA O TESTE A/B (Variante B) --- */}
+
+
         {/* INTEREST: Motivation Section */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={800} className="mb-8 md:mb-12">
           <MotivationSection />
         </AnimatedWrapper>
 
         {/* INTEREST: Bonus Section */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850} className="mb-8 md:mb-12">
           <BonusSection />
         </AnimatedWrapper>
 
         {/* DESIRE: Testimonials */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={900} className="mb-8 md:mb-12">
           <Testimonials />
         </AnimatedWrapper>
 
         {/* DESIRE: Featured CTA (Green) */}
-        {/* Aumentando o mb no container geral do CTA */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950} className="mb-8 md:mb-12">
           <div className="text-center my-10">
             <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
@@ -306,19 +368,16 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
         </AnimatedWrapper>
 
         {/* DESIRE: Guarantee Section */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1000} className="mb-8 md:mb-12">
           <GuaranteeSection />
         </AnimatedWrapper>
 
         {/* DESIRE: Mentor and Trust Elements */}
-        {/* Aumentando o mb para dar mais respiro */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1050} className="mb-8 md:mb-12">
           <MentorSection />
         </AnimatedWrapper>
 
         {/* ACTION: Final Value Proposition and CTA */}
-        {/* Container principal para o CTA final e preço. Ajustando o mt/mb */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={1100} className="mt-8 mb-12 md:mt-10 md:mb-16">
           <div className="text-center">
             <h2 className="text-2xl md:text-3xl font-playfair text-[#aa6b5d] mb-4">
@@ -385,7 +444,8 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
                          sm:transform hover:scale-105 sm:shadow-lg sm:hover:shadow-xl
                          min-w-0" 
               style={{
-                background: "linear-gradient(to right, #4CAF50, #45a049)",
+                background: "linear-gradient(to right, #458B74, #3D7A65)", // Verde floresta mais elegante
+                boxShadow: "0 2px 8px rgba(61, 122, 101, 0.2)" // Sombra mais suave
               }} 
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
@@ -423,5 +483,4 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
   );
 };
 
-// EXPORTAÇÃO PADRÃO AQUI
 export default ResultPage;
