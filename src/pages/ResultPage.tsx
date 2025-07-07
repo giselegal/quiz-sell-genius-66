@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
@@ -91,7 +92,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
     if (!primaryStyle) return;
     window.scrollTo(0, 0);
 
-    const criticalImages = [globalStyles.logo || 'https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp'];
+    const criticalImages = [globalStyles.logo || '[https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp](https://res.cloudinary.com/dqljyf76t/image/upload/v1744911572/LOGO_DA_MARCA_GISELE_r14oz2.webp)'];
     criticalImages.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -153,7 +154,7 @@ const ResultPage: React.FC = () => { // AGORA É SOMENTE 'const ResultPage'
       });
     }
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page'); // Seu rastreamento existente
-    window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
+    window.location.href = '[https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912](https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912)';
   };
 
   return (
