@@ -104,11 +104,12 @@ const ResultPage: React.FC = () => {
     // Open in same window for better conversion
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
-  return <div className="min-h-screen relative overflow-hidden" style={{
-    backgroundColor: globalStyles.backgroundColor || '#fffaf7',
-    color: globalStyles.textColor || '#432818',
-    fontFamily: globalStyles.fontFamily || 'inherit'
-  }}>
+  return (
+    <div className="min-h-screen relative overflow-hidden" style={{
+      backgroundColor: globalStyles.backgroundColor || '#fffaf7',
+      color: globalStyles.textColor || '#432818',
+      fontFamily: globalStyles.fontFamily || 'inherit'
+    }}>
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[#B89B7A]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-[#aa6b5d]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
@@ -285,8 +286,7 @@ const ResultPage: React.FC = () => {
             
             <div className="mt-2 inline-block bg-[#aa6b5d]/10 px-3 py-1 rounded-full">
               <p className="text-sm text-[#aa6b5d] font-medium flex items-center justify-center gap-1">
-                
-                
+                {/* Content was empty, removed extra spaces */}
               </p>
             </div>
             
@@ -376,7 +376,7 @@ const ResultPage: React.FC = () => {
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              <span className="flex items-center justify-center gap-3">
+              <span className="flex items-center justify-center gap-3 leading-none"> {/* Added leading-none here */}
                 <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
@@ -401,6 +401,7 @@ const ResultPage: React.FC = () => {
       </div>
 
       <BuildInfo />
-    </div>;
+    </div>
+  );
 };
 export default ResultPage;
