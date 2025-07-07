@@ -377,25 +377,22 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-           <Button 
+          <Button 
               onClick={handleCTAClick} 
-              className="text-white py-6 px-3 sm:px-8 md:px-10 rounded-lg mb-4 w-full max-w-md mx-auto block
-                         transition-all duration-300 transform-none hover:scale-105 active:scale-95
+              className="text-white py-6 px-3 sm:px-8 md:px-10 rounded-lg shadow-lg transition-all duration-300 transform-none hover:scale-105 active:scale-95
                          sm:transform hover:scale-105 sm:shadow-lg sm:hover:shadow-xl
-                         min-w-0"
+                         min-w-0" 
               style={{
                 background: "linear-gradient(to right, #4CAF50, #45a049)",
               }} 
               onMouseEnter={() => setIsButtonHovered(true)} 
               onMouseLeave={() => setIsButtonHovered(false)}
             >
-              {/* ATENÇÃO ÀS MUDANÇAS AQUI NO SPAN */}
-              <span className="flex flex-wrap flex-col sm:flex-row items-center justify-center 
+              <span className="flex flex-col sm:flex-row items-center justify-center 
                                  gap-1 sm:gap-3 
                                  text-[0.65rem] xs:text-xs sm:text-base md:text-lg lg:text-xl 
-                                 leading-tight sm:leading-normal font-semibold
-                                 min-w-0 text-balance" /* Adicionado flex-wrap e text-balance */>
-                <ShoppingCart className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} />
+                                 leading-none text-center font-semibold">
+                {/* REMOVIDO: <ShoppingCart className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-120' : ''}`} /> */}
                 <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
             </Button>
