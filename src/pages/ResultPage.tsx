@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useQuiz } from '@/hooks/useQuiz';
 import { useGlobalStyles } from '@/hooks/useGlobalStyles';
 import { Header } from '@/components/result/Header';
-import { styleConfig } from '@/config/styleConfig';
-import { Progress } from '@/components/ui/progress'; // CORRECTED LINE HERE
+import { styleConfig } = '@/config/styleConfig';
+import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { ShoppingCart, CheckCircle, ArrowDown, Lock } from 'lucide-react';
 import { AnimatedWrapper } from '@/components/ui/animated-wrapper';
@@ -224,10 +224,10 @@ const ResultPage: React.FC = () => {
                 </ul>
                 <Button
                   onClick={handleCTAClick}
-                  className="text-white py-2 px-8 rounded-lg transition-all duration-300 text-base font-medium"
+                  className="text-white py-3 px-8 rounded-lg transition-all duration-300 text-base font-medium"
                   style={{
                     background: "linear-gradient(to right, #aa6b5d, #B89B7A)",
-                    boxShadow: "0 3px 14px rgba(184, 155, 122, 0.3)",
+                    boxShadow: "0 4px 14px rgba(184, 155, 122, 0.3)",
                   }}
                   onMouseEnter={() => setIsButtonHovered(true)}
                   onMouseLeave={() => setIsButtonHovered(false)}
@@ -273,7 +273,7 @@ const ResultPage: React.FC = () => {
         {/* DESIRE: Featured CTA (Green) */}
         {/* Aumentando o mb no container geral do CTA */}
         <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={950} className="mb-8 md:mb-12">
-          <div className="text-center my-10"> {/* 'my-10' já dá margin top/bottom, mas podemos ajustar para ser mais consistente */}
+          <div className="text-center my-10">
             <div className="bg-[#f9f4ef] p-6 rounded-lg border border-[#B89B7A]/10 mb-6">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">
                 Descubra Como Aplicar Seu Estilo na Prática
@@ -377,7 +377,7 @@ const ResultPage: React.FC = () => {
               </div>
             </div>
 
-          <Button 
+            <Button 
               onClick={handleCTAClick} 
               className="text-white py-6 px-3 sm:px-8 md:px-10 rounded-lg shadow-lg transition-all duration-300 transform-none hover:scale-105 active:scale-95
                          sm:transform hover:scale-105 sm:shadow-lg sm:hover:shadow-xl
@@ -398,7 +398,7 @@ const ResultPage: React.FC = () => {
             </Button>
             
             <div className="text-center mb-4">
-              <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/40">
+              <div className="bg-[#ff6b6b]/10 rounded-full px-2 py-1 inline-block border border-[#ff6b6b]/20">
                 <p className="text-[0.65rem] xs:text-xs sm:text-sm text-[#ff6b6b] font-medium animate-pulse leading-tight tracking-tight px-1 py-0.5">
                   ⚡ Esta oferta expira ao sair desta página
                 </p>
@@ -409,7 +409,7 @@ const ResultPage: React.FC = () => {
 
             <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
               <Lock className="w-3 h-3" />
-              <span>Oferta exclusiva - Apenas nesta página</span>
+              <span>Oferta exclusiva para {category} - Apenas nesta página</span>
             </p>
           </div>
         </AnimatedWrapper>
