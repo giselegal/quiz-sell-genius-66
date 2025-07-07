@@ -23,6 +23,9 @@ import { trackButtonClick } from '@/utils/analytics';
 import BuildInfo from '@/components/BuildInfo';
 import SecurePurchaseElement from '@/components/result/SecurePurchaseElement';
 import { useAuth } from '@/context/AuthContext';
+import PersonalizedHook from '@/components/result/PersonalizedHook';
+import UrgencyCountdown from '@/components/result/UrgencyCountdown';
+import StyleSpecificProof from '@/components/result/StyleSpecificProof';
 
 const ResultPage: React.FC = () => {
   const {
@@ -98,6 +101,7 @@ const ResultPage: React.FC = () => {
   const handleCTAClick = () => {
     // Track checkout initiation
     trackButtonClick('checkout_button', 'Iniciar Checkout', 'results_page');
+    // Open in same window for better conversion
     window.location.href = 'https://pay.hotmart.com/W98977034C?checkoutMode=10&bid=1744967466912';
   };
   return <div className="min-h-screen relative overflow-hidden" style={{
@@ -112,6 +116,28 @@ const ResultPage: React.FC = () => {
       <Header primaryStyle={primaryStyle} logoHeight={globalStyles.logoHeight} logo={globalStyles.logo} logoAlt={globalStyles.logoAlt} userName={user?.userName} />
 
       <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
+        {/* HOOK IMEDIATO: Personalized Hook with Primary CTA */}
+        <AnimatedWrapper animation="fade" show={true} duration={600} delay={100}>
+          <PersonalizedHook 
+            styleCategory={category}
+            userName={user?.userName}
+            onCTAClick={handleCTAClick}
+          />
+        </AnimatedWrapper>
+
+        {/* URGÊNCIA: Countdown Timer */}
+        <AnimatedWrapper animation="fade" show={true} duration={400} delay={200}>
+          <UrgencyCountdown styleCategory={category} />
+        </AnimatedWrapper>
+
+        {/* PROVA SOCIAL: Style-Specific Social Proof */}
+        <AnimatedWrapper animation="fade" show={true} duration={400} delay={300}>
+          <StyleSpecificProof 
+            styleCategory={category}
+            userName={user?.userName}
+          />
+        </AnimatedWrapper>
+
         {/* ATTENTION: Primary Style Card */}
         <Card className="p-6 mb-10 bg-white shadow-md border border-[#B89B7A]/20 card-elegant">
           <AnimatedWrapper animation="fade" show={true} duration={600} delay={300}>
@@ -303,55 +329,72 @@ const ResultPage: React.FC = () => {
               </ul>
             </div>
 
-            {/* Updated Value Stack Section with new prices and fixed red line */}
+            {/* ANCORAGEM DE PREÇO: Strategic Price Anchoring */}
             <div className="bg-white p-6 rounded-lg shadow-md border border-[#B89B7A]/20 card-elegant mb-8 max-w-md mx-auto">
               <h3 className="text-xl font-medium text-center text-[#aa6b5d] mb-4">O Que Você Recebe Hoje</h3>
               
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Guia Principal</span>
-                  <span className="font-medium">R$ 67,00</span>
+                  <span className="font-medium">R$ 97,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Peças-chave</span>
-                  <span className="font-medium">R$ 79,00</span>
+                  <span className="font-medium">R$ 129,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 border-b border-[#B89B7A]/10">
                   <span>Bônus - Visagismo Facial</span>
-                  <span className="font-medium">R$ 29,00</span>
+                  <span className="font-medium">R$ 71,00</span>
                 </div>
                 <div className="flex justify-between items-center p-2 pt-3 font-bold">
                   <span>Valor Total</span>
                   <div className="relative">
-                    <span>R$ 175,00</span>
+                    <span>R$ 297,00</span>
                     <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#ff5a5a] transform -translate-y-1/2 -rotate-3"></div>
                   </div>
                 </div>
               </div>
               
-              <div className="text-center p-4 bg-[#f9f4ef] rounded-lg">
-                <p className="text-sm text-[#aa6b5d] uppercase font-medium">Hoje por apenas</p>
-                <p className="text-4xl font-bold gold-text">R$ 39,00</p>
-                <p className="text-xs text-[#3a3a3a]/60 mt-1">Pagamento único</p>
+              <div className="text-center p-4 bg-gradient-to-r from-[#4CAF50]/10 to-[#45a049]/10 rounded-lg border border-[#4CAF50]/30">
+                <p className="text-sm text-[#4CAF50] uppercase font-medium">Especial para {category}: -84% HOJE</p>
+                <p className="text-4xl font-bold text-[#4CAF50]">R$ 47,00</p>
+                <p className="text-xs text-[#3a3a3a]/60 mt-1">ou 3x de R$ 16,57</p>
+                <div className="mt-2 bg-[#ff6b6b]/10 rounded-full px-3 py-1 inline-block">
+                  <p className="text-xs text-[#ff6b6b] font-medium">💥 Preço volta para R$ 297 em breve</p>
+                </div>
               </div>
             </div>
 
-            <Button onClick={handleCTAClick} className="text-white py-5 px-8 rounded-md shadow-md transition-colors btn-3d mb-2" style={{
-            background: "linear-gradient(to right, #4CAF50, #45a049)",
-            boxShadow: "0 4px 14px rgba(76, 175, 80, 0.4)",
-            fontSize: "1rem" /* Smaller font size for button */
-          }} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)}>
-              <span className="flex items-center justify-center gap-2">
-                <ShoppingCart className={`w-4 h-4 transition-transform duration-300 ${isButtonHovered ? 'scale-110' : ''}`} />
-                <span>Garantir Meu Guia + Bônus Especiais</span>
+            <Button 
+              onClick={handleCTAClick} 
+              className="text-white py-6 px-10 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 mb-4 w-full max-w-md mx-auto block" 
+              style={{
+                background: "linear-gradient(to right, #4CAF50, #45a049)",
+                boxShadow: "0 6px 20px rgba(76, 175, 80, 0.4)",
+                fontSize: "1.1rem"
+              }} 
+              onMouseEnter={() => setIsButtonHovered(true)} 
+              onMouseLeave={() => setIsButtonHovered(false)}
+            >
+              <span className="flex items-center justify-center gap-3">
+                <ShoppingCart className={`w-5 h-5 transition-transform duration-300 ${isButtonHovered ? 'scale-125' : ''}`} />
+                <span>GARANTIR MEU GUIA {category.toUpperCase()} AGORA</span>
               </span>
             </Button>
+            
+            <div className="text-center mb-4">
+              <div className="bg-[#ff6b6b]/10 rounded-full px-4 py-2 inline-block border border-[#ff6b6b]/30">
+                <p className="text-sm text-[#ff6b6b] font-medium animate-pulse">
+                  ⚡ Esta oferta expira quando você sair desta página
+                </p>
+              </div>
+            </div>
             
             <SecurePurchaseElement />
 
             <p className="text-sm text-[#aa6b5d] mt-2 flex items-center justify-center gap-1">
               <Lock className="w-3 h-3" />
-              <span>Oferta exclusiva nesta página</span>
+              <span>Oferta exclusiva para {category} - Apenas nesta página</span>
             </p>
           </div>
         </AnimatedWrapper>
