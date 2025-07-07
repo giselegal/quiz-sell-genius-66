@@ -101,7 +101,7 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
         
         {/* Exclusive Offer Badge - Font size and padding adapt */}
         <div className="bg-gradient-to-r from-[#B89B7A] to-[#aa6b5d] text-white px-4 sm:px-6 py-1 sm:py-2 rounded-full shadow-lg text-xs sm:text-sm md:text-base font-medium transform -rotate-2 inline-block mb-6 whitespace-nowrap">
-          � {messages.exclusive} - 75% OFF
+          🎯 {messages.exclusive} - 75% OFF
         </div>
         
         {/* Primary CTA Button - Full width on small screens, adjusts on larger screens */}
@@ -129,4 +129,3 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
 };
 
 export default PersonalizedHook;
-�
