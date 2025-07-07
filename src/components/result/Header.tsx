@@ -31,7 +31,7 @@ export const Header: React.FC<HeaderProps> = ({
   const displayName = userName || user?.userName || 'Visitante';
   
   return (
-    <Card className={`bg-white shadow-sm p-6 mb-6 ${className}`}>
+    <Card className={`bg-white shadow-sm p-6 mb-6 border-0 ${className}`}>
       <div className="flex flex-col items-center gap-5">
         <div className="flex justify-center w-full">
           <Logo 

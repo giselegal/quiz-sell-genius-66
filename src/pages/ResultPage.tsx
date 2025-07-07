@@ -157,6 +157,61 @@ const ResultPage: React.FC = () => {
                 </div>
               </div>
             </AnimatedWrapper>
+            
+            {/* CTA Section after Style Guide */}
+            <AnimatedWrapper animation={isLowPerformance ? 'none' : 'fade'} show={true} duration={400} delay={850}>
+              <div className="mt-8 text-center">
+                <h4 className="text-xl md:text-2xl font-semibold text-[#432818] mb-4 font-playfair">
+                  Transforme Sua Imagem,{" "}
+                  <span className="text-[#aa6b5d]">Revele Sua Essência</span>
+                </h4>
+                <p className="text-gray-700 mb-6 leading-relaxed max-w-2xl mx-auto">
+                  Seu estilo é uma ferramenta poderosa. Não se trata apenas de
+                  roupas, mas de comunicar quem você é e aspira ser. Com a
+                  orientação certa, você pode:
+                </p>
+                <ul className="space-y-3 text-gray-700 mb-8 max-w-xl mx-auto text-left">
+                  {[
+                    {
+                      text: "Construir looks com intenção e identidade visual.",
+                    },
+                    {
+                      text: "Utilizar cores, modelagens e tecidos a seu favor.",
+                    },
+                    {
+                      text: "Alinhar sua imagem aos seus objetivos pessoais e profissionais.",
+                    },
+                    {
+                      text: "Desenvolver um guarda-roupa funcional e inteligente.",
+                    },
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start">
+                      <CheckCircle className="h-5 w-5 text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
+                      <span>{item.text}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button
+                  onClick={handleCTAClick}
+                  className="text-white py-3 px-8 rounded-lg transition-all duration-300 text-base font-medium"
+                  style={{
+                    background: "linear-gradient(to right, #aa6b5d, #B89B7A)",
+                    boxShadow: "0 4px 14px rgba(184, 155, 122, 0.3)",
+                  }}
+                  onMouseEnter={() => setIsButtonHovered(true)}
+                  onMouseLeave={() => setIsButtonHovered(false)}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <ShoppingCart
+                      className={`w-5 h-5 transition-transform duration-300 ${
+                        isButtonHovered ? "scale-110" : ""
+                      }`}
+                    />
+                    <span>Quero Transformar Minha Imagem</span>
+                  </span>
+                </Button>
+              </div>
+            </AnimatedWrapper>
           </AnimatedWrapper>
         </Card>
 

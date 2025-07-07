@@ -180,64 +180,9 @@ export const BeforeAfterTransformation: React.FC<
   return (
     <Card className="w-full max-w-6xl mx-auto border-0 shadow-lg overflow-hidden bg-white/95 backdrop-blur">
       <CardContent className="p-6">
-        <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 lg:gap-12">
-          {/* Seção de Texto */}
-          <div className="text-left lg:w-2/5 order-2 lg:order-1">
-            <h4 className="text-xl md:text-2xl font-semibold text-[#432818] mb-4 font-playfair">
-              Transforme Sua Imagem,{" "}
-              <span className="text-[#aa6b5d]">Revele Sua Essência</span>
-            </h4>
-            <p className="text-gray-700 mb-6 leading-snug sm:leading-relaxed">
-              Seu estilo é uma ferramenta poderosa. Não se trata apenas de
-              roupas, mas de comunicar quem você é e aspira ser. Com a
-              orientação certa, você pode:
-            </p>
-            <ul className="space-y-2 sm:space-y-3 text-gray-700 mb-6 sm:mb-8">
-              {[
-                {
-                  text: "Construir looks com intenção e identidade visual.",
-                },
-                {
-                  text: "Utilizar cores, modelagens e tecidos a seu favor.",
-                },
-                {
-                  text: "Alinhar sua imagem aos seus objetivos pessoais e profissionais.",
-                },
-                {
-                  text: "Desenvolver um guarda-roupa funcional e inteligente.",
-                },
-              ].map((item, idx) => (
-                <li key={idx} className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-[#B89B7A] mr-3 mt-1 flex-shrink-0" />
-                  <span>{item.text}</span>
-                </li>
-              ))}
-            </ul>
-            <Button
-              onClick={handleButtonClick}
-              className="text-white py-3 sm:py-3.5 px-6 sm:px-8 rounded-lg transition-all duration-300 w-full sm:w-auto text-sm sm:text-base font-medium leading-tight"
-              style={{
-                background: "linear-gradient(to right, #aa6b5d, #B89B7A)",
-                boxShadow: "0 4px 14px rgba(184, 155, 122, 0.3)",
-              }}
-              onMouseEnter={() => setIsButtonHovered(true)}
-              onMouseLeave={() => setIsButtonHovered(false)}
-            >
-              <span className="flex items-center justify-center gap-2 sm:gap-2.5 leading-none">
-                <ShoppingCart
-                  className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${
-                    isButtonHovered ? "scale-110" : ""
-                  }`}
-                />
-                <span className="leading-none">
-                  Quero Transformar Minha Imagem
-                </span>
-              </span>
-            </Button>
-          </div>
-
+        <div className="flex justify-center w-full">
           {/* Seção do Slider de Imagem */}
-          <div className="lg:w-3/5 order-1 lg:order-2 w-full max-w-xl mx-auto">
+          <div className="w-full max-w-xl mx-auto">
             {isLoading && !imageLoaded ? (
               <div className="aspect-[4/5] bg-gray-200 rounded-lg flex items-center justify-center w-full mx-auto">
                 <p className="text-gray-500">Carregando transformação...</p>
