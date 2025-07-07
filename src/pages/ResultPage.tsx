@@ -224,10 +224,10 @@ const ResultPage: React.FC = () => {
                 </ul>
                 <Button
                   onClick={handleCTAClick}
-                  className="text-white py-3 px-8 rounded-lg transition-all duration-300 text-base font-medium"
+                  className="text-white py-2 px-8 rounded-lg transition-all duration-300 text-base font-medium"
                   style={{
                     background: "linear-gradient(to right, #aa6b5d, #B89B7A)",
-                    boxShadow: "0 4px 14px rgba(184, 155, 122, 0.3)",
+                    boxShadow: "0 3px 14px rgba(184, 155, 122, 0.3)",
                   }}
                   onMouseEnter={() => setIsButtonHovered(true)}
                   onMouseLeave={() => setIsButtonHovered(false)}
