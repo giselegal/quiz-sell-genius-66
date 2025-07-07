@@ -71,7 +71,6 @@ export const UrgencyCountdown: React.FC<UrgencyCountdownProps> = ({
         
         <div className="flex items-center justify-center gap-2 text-sm text-[#432818]/70">
           <Clock className="w-4 h-4" />
-          <span>Apenas 15 vagas restantes este mês</span>
         </div>
       </div>
     </Card>
