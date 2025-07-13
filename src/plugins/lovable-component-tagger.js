@@ -5,7 +5,7 @@
 
 export function componentTagger() {
   return {
-    name: 'lovable-component-tagger',
+    name: "lovable-component-tagger",
     transform(code, id) {
       // Processa apenas arquivos React/TypeScript
       if (!/\.(jsx|tsx)$/.test(id)) {
@@ -20,10 +20,12 @@ export function componentTagger() {
         }
       );
 
-      return transformedCode !== code ? {
-        code: transformedCode,
-        map: null
-      } : null;
-    }
+      return transformedCode !== code
+        ? {
+            code: transformedCode,
+            map: null,
+          }
+        : null;
+    },
   };
 }
