@@ -2,21 +2,19 @@
   "github": {
     "autoSyncFromGithub": true,
     "autoPushToGithub": true,
-    "branch": "main",
-    "repository": "https://github.com/vdp2025/quiz-sell-genius-66.git"
+    "branch": "main"
   },
   "projectName": "Quiz Sell Genius",
   "projectId": "quiz-sell-genius-66",
-  "version": "2.3.1750613771",
-  "lastUpdate": "2025-06-22T17:36:11.454Z",
+  "version": "2.1.1749346944",
+  "lastUpdate": "2025-06-08T01:42:24Z",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
     "enhancedSync": true,
     "visualEditor": true,
     "forceSync": true,
-    "webhookAlternative": true,
-    "reactivation": true
+    "webhookAlternative": true
   },
   "editor": {
     "enableLiveMode": true,
@@ -25,19 +23,16 @@
   },
   "sync": {
     "forced": true,
-    "timestamp": 1750613771,
-    "method": "github-direct",
-    "tokenRequired": false,
-    "lastForceSync": "2025-06-22T17:36:11.455Z",
-    "reactivation": true,
-    "status": "FORCE_ACTIVATED"
+    "timestamp": 1749346944,
+    "method": "webhook-alternative",
+    "tokenRequired": false
   },
   "scripts": {
     "prepare": "node scripts/prepare-lovable.js",
     "sync": "node scripts/manual-sync.js",
     "test": "node scripts/test-sync.js"
   },
-  "lastSync": "2025-06-24T21:18:51.721Z",
+  "lastSync": "2025-06-22T17:37:30.872Z",
   "componentCount": 503,
   "reactivationAttempt": "1750613771"
 }

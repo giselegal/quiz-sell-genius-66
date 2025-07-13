@@ -1,30 +1,37 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Block } from '@/types/editor';
 import { LucideIcon } from 'lucide-react';
 
 interface ComponentItemProps {
-  type: string;
+  type: Block['type'];
   label: string;
   icon: LucideIcon;
-  onAdd: () => void;
+  description: string;
+  onSelect: (type: Block['type']) => void;
 }
 
-export const ComponentItem: React.FC<ComponentItemProps> = ({
+export function ComponentItem({
   type,
   label,
   icon: Icon,
-  onAdd
-}) => {
+  description,
+  onSelect
+}: ComponentItemProps) {
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className="w-full justify-start text-[#8F7A6A] hover:text-[#432818] hover:bg-[#FAF9F7] h-8"
-      onClick={onAdd}
+    <div 
+      className="border border-[#B89B7A]/20 rounded-md bg-white hover:bg-[#FAF9F7] transition-colors cursor-pointer overflow-hidden"
+      onClick={() => onSelect(type)}
     >
-      <Icon className="w-4 h-4 mr-2" />
-      {label}
-    </Button>
+      <div className="p-3">
+        <div className="flex items-center gap-2 mb-2">
+          <Icon className="w-4 h-4 text-[#8F7A6A]" />
+          <span className="font-medium text-[#432818]">{label}</span>
+        </div>
+        <p className="text-xs text-[#8F7A6A]">{description}</p>
+      </div>
+    </div>
   );
-};
+}

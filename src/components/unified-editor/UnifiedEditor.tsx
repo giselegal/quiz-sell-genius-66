@@ -114,7 +114,6 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
   });
 
   const [isSaving, setIsSaving] = useState(false);
-  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -129,14 +128,6 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
     }));
   };
 
-  const openTemplateModal = () => {
-    setIsTemplateModalOpen(true);
-  };
-
-  const closeTemplateModal = () => {
-    setIsTemplateModalOpen(false);
-  };
-
   // Helper function to handle component selection
   const handleComponentSelect = (type: string) => {
     console.log('Component selected:', type);
@@ -149,9 +140,7 @@ const UnifiedEditor: React.FC<UnifiedEditorProps> = ({ initialData }) => {
         isPreviewing={editorState.isPreviewing}
         onPreviewToggle={togglePreview}
         onSave={handleSave}
-        onOpenTemplateModal={openTemplateModal}
-        viewportSize="lg"
-        onViewportSizeChange={() => {}}
+        activeTab={editorState.activeTab}
       />
 
       <div className="flex-1 overflow-hidden">

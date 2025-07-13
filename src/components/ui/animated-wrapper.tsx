@@ -1,64 +1,75 @@
 
-import React, { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
+import React from 'react';
 
 interface AnimatedWrapperProps {
-  children: React.ReactNode;
-  animation?: 'fade' | 'scale' | 'slide' | 'none';
-  show?: boolean;
+  animation?: 'fade' | 'scale' | 'none';
+  show: boolean;
   duration?: number;
   delay?: number;
   className?: string;
+  children: React.ReactNode;
 }
 
 export const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({
-  children,
   animation = 'fade',
-  show = true,
+  show,
   duration = 300,
   delay = 0,
-  className = ''
+  className = '',
+  children
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [mounted, setMounted] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (show) {
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, delay);
+      const timer = setTimeout(() => setMounted(true), delay);
       return () => clearTimeout(timer);
-    } else {
-      setIsVisible(false);
     }
   }, [show, delay]);
 
-  if (animation === 'none') {
-    return <div className={className}>{children}</div>;
-  }
+  if (!show || !mounted) return null;
 
-  const getAnimationClasses = () => {
-    switch (animation) {
-      case 'fade':
-        return isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4';
-      case 'scale':
-        return isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95';
-      case 'slide':
-        return isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4';
-      default:
-        return isVisible ? 'opacity-100' : 'opacity-0';
-    }
-  };
+  const animationClass = animation === 'fade' ? 'animate-fade-in' : 
+                        animation === 'scale' ? 'animate-scale-in' : '';
 
   return (
-    <div
-      className={cn(
-        'transition-all ease-out',
-        getAnimationClasses(),
-        className
-      )}
-      style={{ transitionDuration: `${duration}ms` }}
+    <div 
+      className={`${animationClass} ${className}`}
+      style={{ animationDuration: `${duration}ms` }}
     >
       {children}
     </div>
+  );
+};
+
+interface OptimizedImageProps {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  className?: string;
+  priority?: boolean;
+  style?: React.CSSProperties;
+}
+
+export const OptimizedImage: React.FC<OptimizedImageProps> = ({
+  src,
+  alt,
+  width,
+  height,
+  className = '',
+  priority = false,
+  style
+}) => {
+  return (
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      className={className}
+      style={style}
+      loading={priority ? 'eager' : 'lazy'}
+    />
   );
 };

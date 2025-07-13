@@ -1,5 +1,4 @@
 
-
 /**
  * Serviço para gerenciar múltiplos Facebook Pixels no sistema
  */
@@ -106,10 +105,3 @@ export const trackFunnelEvent = (eventName: string, eventData: Record<string, an
     window.fbq('trackCustom', eventName, enrichedData);
   }
 };
-
-export const initializePixel = (pixelId: string) => {
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('init', pixelId);
-  }
-};
-

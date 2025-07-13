@@ -1,11 +1,9 @@
 # 🎨 PROMPT PARA DESENVOLVER EDITOR VISUAL AO VIVO
-
 ## Quiz Sell Genius - Editor Visual Completo
 
 ### 📋 CONTEXTO DO PROJETO
 
 Desenvolver um **Editor Visual Ao Vivo** para o projeto **Quiz Sell Genius** que permita editar em tempo real:
-
 - 📝 **Quiz atual** (perguntas, respostas, layout)
 - 🎯 **Página de resultado** (conteúdo, design, ofertas)
 - 💰 **Página de oferta/venda** (copy, imagens, preços)
@@ -29,7 +27,6 @@ Criar um sistema de editor visual que permita:
 ## 🏗️ ESTRUTURA ATUAL DO PROJETO
 
 ### 📁 Arquivos Principais Identificados:
-
 ```
 /src/pages/admin/EditorPage.tsx                    # ✅ Página principal do editor
 /src/components/visual-editor/
@@ -45,20 +42,18 @@ Criar um sistema de editor visual que permita:
 ```
 
 ### 🎨 Design System Atual:
-
 ```css
 :root {
-  --primary: #b89b7a; /* Cor principal */
-  --secondary: #432818; /* Cor secundária */
-  --accent: #aa6b5d; /* Cor de destaque */
-  --background: #fffbf7; /* Fundo principal */
-  --text-dark: #432818; /* Texto escuro */
-  --text-medium: #6b4f43; /* Texto médio */
+  --primary: #B89B7A;          /* Cor principal */
+  --secondary: #432818;        /* Cor secundária */
+  --accent: #aa6b5d;          /* Cor de destaque */
+  --background: #FFFBF7;      /* Fundo principal */
+  --text-dark: #432818;       /* Texto escuro */
+  --text-medium: #6B4F43;     /* Texto médio */
 }
 ```
 
 ### 🧩 Componentes Existentes:
-
 - ✅ `EditorPage` - Interface principal do editor
 - ✅ `QuizOfferPageVisualEditor` - Editor visual avançado
 - ✅ `QuizOfferPageEditable` - Componente editável
@@ -73,7 +68,6 @@ Criar um sistema de editor visual que permita:
 ### 1. **EDITOR VISUAL PRINCIPAL**
 
 **Funcionalidades Core:**
-
 ```typescript
 interface VisualEditor {
   // Seções editáveis
@@ -87,7 +81,7 @@ interface VisualEditor {
     pricing: EditableSection;
     faq: EditableSection;
   };
-
+  
   // Controles de edição
   controls: {
     textEditor: RichTextEditor;
@@ -96,11 +90,11 @@ interface VisualEditor {
     layoutManager: LayoutControls;
     styleEditor: CSSEditor;
   };
-
+  
   // Sistema de preview
   preview: {
-    mode: "edit" | "preview";
-    responsive: "desktop" | "tablet" | "mobile";
+    mode: 'edit' | 'preview';
+    responsive: 'desktop' | 'tablet' | 'mobile';
     realTime: boolean;
   };
 }
@@ -109,7 +103,6 @@ interface VisualEditor {
 ### 2. **INTERFACE DE EDIÇÃO**
 
 **Layout sugerido:**
-
 ```
 ┌─────────────────────────────────────────────────┐
 │ 🎯 Barra de Ferramentas                         │
@@ -134,7 +127,6 @@ interface VisualEditor {
 **Seções editáveis identificadas:**
 
 1. **📝 HERO SECTION**
-
    - Título principal
    - Subtítulo
    - CTA button text
@@ -142,42 +134,36 @@ interface VisualEditor {
    - Badge de credibilidade
 
 2. **⚠️ SEÇÃO PROBLEMA**
-
    - Título da seção
    - Lista de problemas
    - Descrição expandida
    - Imagem ilustrativa
 
 3. **💡 SEÇÃO SOLUÇÃO**
-
    - Título da solução
    - Descrição do quiz
    - Preview do quiz
    - CTA principal
 
 4. **🎁 SEÇÃO BENEFÍCIOS**
-
    - Lista de benefícios
    - Descrições detalhadas
    - Ícones dos benefícios
    - Imagens de apoio
 
 5. **🎯 SEÇÃO BÔNUS**
-
    - Bônus 1: Peças-chave
    - Bônus 2: Visagismo
    - Descrições e imagens
    - Valores agregados
 
 6. **💰 SEÇÃO PREÇOS**
-
    - Valor principal
    - Valor promocional
    - Lista do que está incluso
    - CTAs de compra
 
 7. **💬 DEPOIMENTOS**
-
    - Fotos de clientes
    - Textos dos depoimentos
    - Resultados mostrados
@@ -200,9 +186,9 @@ interface SectionEditor {
     fontSize: number;
     fontWeight: string;
     color: string;
-    alignment: "left" | "center" | "right";
+    alignment: 'left' | 'center' | 'right';
   };
-
+  
   // Gerenciador de imagens
   imageControls: {
     upload: (file: File) => string;
@@ -210,7 +196,7 @@ interface SectionEditor {
     position: string;
     alt: string;
   };
-
+  
   // Controles de layout
   layoutControls: {
     spacing: { top: number; bottom: number };
@@ -218,7 +204,7 @@ interface SectionEditor {
     background: { color: string; image?: string };
     border: { width: number; color: string; radius: number };
   };
-
+  
   // Visibilidade
   visibility: {
     show: boolean;
@@ -239,18 +225,18 @@ interface SaveSystem {
     interval: number; // 30 segundos
     enabled: boolean;
   };
-
+  
   manualSave: {
     button: () => void;
-    shortcut: "Ctrl+S";
+    shortcut: 'Ctrl+S';
   };
-
+  
   history: {
     undo: () => void;
     redo: () => void;
     maxSteps: number; // 50 passos
   };
-
+  
   export: {
     json: () => string;
     html: () => string;
@@ -264,28 +250,25 @@ interface SaveSystem {
 ## 🎨 ESPECIFICAÇÕES DE DESIGN
 
 ### **Paleta de Cores (manter exata)**
-
 ```css
 /* Cores principais - NÃO ALTERAR */
---primary: #b89b7a;
+--primary: #B89B7A;
 --secondary: #432818;
 --accent: #aa6b5d;
---background: #fffbf7;
+--background: #FFFBF7;
 --white: #ffffff;
 --text-dark: #432818;
---text-medium: #6b4f43;
+--text-medium: #6B4F43;
 ```
 
 ### **Tipografia (manter exata)**
-
 ```css
 /* Fontes - NÃO ALTERAR */
-font-family: "Inter", sans-serif; /* Texto geral */
-font-family: "Playfair Display", serif; /* Títulos */
+font-family: 'Inter', sans-serif;          /* Texto geral */
+font-family: 'Playfair Display', serif;    /* Títulos */
 ```
 
 ### **Componentes Visuais (preservar)**
-
 - ✅ Botões 3D com gradiente
 - ✅ Cards com sombra e hover
 - ✅ Animações de entrada
@@ -298,7 +281,6 @@ font-family: "Playfair Display", serif; /* Títulos */
 ## 🛠️ IMPLEMENTAÇÃO TÉCNICA
 
 ### **1. Tecnologias a usar:**
-
 - ⚛️ **React 18** + TypeScript
 - 🎨 **Tailwind CSS** (já configurado)
 - 🧩 **shadcn/ui** (componentes existentes)
@@ -306,7 +288,6 @@ font-family: "Playfair Display", serif; /* Títulos */
 - 🔄 **React Suspense** para lazy loading
 
 ### **2. Estrutura de arquivos sugerida:**
-
 ```
 /src/components/visual-editor/
 ├── VisualEditor.tsx                    # 🎯 Componente principal
@@ -333,12 +314,11 @@ font-family: "Playfair Display", serif; /* Títulos */
 ```
 
 ### **3. Interface do Editor Principal:**
-
 ```tsx
 interface VisualEditorProps {
   initialData: PageData;
   onSave: (data: PageData) => void;
-  mode: "quiz" | "result" | "offer";
+  mode: 'quiz' | 'result' | 'offer';
 }
 
 interface PageData {
@@ -362,7 +342,6 @@ interface Section {
 ## 🎯 FUNCIONALIDADES ESPECÍFICAS
 
 ### **A. EDITOR DE QUIZ**
-
 - ✏️ Editar perguntas e respostas
 - 🎨 Customizar cores e fontes
 - 📱 Preview responsivo
@@ -371,7 +350,6 @@ interface Section {
 - 🖼️ Upload de imagens para opções
 
 ### **B. EDITOR DE PÁGINA DE RESULTADO**
-
 - 📊 Customizar layout de resultados
 - 🎨 Editar textos e descrições
 - 🖼️ Gerenciar imagens de resultado
@@ -379,7 +357,6 @@ interface Section {
 - 📈 Ajustar elementos de conversão
 
 ### **C. EDITOR DE PÁGINA DE OFERTA**
-
 - 💰 Editar preços e ofertas
 - 📝 Customizar copy de vendas
 - 🎁 Gerenciar seção de bônus
@@ -392,7 +369,6 @@ interface Section {
 ## 🎮 EXPERIÊNCIA DO USUÁRIO
 
 ### **Interface Intuitiva:**
-
 1. **🎯 Click para editar** - Clique direto no elemento para editar
 2. **🖱️ Drag and drop** - Arraste seções para reordenar
 3. **⚡ Preview instantâneo** - Veja mudanças em tempo real
@@ -400,7 +376,6 @@ interface Section {
 5. **💾 Salvamento automático** - Nunca perca o trabalho
 
 ### **Controles Visuais:**
-
 - 🎨 **Color picker** integrado
 - 📏 **Sliders** para espaçamentos
 - 🔤 **Typography controls** fáceis
@@ -412,7 +387,6 @@ interface Section {
 ## 🚦 REQUISITOS OBRIGATÓRIOS
 
 ### **❌ NÃO PODE:**
-
 - Quebrar o design atual
 - Alterar URLs existentes
 - Remover funcionalidades
@@ -420,7 +394,6 @@ interface Section {
 - Afetar SEO/Performance
 
 ### **✅ DEVE:**
-
 - Manter layout responsivo
 - Preservar animações CSS
 - Manter sistema de cores
@@ -428,7 +401,6 @@ interface Section {
 - Ser intuitivo para não-técnicos
 
 ### **🔧 INTEGRAÇÃO:**
-
 - Usar componentes shadcn/ui existentes
 - Integrar com sistema admin atual
 - Manter autenticação funcionando
@@ -440,21 +412,18 @@ interface Section {
 ## 📋 CHECKLIST DE DESENVOLVIMENTO
 
 ### **Fase 1: Estrutura Base**
-
 - [ ] Criar componente VisualEditor principal
 - [ ] Implementar sistema de seções
 - [ ] Configurar preview ao vivo
 - [ ] Integrar com EditorPage existente
 
 ### **Fase 2: Editores Específicos**
-
 - [ ] Editor de texto rico
 - [ ] Gerenciador de imagens
 - [ ] Seletor de cores
 - [ ] Controles de layout
 
 ### **Fase 3: Seções Específicas**
-
 - [ ] Editor Hero section
 - [ ] Editor seção problema
 - [ ] Editor seção solução
@@ -463,21 +432,18 @@ interface Section {
 - [ ] Editor FAQ
 
 ### **Fase 4: Sistema de Salvamento**
-
 - [ ] Salvamento automático
 - [ ] Sistema de undo/redo
 - [ ] Export/import dados
 - [ ] Backup automático
 
 ### **Fase 5: UI/UX**
-
 - [ ] Interface intuitiva
 - [ ] Responsividade
 - [ ] Feedback visual
 - [ ] Loading states
 
 ### **Fase 6: Testes**
-
 - [ ] Teste em dispositivos
 - [ ] Teste de performance
 - [ ] Teste de salvamento
@@ -508,17 +474,17 @@ Um **Editor Visual Completo** que permita:
 const editorData = {
   hero: {
     title: "Descubra Seu Estilo Predominante",
-    subtitle: "em 5 Minutos",
+    subtitle: "em 5 Minutos", 
     ctaText: "Descobrir Meu Estilo Agora",
     image: "/hero-image.jpg",
-    backgroundColor: "#FFFBF7",
+    backgroundColor: "#FFFBF7"
   },
   pricing: {
     mainPrice: "39,90",
     originalPrice: "197,00",
     currency: "R$",
-    ctaText: "Comprar Agora",
-  },
+    ctaText: "Comprar Agora"
+  }
   // ... outras seções
 };
 

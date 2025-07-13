@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { EditorStage, EditorComponent } from '@/hooks/useLiveEditor';
+import { EditorStage, EditorComponent } from '../../LiveQuizEditor';
 
 interface ResultPreviewProps {
   stage: EditorStage;

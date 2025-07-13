@@ -1,17 +1,17 @@
-import React from "react";
-import { QuizQuestion } from "./QuizQuestion";
-import { UserResponse, QuizQuestion as QuizQuestionType } from "@/types/quiz";
-import { QuizHeader } from "./quiz/QuizHeader";
-import { StrategicQuestions } from "./quiz/StrategicQuestions";
-import QuizNavigation from "./quiz/QuizNavigation";
+
+import React from 'react';
+import { QuizQuestion } from './QuizQuestion';
+import { UserResponse } from '@/types/quiz';
+import { QuizHeader } from './quiz/QuizHeader';
+import { StrategicQuestions } from './quiz/StrategicQuestions';
 
 interface QuizContentProps {
-  user: { userName: string } | null;
+  user: any;
   currentQuestionIndex: number;
   totalQuestions: number;
   showingStrategicQuestions: boolean;
   currentStrategicQuestionIndex: number;
-  currentQuestion: QuizQuestionType;
+  currentQuestion: any;
   currentAnswers: string[];
   handleAnswerSubmit: (response: UserResponse) => void;
   handleNextClick: () => void;
@@ -31,27 +31,17 @@ export const QuizContent: React.FC<QuizContentProps> = ({
   handlePrevious,
 }) => {
   // Get user name from localStorage if not provided in props
-  const userName = user?.userName || localStorage.getItem("userName") || "";
-
+  const userName = user?.userName || localStorage.getItem('userName') || '';
+  
   // Determine the required selections based on question type
-  const requiredSelections = showingStrategicQuestions ? 1 : 3; // Always 3 for normal questions
-
+  const requiredSelections = showingStrategicQuestions ? 1 : (currentQuestion?.multiSelect || 3);
+  
   // Check if we have enough selections to proceed
-  const canProceed = currentAnswers?.length >= requiredSelections;
-
-  // Determine question type for navigation component
-  const currentQuestionType: "normal" | "strategic" = showingStrategicQuestions
-    ? "strategic"
-    : "normal";
-
-  // Check if it's the last question
-  const isLastQuestion = showingStrategicQuestions
-    ? currentStrategicQuestionIndex >= 6
-    : currentQuestionIndex >= totalQuestions - 1;
+  const canProceed = currentAnswers?.length === requiredSelections;
 
   return (
     <>
-      <QuizHeader
+      <QuizHeader 
         userName={userName}
         currentQuestionIndex={currentQuestionIndex}
         totalQuestions={totalQuestions}
@@ -63,16 +53,12 @@ export const QuizContent: React.FC<QuizContentProps> = ({
         {showingStrategicQuestions ? (
           <StrategicQuestions
             currentQuestionIndex={currentStrategicQuestionIndex}
-            answers={
-              showingStrategicQuestions
-                ? currentAnswers.reduce((acc, optionId) => {
-                    if (currentQuestion?.id) {
-                      acc[currentQuestion.id] = [optionId];
-                    }
-                    return acc;
-                  }, {})
-                : {}
-            }
+            answers={showingStrategicQuestions ? currentAnswers.reduce((acc, optionId) => {
+              if (currentQuestion?.id) {
+                acc[currentQuestion.id] = [optionId];
+              }
+              return acc;
+            }, {}) : {}}
             onAnswer={handleAnswerSubmit}
           />
         ) : (
@@ -81,19 +67,8 @@ export const QuizContent: React.FC<QuizContentProps> = ({
             onAnswer={handleAnswerSubmit}
             currentAnswers={currentAnswers || []}
             showQuestionImage={true}
-            isStrategicQuestion={false}
           />
         )}
-
-        {/* Navigation Component */}
-        <QuizNavigation
-          canProceed={canProceed}
-          onNext={handleNextClick}
-          onPrevious={currentQuestionIndex > 0 ? handlePrevious : undefined}
-          currentQuestionType={currentQuestionType}
-          selectedOptionsCount={currentAnswers?.length || 0}
-          isLastQuestion={isLastQuestion}
-        />
       </div>
     </>
   );

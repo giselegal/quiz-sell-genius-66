@@ -1,170 +1,138 @@
-import { useEffect, useCallback, useRef, useState } from "react";
-import { Block } from "@/types/editor";
 
-interface UseAutoSaveProps {
-  blocks: Block[];
-  onSave?: () => void;
-  autoSaveInterval?: number; // em millisegundos
-  storageKey?: string;
+import { useEffect, useRef, useState } from 'react';
+import { toast } from '@/components/ui/use-toast';
+import debounce from 'lodash/debounce';
+
+interface UseAutosaveOptions<T> {
+  data: T;
+  onSave: (data: T) => Promise<boolean>;
+  interval?: number;
+  enabled?: boolean;
+  showToast?: boolean;
 }
 
-interface AutoSaveState {
-  lastSaved: Date | null;
-  isDirty: boolean;
-  isSaving: boolean;
-  saveIndicator: string;
-}
-
-export function useAutoSave({
-  blocks,
+export function useAutosave<T>({
+  data,
   onSave,
-  autoSaveInterval = 5000, // 5 segundos
-  storageKey = "enhanced_editor_auto_save",
-}: UseAutoSaveProps) {
-  const [state, setState] = useState<AutoSaveState>({
-    lastSaved: null,
-    isDirty: false,
-    isSaving: false,
-    saveIndicator: "Salvo",
-  });
+  interval = 5000,
+  enabled = true,
+  showToast = false
+}: UseAutosaveOptions<T>) {
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastDataRef = useRef<T>(data);
+  const pendingSaveRef = useRef<boolean>(false);
 
-  const blocksRef = useRef<Block[]>(blocks);
-  const timeoutRef = useRef<NodeJS.Timeout>();
-  const lastSaveDataRef = useRef<string>("");
-
-  // Update blocks reference
-  useEffect(() => {
-    blocksRef.current = blocks;
-  }, [blocks]);
-
-  // Auto-save function
-  const performAutoSave = useCallback(async () => {
-    const currentData = JSON.stringify(blocksRef.current);
-
-    // Don't save if data hasn't changed
-    if (currentData === lastSaveDataRef.current) {
+  const save = async (forceShowToast = false) => {
+    if (!enabled) return;
+    
+    // Compare JSON stringified versions to detect changes
+    const currentDataStr = JSON.stringify(data);
+    const lastDataStr = JSON.stringify(lastDataRef.current);
+    
+    // Don't save if the data hasn't changed
+    if (currentDataStr === lastDataStr && !forceShowToast) {
       return;
     }
-
-    setState((prev) => ({
-      ...prev,
-      isSaving: true,
-      saveIndicator: "Salvando...",
-    }));
-
+    
+    // If already saving, mark as pending and return
+    if (isSaving) {
+      pendingSaveRef.current = true;
+      return;
+    }
+    
+    setIsSaving(true);
     try {
-      // Save to localStorage
-      localStorage.setItem(storageKey, currentData);
-      localStorage.setItem(`${storageKey}_timestamp`, new Date().toISOString());
-
-      // Call external save function if provided
-      if (onSave) {
-        await onSave();
+      const success = await onSave(data);
+      if (success) {
+        lastDataRef.current = JSON.parse(currentDataStr);
+        const now = new Date();
+        setLastSaved(now);
+        
+        if (showToast || forceShowToast) {
+          toast({
+            title: "Alterações salvas",
+            description: `Suas alterações foram salvas às ${now.toLocaleTimeString()}`,
+          });
+        }
       }
-
-      lastSaveDataRef.current = currentData;
-
-      setState((prev) => ({
-        ...prev,
-        lastSaved: new Date(),
-        isDirty: false,
-        isSaving: false,
-        saveIndicator: "Salvo automaticamente",
-      }));
     } catch (error) {
-      console.error("Erro no auto-save:", error);
-      setState((prev) => ({
-        ...prev,
-        isSaving: false,
-        saveIndicator: "Erro ao salvar",
-      }));
-    }
-  }, [onSave, storageKey]);
-
-  // Detect changes and schedule auto-save
-  useEffect(() => {
-    const currentData = JSON.stringify(blocks);
-
-    if (currentData !== lastSaveDataRef.current) {
-      setState((prev) => ({
-        ...prev,
-        isDirty: true,
-        saveIndicator: "Alterações não salvas",
-      }));
-
-      // Clear existing timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      console.error('Erro ao salvar:', error);
+      if (showToast || forceShowToast) {
+        toast({
+          title: "Erro ao salvar",
+          description: "Suas alterações não puderam ser salvas. Tente novamente.",
+          variant: "destructive",
+        });
       }
-
-      // Schedule auto-save
-      timeoutRef.current = setTimeout(() => {
-        performAutoSave();
-      }, autoSaveInterval);
+    } finally {
+      setIsSaving(false);
+      
+      // If a pending save was requested during this save operation, trigger a new save
+      if (pendingSaveRef.current) {
+        pendingSaveRef.current = false;
+        setTimeout(() => save(false), 100);
+      }
     }
+  };
 
+  // Setup autosave
+  useEffect(() => {
+    if (!enabled) return;
+    
+    // Clear existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
+    // Set new timeout
+    timeoutRef.current = setTimeout(() => {
+      save(false);
+    }, interval);
+    
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [blocks, autoSaveInterval, performAutoSave]);
+  }, [data, enabled, interval]);
 
-  // Manual save function
-  const saveNow = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    performAutoSave();
-  }, [performAutoSave]);
-
-  // Load from localStorage
-  const loadFromStorage = useCallback(() => {
-    try {
-      const savedData = localStorage.getItem(storageKey);
-      const savedTimestamp = localStorage.getItem(`${storageKey}_timestamp`);
-
-      if (savedData && savedTimestamp) {
-        const blocks = JSON.parse(savedData);
-        const timestamp = new Date(savedTimestamp);
-
-        return {
-          blocks,
-          timestamp,
-          hasData: true,
-        };
+  // Save immediately when component unmounts
+  useEffect(() => {
+    return () => {
+      if (enabled && JSON.stringify(data) !== JSON.stringify(lastDataRef.current)) {
+        save(false);
       }
-    } catch (error) {
-      console.error("Erro ao carregar dados salvos:", error);
-    }
-
-    return {
-      blocks: [],
-      timestamp: null,
-      hasData: false,
     };
-  }, [storageKey]);
-
-  // Clear saved data
-  const clearStorage = useCallback(() => {
-    localStorage.removeItem(storageKey);
-    localStorage.removeItem(`${storageKey}_timestamp`);
-
-    setState((prev) => ({
-      ...prev,
-      lastSaved: null,
-      isDirty: false,
-      saveIndicator: "Dados limpos",
-    }));
-  }, [storageKey]);
+  }, [data, enabled]);
 
   return {
-    ...state,
-    saveNow,
-    loadFromStorage,
-    clearStorage,
-    hasUnsavedChanges: state.isDirty,
+    isSaving,
+    lastSaved,
+    saveNow: () => save(true),
   };
 }
 
-export default useAutoSave;
+// Separate implementation for useAutoSave with different signature
+export function useAutoSave({ onSave, delay = 1000 }: { onSave: (data: any) => void; delay?: number }) {
+  const savedCallback = useRef(onSave);
+
+  useEffect(() => {
+    savedCallback.current = onSave;
+  }, [onSave]);
+
+  const debouncedSave = useRef(
+    debounce((data: any) => {
+      savedCallback.current(data);
+    }, delay)
+  ).current;
+
+  useEffect(() => {
+    return () => {
+      debouncedSave.cancel();
+    };
+  }, [debouncedSave]);
+
+  return debouncedSave;
+}

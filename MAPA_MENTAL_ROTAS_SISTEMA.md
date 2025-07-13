@@ -29,23 +29,21 @@ graph TD
     B -->|50%| D["/quiz-descubra-seu-estilo"]
     B -->|?quiz=true| E[QuizPage Direto]
     B -->|?skip-ab=true| E
-
+    
     F["/quiz"] --> E[QuizPage]
-
+    
     E --> G[Questões do Quiz]
     G --> H[Cálculo do Estilo]
     H --> I[Redirecionamento para Resultado]
 ```
 
 **📍 Arquivos Envolvidos:**
-
 - `/src/pages/LandingPage.tsx` - Página inicial com teste A/B
 - `/src/components/QuizPage.tsx` - Componente principal do quiz
 - `/src/components/ABTestRedirect.tsx` - Lógica de redirecionamento A/B
 - `/src/utils/abtest.ts` - Configuração do teste A/B
 
 **🔧 Funcionalidades:**
-
 - ✅ Teste A/B automático (50/50)
 - ✅ Bypass via parâmetros URL (?quiz=true)
 - ✅ Preservação de UTM parameters
@@ -61,18 +59,17 @@ graph TD
     B --> C{Estilo Identificado?}
     C -->|Sim| D[Exibir Resultado Personalizado]
     C -->|Não| E[Redirecionar para Quiz]
-
+    
     D --> F[Hero Section]
     F --> G[Descrição do Estilo]
     G --> H[Produtos Recomendados]
     H --> I[Oferta Principal]
     I --> J[Call-to-Action]
-
+    
     K["/resultado/editor"] --> L[Editor Visual da Página]
 ```
 
 **📍 Arquivos Envolvidos:**
-
 - `/src/pages/ResultPage.tsx` - Página principal de resultado
 - `/src/pages/ResultPagePrototype.tsx` - Protótipo da página
 - `/src/components/pages/PreviewQuizOfferPage.tsx` - Preview para admin
@@ -80,7 +77,6 @@ graph TD
 - `/src/styles/preview-quiz-offer.css` - Estilos específicos
 
 **🎨 Elementos Visuais:**
-
 - ✅ Hero com resultado personalizado
 - ✅ Design responsivo
 - ✅ Cores do brand (#B89B7A, #432818, #aa6b5d)
@@ -95,7 +91,7 @@ graph TD
 graph TD
     A["/quiz-descubra-seu-estilo"] --> B[QuizDescubraSeuEstilo.tsx]
     A2["/descubra-seu-estilo"] --> B
-
+    
     B --> C[Landing Page do Quiz]
     C --> D[Introdução + Promessa]
     D --> E[Quiz Interativo]
@@ -108,14 +104,12 @@ graph TD
 ```
 
 **📍 Arquivos Envolvidos:**
-
 - `/src/pages/quiz-descubra-seu-estilo.tsx` - Página principal
 - `/src/context/QuizContext.tsx` - Estado global do quiz
 - `/src/hooks/useQuiz.ts` - Lógica do quiz
 - `/src/utils/quizLogic.ts` - Algoritmo de cálculo do estilo
 
 **🎯 Características:**
-
 - ✅ Interface step-by-step
 - ✅ Validação em tempo real
 - ✅ Progress tracking
@@ -131,7 +125,7 @@ graph TD
     A["/admin"] --> B{AdminRoute}
     B -->|Não Auth| C[AdminLogin]
     B -->|Auth OK| D[DashboardPage]
-
+    
     D --> E[AdminSidebar Navigation]
     E --> F["/admin/dashboard - Overview"]
     E --> G["/admin/editor - Editor Visual"]
@@ -140,14 +134,13 @@ graph TD
     E --> J["/admin/settings - Configurações"]
     E --> K["/admin/ab-tests - Testes A/B"]
     E --> L["/admin/criativos - Criativos"]
-
+    
     G --> M[QuizOfferPageVisualEditor]
     M --> N[Preview em Tempo Real]
     M --> O[Salvar Alterações]
 ```
 
 **📍 Arquivos Envolvidos:**
-
 - `/src/pages/admin/DashboardPage.tsx` - Hub administrativo
 - `/src/pages/admin/EditorPage.tsx` - Editor visual
 - `/src/components/admin/AdminSidebar.tsx` - Navegação lateral
@@ -159,7 +152,6 @@ graph TD
 ## 🛠️ **5. UTILITÁRIOS DE ROTEAMENTO**
 
 ### 📊 **Verificação e Monitoramento**
-
 ```
 🔍 /src/utils/route-checker.ts
 ├── checkRoute() - Verifica se rota existe
@@ -189,7 +181,6 @@ graph TD
 ## 🎮 **6. FLUXOS DE USUÁRIO COMPLETOS**
 
 ### 🎯 **Fluxo Principal: Visitante → Conversão**
-
 ```
 1. Usuário acessa giselegalvao.com.br
 2. ABTestRedirect decide a variante (50/50)
@@ -201,7 +192,6 @@ graph TD
 ```
 
 ### 🔧 **Fluxo Admin: Gestão de Conteúdo**
-
 ```
 1. Admin acessa /admin
 2. AdminRoute verifica autenticação
@@ -219,7 +209,6 @@ graph TD
 ## 📱 **7. ROTAS DE ACESSO RÁPIDO**
 
 ### 🚀 **URLs Especiais de Desenvolvimento**
-
 ```
 🎯 Bypass do Teste A/B:
 ├── /?quiz=true - Força exibição do quiz
@@ -238,7 +227,6 @@ graph TD
 ```
 
 ### 🎨 **Rotas de Editor Visual**
-
 ```
 📝 Editor Principal:
 ├── /admin/editor - Hub do editor
@@ -256,7 +244,6 @@ graph TD
 ## 🔄 **8. SISTEMA DE NAVEGAÇÃO ENTRE ROTAS**
 
 ### 📊 **Redirecionamentos Automáticos**
-
 ```mermaid
 graph LR
     A[Rota Inválida] --> B[NotFoundPage]
@@ -267,7 +254,6 @@ graph LR
 ```
 
 ### 🎯 **Preservação de Estado**
-
 ```
 📦 LocalStorage:
 ├── Quiz State - Respostas do usuário
@@ -287,7 +273,6 @@ graph LR
 ## 🎨 **9. DESIGN SYSTEM NAS ROTAS**
 
 ### 🎯 **Cores Principais por Rota**
-
 ```
 🏠 Quiz (/quiz-descubra-seu-estilo):
 ├── Primary: #B89B7A (dourado suave)
@@ -306,7 +291,6 @@ graph LR
 ```
 
 ### 📱 **Responsividade por Rota**
-
 ```
 📱 Mobile First:
 ├── Quiz: Stack vertical, botões grandes
@@ -324,20 +308,16 @@ graph LR
 ## 🚀 **10. PERFORMANCE E OTIMIZAÇÃO**
 
 ### ⚡ **Lazy Loading Implementado**
-
 ```typescript
 // Componentes carregados sob demanda
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const QuizPage = lazy(() => import("./components/QuizPage"));
 const ResultPage = lazy(() => import("./pages/ResultPage"));
-const QuizDescubraSeuEstilo = lazy(
-  () => import("./pages/quiz-descubra-seu-estilo")
-);
+const QuizDescubraSeuEstilo = lazy(() => import("./pages/quiz-descubra-seu-estilo"));
 const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 ```
 
 ### 🎯 **Critical CSS por Rota**
-
 ```
 🎨 CSS Crítico:
 ├── initialCriticalCSS - Base do sistema
@@ -355,7 +335,6 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 ## 📊 **11. ANALYTICS E TRACKING**
 
 ### 🎯 **Eventos Trackados por Rota**
-
 ```
 📈 Quiz (/quiz-descubra-seu-estilo):
 ├── quiz_started - Início do quiz
@@ -377,7 +356,6 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 ```
 
 ### 📊 **UTM e Tracking**
-
 ```
 🎯 Captura Automática:
 ├── captureUTMParameters() - No carregamento
@@ -397,16 +375,14 @@ const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
 ## 🛡️ **12. SEGURANÇA E AUTENTICAÇÃO**
 
 ### 🔐 **Proteção de Rotas Admin**
-
 ```typescript
 // Middleware de autenticação
-AdminRoute → useAdminAuth() →
+AdminRoute → useAdminAuth() → 
 ├── isAdminAuthenticated ✅ → Permite acesso
 └── !isAdminAuthenticated ❌ → AdminLogin
 ```
 
 ### 🛡️ **Contextos de Segurança**
-
 ```
 🔑 AdminAuthProvider:
 ├── Gerencia token de admin
@@ -426,11 +402,10 @@ AdminRoute → useAdminAuth() →
 ## 🎯 **RESUMO DO MAPA MENTAL**
 
 ### 🏗️ **Arquitetura Simplificada**
-
 ```
 ✅ SPA ÚNICO (React Router)
 ├── Entry: main.jsx
-├── Router: App.tsx
+├── Router: App.tsx  
 ├── Pages: /src/pages/
 ├── Components: /src/components/
 └── Utils: /src/utils/
@@ -443,12 +418,11 @@ AdminRoute → useAdminAuth() →
 ```
 
 ### 🎯 **3 Rotas Principais (Foco do Mapa)**
-
 ```
 🎯 1. QUIZ: /quiz-descubra-seu-estilo
    └── Landing → Quiz Interativo → Resultado
 
-🏆 2. RESULTADO: /resultado
+🏆 2. RESULTADO: /resultado  
    └── Estilo Personalizado → Oferta → Conversão
 
 🏠 3. RAIZ: /
@@ -456,7 +430,6 @@ AdminRoute → useAdminAuth() →
 ```
 
 ### 🔧 **Ferramentas de Desenvolvimento**
-
 ```
 🛠️ Utilitários:
 ├── route-checker.ts - Debug de rotas

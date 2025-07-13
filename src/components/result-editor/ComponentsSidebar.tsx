@@ -1,126 +1,99 @@
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  Type, 
-  AlignLeft, 
-  Image, 
-  List, 
-  Star, 
-  DollarSign, 
-  Shield, 
-  MousePointer,
-  User,
-  ArrowRight,
-  ShoppingCart
+import { BlockType } from '@/types/editor';
+import {
+  Heading1,
+  Type,
+  Image,
+  CreditCard,
+  CheckCircle,
+  MessageSquareQuote,
+  Award,
+  LayoutGrid,
+  PanelTop,
+  GripVertical,
+  Video,
+  Columns,
+  BaggageClaim
 } from 'lucide-react';
-import { ResultPageBlockType } from '@/types/resultPageBlocks';
 
 interface ComponentsSidebarProps {
-  onAddBlock: (type: ResultPageBlockType) => void;
+  onComponentSelect: (type: BlockType) => void;
 }
 
-export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({
-  onAddBlock
-}) => {
-  const components = [
+export const ComponentsSidebar: React.FC<ComponentsSidebarProps> = ({ onComponentSelect }) => {
+  // Component category definitions
+  const componentCategories = [
     {
-      type: 'result-header' as ResultPageBlockType,
-      name: 'Cabeçalho Resultado',
-      icon: User,
-      description: 'Seção com nome do usuário e estilo predominante'
+      title: 'Estrutura',
+      components: [
+        { type: 'header', icon: <PanelTop size={16} />, label: 'Cabeçalho' },
+        { type: 'two-column', icon: <Columns size={16} />, label: 'Duas Colunas' },
+        { type: 'spacer', icon: <GripVertical size={16} />, label: 'Espaçador' },
+      ]
     },
     {
-      type: 'transition' as ResultPageBlockType,
-      name: 'Seção Transição',
-      icon: ArrowRight,
-      description: 'Seção de transição motivacional'
+      title: 'Conteúdo',
+      components: [
+        { type: 'headline', icon: <Heading1 size={16} />, label: 'Título' },
+        { type: 'text', icon: <Type size={16} />, label: 'Texto' },
+        { type: 'image', icon: <Image size={16} />, label: 'Imagem' },
+        { type: 'video', icon: <Video size={16} />, label: 'Vídeo' },
+      ]
     },
     {
-      type: 'final-cta' as ResultPageBlockType,
-      name: 'CTA Final',
-      icon: ShoppingCart,
-      description: 'Call-to-action final com produtos e ofertas'
+      title: 'Resultado',
+      components: [
+        { type: 'style-result', icon: <BaggageClaim size={16} />, label: 'Estilo Principal' },
+        { type: 'secondary-styles', icon: <LayoutGrid size={16} />, label: 'Estilos Secundários' },
+      ]
     },
     {
-      type: 'header' as ResultPageBlockType,
-      name: 'Cabeçalho',
-      icon: Type,
-      description: 'Título e navegação da página'
+      title: 'Vendas',
+      components: [
+        { type: 'pricing', icon: <CreditCard size={16} />, label: 'Preço' },
+        { type: 'benefits', icon: <CheckCircle size={16} />, label: 'Benefícios' },
+        { type: 'testimonials', icon: <MessageSquareQuote size={16} />, label: 'Depoimentos' },
+        { type: 'guarantee', icon: <Award size={16} />, label: 'Garantia' },
+        { type: 'cta', icon: <Award size={16} />, label: 'Chamada para Ação' },
+      ]
     },
-    {
-      type: 'headline' as ResultPageBlockType,
-      name: 'Título',
-      icon: Type,
-      description: 'Título principal e subtítulo'
-    },
-    {
-      type: 'text' as ResultPageBlockType,
-      name: 'Texto',
-      icon: AlignLeft,
-      description: 'Parágrafo de texto simples'
-    },
-    {
-      type: 'benefits' as ResultPageBlockType,
-      name: 'Benefícios',
-      icon: List,
-      description: 'Lista de benefícios ou recursos'
-    },
-    {
-      type: 'testimonials' as ResultPageBlockType,
-      name: 'Depoimentos',
-      icon: Star,
-      description: 'Seção de depoimentos e avaliações'
-    },
-    {
-      type: 'guarantee' as ResultPageBlockType,
-      name: 'Garantia',
-      icon: Shield,
-      description: 'Seção de garantia e segurança'
-    },
-    {
-      type: 'cta' as ResultPageBlockType,
-      name: 'Call to Action',
-      icon: MousePointer,
-      description: 'Botão de ação principal'
-    }
   ];
 
   return (
-    <div className="w-80 bg-white border-r border-[#B89B7A]/20 flex flex-col">
-      <div className="p-4 border-b border-[#B89B7A]/20">
-        <h2 className="font-semibold text-[#432818]">Componentes</h2>
-        <p className="text-sm text-[#8F7A6A]">Arraste para adicionar ao canvas</p>
+    <div className="h-full flex flex-col">
+      <div className="p-4 border-b">
+        <h2 className="font-medium text-[#432818]">Componentes</h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Arraste ou clique nos componentes para adicionar à sua página
+        </p>
       </div>
-
-      <ScrollArea className="flex-1">
-        <div className="p-4 space-y-2">
-          {components.map((component) => {
-            const IconComponent = component.icon;
-            return (
-              <Card 
-                key={component.type}
-                className="p-3 hover:bg-[#FAF9F7] cursor-pointer transition-colors border-[#B89B7A]/20"
-                onClick={() => onAddBlock(component.type)}
-              >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#B89B7A]/10 flex items-center justify-center flex-shrink-0">
-                    <IconComponent className="w-4 h-4 text-[#B89B7A]" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-[#432818] text-sm mb-1">
-                      {component.name}
-                    </h3>
-                    <p className="text-xs text-[#8F7A6A] leading-relaxed">
-                      {component.description}
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            );
-          })}
+      
+      <ScrollArea className="flex-1 p-3">
+        <div className="space-y-6">
+          {componentCategories.map((category, index) => (
+            <div key={index} className="space-y-2">
+              <h3 className="text-xs text-[#8F7A6A] uppercase font-medium tracking-wide">
+                {category.title}
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {category.components.map((component, compIndex) => (
+                  <Button
+                    key={compIndex}
+                    variant="outline"
+                    size="sm"
+                    className="h-auto py-3 px-3 justify-start gap-2 hover:bg-[#FAF9F7]"
+                    onClick={() => onComponentSelect(component.type as BlockType)}
+                  >
+                    <span className="text-[#B89B7A]">{component.icon}</span>
+                    <span className="text-xs">{component.label}</span>
+                  </Button>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </ScrollArea>
     </div>

@@ -1,4 +1,3 @@
-
 // Utilitário para monitorar e otimizar o funil de vendas
 export function monitorFunnelRoutes() {
   console.log('🔄 Inicializando monitoramento do funil de vendas...');
@@ -143,7 +142,7 @@ function checkSalesComponents() {
 }
 
 // Registrar progresso no funil para analytics
-function registerFunnelProgress(currentRoute: string) {
+function registerFunnelProgress(currentRoute) {
   try {
     // Se o Facebook Pixel estiver disponível, registrar evento
     if (typeof window.fbq === 'function') {
@@ -188,10 +187,10 @@ function setupNavigationMonitoring() {
   try {
     // Monitorar cliques em links para páginas do funil
     document.addEventListener('click', (event) => {
-      const target = event.target as Element;
+      const target = event.target;
       
       // Verificar se o clique foi em um link ou em um elemento dentro de um link
-      const linkElement = target.tagName === 'A' ? target as HTMLAnchorElement : target.closest('a');
+      const linkElement = target.tagName === 'A' ? target : target.closest('a');
       
       if (linkElement && linkElement.href) {
         const href = linkElement.getAttribute('href');

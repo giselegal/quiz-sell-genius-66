@@ -1,25 +1,47 @@
 
 export const ROUTES = {
-  // Rotas principais do SPA
+  // Rotas públicas principais
   HOME: '/',
-  QUIZ: '/quiz',
   RESULTADO: '/resultado',
   DESCUBRA_SEU_ESTILO: '/descubra-seu-estilo',
-  QUIZ_DESCUBRA_SEU_ESTILO: '/quiz-descubra-seu-estilo',
-  UNIFIED_EDITOR: '/unified-editor',
-  QUIZ_OFFER_EDITOR: '/quiz-offer-editor'
+  
+  // Rotas administrativas
+  ADMIN: {
+    ROOT: '/admin',
+    DASHBOARD: '/admin',
+    QUIZ: '/admin/quiz',
+    AB_TESTS: '/admin/ab-tests',
+    SETTINGS: '/admin/settings',
+    CRIATIVOS: '/admin/criativos',
+    ANALYTICS: '/admin/analytics',
+    EDITOR: '/admin/editor'
+  }
 }
 
 export function isValidRoute(path: string): boolean {
-  const validRoutes = [
+  const allRoutes = [
     ROUTES.HOME,
-    ROUTES.QUIZ,
     ROUTES.RESULTADO,
     ROUTES.DESCUBRA_SEU_ESTILO,
-    ROUTES.QUIZ_DESCUBRA_SEU_ESTILO,
-    ROUTES.UNIFIED_EDITOR,
-    ROUTES.QUIZ_OFFER_EDITOR
+    ROUTES.ADMIN.ROOT,
+    ROUTES.ADMIN.DASHBOARD,
+    ROUTES.ADMIN.QUIZ,
+    ROUTES.ADMIN.AB_TESTS,
+    ROUTES.ADMIN.SETTINGS,
+    ROUTES.ADMIN.CRIATIVOS,
+    ROUTES.ADMIN.ANALYTICS,
+    ROUTES.ADMIN.EDITOR
   ];
   
-  return validRoutes.includes(path);
+  // Verificar rotas exatas
+  if (allRoutes.includes(path)) {
+    return true;
+  }
+  
+  // Verificar rotas admin com wildcards
+  if (path.startsWith('/admin/') && path.length > '/admin/'.length) {
+    return true;
+  }
+  
+  return false;
 }

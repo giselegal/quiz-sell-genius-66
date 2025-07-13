@@ -1,238 +1,110 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import HomePage from "@/pages/HomePage";
-import NotFoundPage from "@/pages/NotFoundPage";
-import QuizPage from "@/components/QuizPage";
-import QuizDescubraSeuEstilo from "@/pages/quiz-descubra-seu-estilo";
-import ResultPage from "@/pages/ResultPage";
-import UnifiedEditorPage from "@/pages/UnifiedEditorPage";
-import ModernEditorPage from "@/pages/ModernEditorPage";
-import CaktoEditorPage from "@/pages/CaktoEditorPage";
-import EditorTest from "@/pages/EditorTest";
-import QuizIntro from "@/components/QuizIntro";
-import QuizOfferPageVisualEditor from "@/components/editors/QuizOfferPageVisualEditor";
-import AdvancedQuizEditor from "@/components/visual-editor/AdvancedQuizEditor";
-import FinalRefactoredEditor from "@/components/visual-editor/FinalRefactoredEditor";
-import RefactoredAdvancedQuizEditor from "@/components/visual-editor/RefactoredAdvancedQuizEditor";
-import AdvancedQuizEditorTest from "@/components/visual-editor/AdvancedQuizEditor.test";
-import SimpleDragDropEditor from "@/components/visual-editor/SimpleDragDropEditor";
-import QuizPreview from "@/components/QuizPreview";
-import Teste1Page from "@/pages/Teste1Page";
-import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { QuizConfigProvider } from "@/hooks/useQuizConfig";
-import { QuizConfigTest } from "@/components/test/QuizConfigTest";
-import { EditingFlowDemo } from "@/components/demo/EditingFlowDemo";
-import "@/styles/quiz-dynamic-theme.css";
-import { NewQuizPage } from "@/pages/NewQuizPage";
+import React, { Suspense, lazy, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { AdminAuthProvider } from "./context/AdminAuthContext";
+import { QuizProvider } from "./context/QuizContext";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+import { captureUTMParameters } from "./utils/analytics";
+import { loadFacebookPixelDynamic } from "./utils/facebookPixelDynamic";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import CriticalCSSLoader from "./components/CriticalCSSLoader";
+import { initialCriticalCSS, heroCriticalCSS } from "./utils/critical-css";
+import { AdminRoute } from "./components/admin/AdminRoute";
 
-// Componente de botão flutuante para acesso rápido ao editor
-const QuickAccessEditorButton = () => {
-  const navigate = useNavigate();
+// Componente de loading para Suspense
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen bg-gray-50">
+    <div className="text-center">
+      <LoadingSpinner size="lg" color="#B89B7A" className="mx-auto" />
+      <p className="mt-4 text-gray-600">Carregando...</p>
+    </div>
+  </div>
+);
+
+// Lazy loading das páginas essenciais
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const QuizPage = lazy(() => import("./components/QuizPage"));
+const ResultPage = lazy(() => import("./pages/ResultPage"));
+const QuizDescubraSeuEstilo = lazy(
+  () => import("./pages/quiz-descubra-seu-estilo")
+);
+const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
+const EnhancedResultPageEditorPage = lazy(() => import("./pages/EnhancedResultPageEditorPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+
+const App = () => {
+  // Inicializar analytics na montagem do componente
+  useEffect(() => {
+    try {
+      loadFacebookPixelDynamic();
+      captureUTMParameters();
+
+      console.log("App initialized with essential routes only");
+    } catch (error) {
+      console.error("Erro ao inicializar aplicativo:", error);
+    }
+  }, []);
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
-      <Button
-        onClick={() => navigate("/simple-editor")}
-        className="bg-green-600 hover:bg-green-700 text-white shadow-lg"
-        size="sm"
-      >
-        <Edit className="w-4 h-4 mr-2" />✨ Simple Editor (NOVO)
-      </Button>
-      <Button
-        onClick={() => navigate("/cakto-editor")}
-        className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
-        size="sm"
-      >
-        <Edit className="w-4 h-4 mr-2" />
-        Cakto Editor
-      </Button>
-      <Button
-        onClick={() => navigate("/advanced-editor")}
-        className="bg-purple-600 hover:bg-purple-700 text-white shadow-lg"
-        size="sm"
-      >
-        <Edit className="w-4 h-4 mr-2" />
-        Advanced Editor
-      </Button>
-    </div>
+    <AuthProvider>
+      <QuizProvider>
+        <TooltipProvider>
+          <Router>
+            <CriticalCSSLoader
+              cssContent={initialCriticalCSS}
+              id="initial-critical"
+              removeOnLoad={true}
+            />
+            <CriticalCSSLoader
+              cssContent={heroCriticalCSS}
+              id="hero-critical"
+              removeOnLoad={true}
+            />
+
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                {/* Página inicial com teste A/B */}
+                <Route path="/" element={<LandingPage />} />
+                {/* Rota do quiz específica */}
+                <Route path="/quiz" element={<QuizPage />} />
+                {/* Rotas do teste A/B */}
+                <Route path="/resultado" element={<ResultPage />} />
+                <Route
+                  path="/quiz-descubra-seu-estilo"
+                  element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Manter rota antiga para compatibilidade */}
+                <Route
+                  path="/descubra-seu-estilo"
+                  element={<QuizDescubraSeuEstilo />}
+                />
+                {/* Advanced Editor */}
+                <Route
+                  path="/advanced-editor"
+                  element={<EnhancedResultPageEditorPage />}
+                />
+                {/* Admin - protegido com AdminAuthProvider */}
+                <Route
+                  path="/admin/*"
+                  element={
+                    <AdminAuthProvider>
+                      <AdminRoute>
+                        <DashboardPage />
+                      </AdminRoute>
+                    </AdminAuthProvider>
+                  }
+                />
+                {/* 404 */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
+          </Router>
+          <Toaster />
+        </TooltipProvider>
+      </QuizProvider>
+    </AuthProvider>
   );
 };
-
-function App() {
-  console.log("🚀 App component rendering - Simplified SPA routes");
-
-  return (
-    <QuizConfigProvider>
-      <div className="min-h-screen bg-gray-50">
-        <Routes>
-          {/* Rota principal - Quiz Intro */}
-          <Route
-            path="/"
-            element={
-              <QuizIntro
-                onStart={(nome: string, email?: string) => {
-                  console.log("Quiz started:", nome, email);
-                }}
-              />
-            }
-          />
-
-          {/* Quiz principal */}
-          <Route path="/quiz" element={<QuizPage />} />
-
-          {/* Novo Quiz baseado no editor */}
-          <Route path="/new-quiz" element={<NewQuizPage />} />
-
-          {/* Quiz específico de estilo */}
-          <Route
-            path="/quiz-descubra-seu-estilo"
-            element={<QuizDescubraSeuEstilo />}
-          />
-          <Route
-            path="/descubra-seu-estilo"
-            element={<QuizDescubraSeuEstilo />}
-          />
-
-          {/* Página de resultados */}
-          <Route path="/resultado" element={<ResultPage />} />
-
-          {/* Editor unificado */}
-          <Route path="/unified-editor" element={<UnifiedEditorPage />} />
-
-          {/* Editor Visual Quiz Offer */}
-          <Route
-            path="/quiz-offer-editor"
-            element={<QuizOfferPageVisualEditor />}
-          />
-
-          {/* Novo Editor Visual Moderno */}
-          <Route path="/modern-editor" element={<ModernEditorPage />} />
-          <Route path="/editor" element={<ModernEditorPage />} />
-
-          {/* Novo Editor Cakto Quiz */}
-          <Route path="/cakto-editor" element={<CaktoEditorPage />} />
-
-          {/* Editor Visual Avançado - Modularizado CORRIGIDO */}
-          <Route path="/advanced-editor" element={<AdvancedQuizEditor />} />
-
-          {/* Teste do Editor Visual Avançado */}
-          <Route
-            path="/advanced-editor-test"
-            element={<AdvancedQuizEditorTest />}
-          />
-          <Route
-            path="/advanced-editor-test"
-            element={<AdvancedQuizEditorTest />}
-          />
-
-          {/* Página de Teste */}
-          <Route path="/editor-test" element={<EditorTest />} />
-
-          {/* NOVO: Editor Visual Modular Completo - SimpleDragDropEditor */}
-          <Route
-            path="/simple-editor"
-            element={
-              <div className="min-h-screen bg-background">
-                <SimpleDragDropEditor />
-              </div>
-            }
-          />
-
-          {/* NOVO: Editor Refatorado com Componentes Separados */}
-          <Route
-            path="/refactored-editor"
-            element={
-              <div className="min-h-screen bg-background">
-                <FinalRefactoredEditor />
-              </div>
-            }
-          />
-
-          {/* Editor Simples de Teste */}
-          <Route
-            path="/simple-working-editor"
-            element={
-              <div className="min-h-screen bg-background">
-                <SimpleDragDropEditor />
-              </div>
-            }
-          />
-
-          {/* NOVO: Editor Completo Refatorado */}
-          <Route
-            path="/full-refactored-editor"
-            element={
-              <div className="min-h-screen bg-background">
-                <RefactoredAdvancedQuizEditor />
-              </div>
-            }
-          />
-
-          {/* Teste simples do editor refatorado */}
-          <Route
-            path="/test-editor"
-            element={
-              <div className="min-h-screen bg-background">
-                <div style={{ padding: "20px", textAlign: "center" }}>
-                  <h1>Editor Refatorado - Teste</h1>
-                  <p>Se você está vendo isso, o roteamento está funcionando!</p>
-                  <div className="advanced-quiz-editor">
-                    <div className="editor-layout">
-                      <div className="editor-column">
-                        <div style={{ padding: "20px" }}>Coluna 1</div>
-                      </div>
-                      <div className="editor-column">
-                        <div style={{ padding: "20px" }}>Coluna 2</div>
-                      </div>
-                      <div className="editor-column">
-                        <div style={{ padding: "20px" }}>Coluna 3</div>
-                      </div>
-                      <div className="editor-column">
-                        <div style={{ padding: "20px" }}>Coluna 4</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            }
-          />
-
-          {/* Editor funcionando - versão estática */}
-          <Route
-            path="/working-editor"
-            element={
-              <div className="min-h-screen bg-background">
-                <FinalRefactoredEditor />
-              </div>
-            }
-          />
-
-          {/* Teste de Configuração - Apenas para desenvolvimento */}
-          <Route path="/test-config" element={<QuizConfigTest />} />
-
-          {/* Demo do Fluxo de Edição */}
-          <Route path="/editing-demo" element={<EditingFlowDemo />} />
-
-          {/* Nova Página do Quiz */}
-          <Route path="/new-quiz" element={<NewQuizPage />} />
-
-          {/* Rota de Preview do Quiz */}
-          <Route path="/quiz-preview" element={<QuizPreview />} />
-
-          {/* NOVA: Rota de Teste1 - Modelo de Produção */}
-          <Route path="/teste1" element={<Teste1Page />} />
-
-          {/* 404 para rotas não encontradas */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-
-        {/* Botão de acesso rápido ao editor (apenas em desenvolvimento) */}
-        <QuickAccessEditorButton />
-      </div>
-    </QuizConfigProvider>
-  );
-}
 
 export default App;

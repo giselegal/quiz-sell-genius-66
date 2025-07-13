@@ -1,3 +1,4 @@
+
 {
   "github": {
     "autoSyncFromGithub": true,
@@ -17,7 +18,5 @@
     "enableLiveMode": true,
     "autoSave": true,
     "componentHighlighting": true
-  },
-  "lastSync": "2025-06-20T02:27:36.839Z",
-  "componentCount": 476
+  }
 }

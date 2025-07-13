@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Progress } from '../ui/progress';
 import { AnimatedWrapper } from '../ui/animated-wrapper';
@@ -40,8 +41,7 @@ export const QuizHeader: React.FC<QuizHeaderProps> = ({
         indicatorClassName="bg-[#B89B7A]" 
       />
       
-      {/* Ajustado padding: pt-6 para pt-4, pb-4 para pb-2 */}
-      <AnimatedWrapper className="flex justify-center items-center pt-4 pb-2 px-4 w-full">
+      <AnimatedWrapper show={true} className="flex justify-center items-center pt-4 pb-2 px-4 w-full">
         <div className="text-sm text-[#1A1818]/60">
           {currentStep} de {totalSteps}
         </div>

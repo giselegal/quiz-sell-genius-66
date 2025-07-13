@@ -126,7 +126,7 @@ export const ResultPageVisualEditor: React.FC<ResultPageVisualEditorProps> = ({
         <TabsContent value="editor" className="h-full">
           <ResizablePanelGroup direction="horizontal" className="h-full">
             <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-              <ComponentsSidebar onAddBlock={blockActions.handleAddBlock} />
+              <ComponentsSidebar onComponentSelect={blockActions.handleAddBlock} />
             </ResizablePanel>
 
             <ResizableHandle withHandle />

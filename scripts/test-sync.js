@@ -1,4 +1,4 @@
-import https from 'https';
+const https = require('https');
 
 console.log('🧪 Testando conexão com Lovable...');
 

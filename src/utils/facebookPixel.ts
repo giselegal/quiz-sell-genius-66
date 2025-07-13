@@ -6,6 +6,14 @@ import {
   trackFunnelEvent,
 } from "../services/pixelManager";
 
+// Use the same type definition as in global.d.ts
+declare global {
+  interface Window {
+    fbq?: (event: string, eventName: string, params?: any) => void;
+    _fbq?: any;
+  }
+}
+
 /**
  * Initialize Facebook Pixel with the provided ID
  * @param pixelId Facebook Pixel ID to initialize
@@ -20,9 +28,9 @@ export const initFacebookPixel = (pixelId: string): boolean => {
 
     // Initialize Facebook Pixel
     if (!window.fbq) {
-      window.fbq = function (...args: any[]) {
+      window.fbq = function (event: string, eventName: string, params?: any) {
         (window.fbq as any).q = (window.fbq as any).q || [];
-        (window.fbq as any).q.push(args);
+        (window.fbq as any).q.push([event, eventName, params]);
       };
       window._fbq = window.fbq;
       (window.fbq as any).loaded = true;
