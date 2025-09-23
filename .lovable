@@ -6,8 +6,8 @@
   },
   "projectName": "Quiz Sell Genius",
   "projectId": "quiz-sell-genius-66",
-  "version": "2.1.1758564163",
-  "lastUpdate": "2025-09-22T18:02:44.022Z",
+  "version": "2.1.1758586038",
+  "lastUpdate": "2025-09-23T00:07:18.354Z",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
@@ -23,7 +23,7 @@
   },
   "sync": {
     "forced": true,
-    "timestamp": 1758564163,
+    "timestamp": 1758586038,
     "method": "webhook-alternative",
     "tokenRequired": false
   },
