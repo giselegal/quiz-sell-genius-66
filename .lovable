@@ -2,12 +2,13 @@
   "github": {
     "autoSyncFromGithub": true,
     "autoPushToGithub": true,
-    "branch": "main"
+    "branch": "main",
+    "repository": "giselegal/quiz-sell-genius-66"
   },
   "projectName": "Quiz Sell Genius",
   "projectId": "quiz-sell-genius-66",
-  "version": "2.1.1764960452",
-  "lastUpdate": "2025-12-05T18:47:32.540Z",
+  "version": "2.1.1764961220",
+  "lastUpdate": "2025-12-05T19:00:20.198Z",
   "features": {
     "componentTagger": true,
     "liveEditing": true,
@@ -23,9 +24,11 @@
   },
   "sync": {
     "forced": true,
-    "timestamp": 1764960452,
+    "timestamp": 1764961220,
     "method": "webhook-alternative",
-    "tokenRequired": false
+    "tokenRequired": false,
+    "forcedResync": true,
+    "forkSync": true
   },
   "scripts": {
     "prepare": "node scripts/prepare-lovable.js",
