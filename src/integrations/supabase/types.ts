@@ -7,13 +7,134 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "13.0.5"
   }
   public: {
     Tables: {
+      funnel_responses: {
+        Row: {
+          answers: Json | null
+          completed_at: string | null
+          funnel_id: string | null
+          id: string
+          participant_email: string | null
+          participant_name: string | null
+          results: Json | null
+          started_at: string | null
+        }
+        Insert: {
+          answers?: Json | null
+          completed_at?: string | null
+          funnel_id?: string | null
+          id?: string
+          participant_email?: string | null
+          participant_name?: string | null
+          results?: Json | null
+          started_at?: string | null
+        }
+        Update: {
+          answers?: Json | null
+          completed_at?: string | null
+          funnel_id?: string | null
+          id?: string
+          participant_email?: string | null
+          participant_name?: string | null
+          results?: Json | null
+          started_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "funnel_responses_funnel_id_fkey"
+            columns: ["funnel_id"]
+            isOneToOne: false
+            referencedRelation: "funnels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      funnel_stages: {
+        Row: {
+          config: Json | null
+          created_at: string | null
+          funnel_id: string
+          id: string
+          is_enabled: boolean | null
+          order_index: number
+          title: string
+          type: Database["public"]["Enums"]["stage_type"]
+        }
+        Insert: {
+          config?: Json | null
+          created_at?: string | null
+          funnel_id: string
+          id?: string
+          is_enabled?: boolean | null
+          order_index: number
+          title: string
+          type: Database["public"]["Enums"]["stage_type"]
+        }
+        Update: {
+          config?: Json | null
+          created_at?: string | null
+          funnel_id?: string
+          id?: string
+          is_enabled?: boolean | null
+          order_index?: number
+          title?: string
+          type?: Database["public"]["Enums"]["stage_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "funnel_stages_funnel_id_fkey"
+            columns: ["funnel_id"]
+            isOneToOne: false
+            referencedRelation: "funnels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      funnels: {
+        Row: {
+          cover_image: string | null
+          created_at: string | null
+          description: string | null
+          global_config: Json | null
+          id: string
+          name: string
+          slug: string
+          status: Database["public"]["Enums"]["funnel_status"] | null
+          style_categories: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          cover_image?: string | null
+          created_at?: string | null
+          description?: string | null
+          global_config?: Json | null
+          id?: string
+          name: string
+          slug: string
+          status?: Database["public"]["Enums"]["funnel_status"] | null
+          style_categories?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          cover_image?: string | null
+          created_at?: string | null
+          description?: string | null
+          global_config?: Json | null
+          id?: string
+          name?: string
+          slug?: string
+          status?: Database["public"]["Enums"]["funnel_status"] | null
+          style_categories?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       participant_answers: {
         Row: {
           created_at: string | null
@@ -41,72 +162,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "participant_answers_option_id_fkey"
-            columns: ["option_id"]
-            isOneToOne: false
-            referencedRelation: "question_options"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "participant_answers_participant_id_fkey"
             columns: ["participant_id"]
             isOneToOne: false
             referencedRelation: "quiz_participants"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "participant_answers_question_id_fkey"
-            columns: ["question_id"]
-            isOneToOne: false
-            referencedRelation: "quiz_questions"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      question_options: {
-        Row: {
-          created_at: string | null
-          id: string
-          image_url: string | null
-          order_index: number
-          points: number | null
-          question_id: string | null
-          style_code: string | null
-          text: string
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          image_url?: string | null
-          order_index: number
-          points?: number | null
-          question_id?: string | null
-          style_code?: string | null
-          text: string
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          image_url?: string | null
-          order_index?: number
-          points?: number | null
-          question_id?: string | null
-          style_code?: string | null
-          text?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "question_options_question_id_fkey"
-            columns: ["question_id"]
-            isOneToOne: false
-            referencedRelation: "quiz_questions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "question_options_style_code_fkey"
-            columns: ["style_code"]
-            isOneToOne: false
-            referencedRelation: "style_types"
             referencedColumns: ["id"]
           },
         ]
@@ -117,108 +176,79 @@ export type Database = {
           email: string | null
           id: string
           name: string | null
-          quiz_id: string | null
-          utm_campaign: string | null
-          utm_medium: string | null
-          utm_source: string | null
         }
         Insert: {
           created_at?: string | null
           email?: string | null
           id?: string
           name?: string | null
-          quiz_id?: string | null
-          utm_campaign?: string | null
-          utm_medium?: string | null
-          utm_source?: string | null
         }
         Update: {
           created_at?: string | null
           email?: string | null
           id?: string
           name?: string | null
-          quiz_id?: string | null
-          utm_campaign?: string | null
-          utm_medium?: string | null
-          utm_source?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "quiz_participants_quiz_id_fkey"
-            columns: ["quiz_id"]
-            isOneToOne: false
-            referencedRelation: "quizzes"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       quiz_questions: {
         Row: {
-          active: boolean | null
           created_at: string | null
           id: string
-          order_index: number
-          quiz_id: string | null
-          required_selections: number | null
-          title: string
-          type: string
+          question_order: number
+          question_text: string
         }
         Insert: {
-          active?: boolean | null
           created_at?: string | null
           id?: string
-          order_index: number
-          quiz_id?: string | null
-          required_selections?: number | null
-          title: string
-          type?: string
+          question_order: number
+          question_text: string
         }
         Update: {
-          active?: boolean | null
           created_at?: string | null
           id?: string
+          question_order?: number
+          question_text?: string
+        }
+        Relationships: []
+      }
+      stage_options: {
+        Row: {
+          id: string
+          image_url: string | null
+          order_index: number
+          points: number | null
+          stage_id: string
+          style_category: string | null
+          text: string
+        }
+        Insert: {
+          id?: string
+          image_url?: string | null
+          order_index: number
+          points?: number | null
+          stage_id: string
+          style_category?: string | null
+          text: string
+        }
+        Update: {
+          id?: string
+          image_url?: string | null
           order_index?: number
-          quiz_id?: string | null
-          required_selections?: number | null
-          title?: string
-          type?: string
+          points?: number | null
+          stage_id?: string
+          style_category?: string | null
+          text?: string
         }
         Relationships: [
           {
-            foreignKeyName: "quiz_questions_quiz_id_fkey"
-            columns: ["quiz_id"]
+            foreignKeyName: "stage_options_stage_id_fkey"
+            columns: ["stage_id"]
             isOneToOne: false
-            referencedRelation: "quizzes"
+            referencedRelation: "funnel_stages"
             referencedColumns: ["id"]
           },
         ]
-      }
-      quizzes: {
-        Row: {
-          active: boolean | null
-          created_at: string | null
-          description: string | null
-          id: string
-          title: string
-          updated_at: string | null
-        }
-        Insert: {
-          active?: boolean | null
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          title?: string
-          updated_at?: string | null
-        }
-        Update: {
-          active?: boolean | null
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          title?: string
-          updated_at?: string | null
-        }
-        Relationships: []
       }
       style_results: {
         Row: {
@@ -229,7 +259,7 @@ export type Database = {
           percentage: number | null
           points: number | null
           rank: number | null
-          style_type_id: string | null
+          style_type_id: string
         }
         Insert: {
           created_at?: string | null
@@ -239,7 +269,7 @@ export type Database = {
           percentage?: number | null
           points?: number | null
           rank?: number | null
-          style_type_id?: string | null
+          style_type_id: string
         }
         Update: {
           created_at?: string | null
@@ -249,7 +279,7 @@ export type Database = {
           percentage?: number | null
           points?: number | null
           rank?: number | null
-          style_type_id?: string | null
+          style_type_id?: string
         }
         Relationships: [
           {
@@ -259,82 +289,31 @@ export type Database = {
             referencedRelation: "quiz_participants"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "style_results_style_type_id_fkey"
-            columns: ["style_type_id"]
-            isOneToOne: false
-            referencedRelation: "style_types"
-            referencedColumns: ["id"]
-          },
         ]
-      }
-      style_types: {
-        Row: {
-          color_primary: string | null
-          color_secondary: string | null
-          created_at: string | null
-          description: string | null
-          id: string
-          name: string
-        }
-        Insert: {
-          color_primary?: string | null
-          color_secondary?: string | null
-          created_at?: string | null
-          description?: string | null
-          id: string
-          name: string
-        }
-        Update: {
-          color_primary?: string | null
-          color_secondary?: string | null
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          name?: string
-        }
-        Relationships: []
       }
       utm_analytics: {
         Row: {
           created_at: string | null
           id: string
-          participant_id: string | null
           utm_campaign: string | null
-          utm_content: string | null
           utm_medium: string | null
           utm_source: string | null
-          utm_term: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
-          participant_id?: string | null
           utm_campaign?: string | null
-          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
-          utm_term?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
-          participant_id?: string | null
           utm_campaign?: string | null
-          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
-          utm_term?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "utm_analytics_participant_id_fkey"
-            columns: ["participant_id"]
-            isOneToOne: false
-            referencedRelation: "quiz_participants"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -344,7 +323,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      funnel_status: "draft" | "published" | "archived"
+      stage_type: "intro" | "question" | "strategic" | "transition" | "result"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -471,6 +451,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      funnel_status: ["draft", "published", "archived"],
+      stage_type: ["intro", "question", "strategic", "transition", "result"],
+    },
   },
 } as const

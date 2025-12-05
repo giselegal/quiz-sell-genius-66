@@ -97,10 +97,7 @@ const ResultPage: React.FC = () => {
     });
 
     const { category } = primaryStyle;
-    const { image, guideImage } = styleConfig[category];
-    const styleImg = new Image();
-    styleImg.src = `${image}?q=auto:best&f=auto&w=238`;
-    styleImg.onload = () => setImagesLoaded(prev => ({ ...prev, style: true }));
+    const { guideImage } = styleConfig[category];
     const guideImg = new Image();
     guideImg.src = `${guideImage}?q=auto:best&f=auto&w=540`;
     guideImg.onload = () => setImagesLoaded(prev => ({ ...prev, guide: true }));
@@ -114,7 +111,7 @@ const ResultPage: React.FC = () => {
   if (isLoading) return <ResultSkeleton />;
 
   const { category } = primaryStyle;
-  const { image, guideImage, description } = styleConfig[category];
+  const { guideImage, description } = styleConfig[category];
 
   const handleCTAClick = () => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -255,7 +252,7 @@ const ResultPage: React.FC = () => {
               <AnimatedWrapper animation={isLowPerformance ? 'none' : 'scale'} show={true} duration={500} delay={500}>
                 {/* AQUI ESTÁ A IMAGEM DO ESTILO PREDOMINANTE. Ela deve ser menor no mobile */}
                 <div className="max-w-[238px] mx-auto relative">
-                  <img src={`${image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`} 
+                  <img src={`${styleConfig[category].image}?q=auto:best&f=auto&w=238`} alt={`Estilo ${category}`}
                        className="w-full h-auto rounded-lg shadow-md hover:scale-105 transition-transform duration-300 max-w-xs sm:max-w-[238px]" /* max-w-xs para mobile, sm:max-w-[238px] para sm+ */
                        loading="eager" fetchPriority="high" width="238" height="auto" />
                   {/* Elegant decorative corner */}

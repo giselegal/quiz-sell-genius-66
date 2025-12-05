@@ -1,7 +1,9 @@
 import React from 'react';
-import { Card } from '@/components/ui/card'; // Card pode ser removido se não for usado para outros fins neste arquivo
+import { useAuth } from '@/context/AuthContext';
+import { styleConfig } from '@/config/styleConfig'; // Importa o styleConfig
+import { AnimatedWrapper } from '@/components/ui/animated-wrapper'; // Importa o AnimatedWrapper
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Star } from 'lucide-react'; // Ícone Star removido daqui
+import { ShoppingCart } from 'lucide-react'; // Ícone ShoppingCart é usado, Star não é.
 
 interface PersonalizedHookProps {
   styleCategory: string;
@@ -17,7 +19,7 @@ const styleMessages: Record<string, {
 }> = {
   'Natural': {
     congratsMessage: "você é uma mulher autêntica e espontânea!",
-    powerMessage: "Mulheres com seu estilo conquistam admiração pela naturalidade e charme genuíno. Sua beleza está na simplicidade elegante.",
+    powerMessage: "Mulheres com seu seu estilo conquistam admiração pela naturalidade e charme genuíno. Sua beleza está na simplicidade elegante.",
     ctaText: "ACESSE SEU GUIA NATURAL AGORA",
     exclusive: "Oferta Especial"
   },
@@ -70,8 +72,10 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
   userName = "Querida",
   onCTAClick
 }) => {
+  // Garante que styleMessages[styleCategory] não seja undefined
   const messages = styleMessages[styleCategory] || styleMessages['Natural'];
-  
+  const { image } = styleConfig[styleCategory] || {}; // Obter a imagem do styleConfig
+
   return (
     <div className="text-center p-0">
       <div className="mb-6">
@@ -82,6 +86,29 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
           {messages.congratsMessage}
         </p>
         
+        {/* Adicionando a imagem do estilo predominante aqui, 50% menor e com efeitos */}
+        {image && (
+          <AnimatedWrapper animation="fade" show={true} duration={500} delay={250}>
+            {/* Adicionado 'group' para permitir efeitos de hover no filho */}
+            <div className="group my-6 mx-auto max-w-[200px] sm:max-w-[200px] md:max-w-[200px] lg:max-w-[200px] relative">
+              <img
+                src={`${image}?q=auto:best&f=auto&w=200`} // Otimiza a imagem para largura de 200px
+                alt={`Estilo ${styleCategory}`}
+                // Efeitos de sombra e transformação no hover (borda fixa removida)
+                className="w-full h-auto rounded-lg shadow-lg
+                           transform transition-all duration-300
+                           group-hover:scale-103 group-hover:-translate-y-1 group-hover:rotate-1 group-hover:border group-hover:border-[#aa6b5d]" // Borda aparece apenas no hover
+                loading="lazy"
+              />
+              {/* Elementos decorativos de canto que aparecem no hover */}
+              <div className="absolute top-0 left-0 w-full h-full rounded-lg pointer-events-none">
+                <div className="absolute -top-2 -left-2 w-8 h-8 border-t border-l border-[#B89B7A] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b border-r border-[#B89B7A] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+            </div>
+          </AnimatedWrapper>
+        )}
+
         <div className="bg-white/80 rounded-lg p-4 sm:p-5 shadow-sm border border-[#B89B7A]/20 mt-6 mb-6 text-left">
           <div className="flex items-start gap-3">
             {/* Ícone Star REMOVIDO AQUI */}
@@ -115,7 +142,7 @@ export const PersonalizedHook: React.FC<PersonalizedHookProps> = ({
       </div>
       
       {/* Mensagem de Urgência - Agora com um mt- para separá-la do bloco de selo/botão */}
-      <p className="text-[#ff6b6b] text-sm font-medium mt-4 sm:mt-6"> {/* Adicionado mt-4/6 */}
+      <p className="text-[#ff6b6b] text-xs font-medium mt-4 sm:mt-6"> {/* Alterado de text-sm para text-xs */}
         ⚡ Esta oferta expira quando você sair desta página
       </p>
     </div>
